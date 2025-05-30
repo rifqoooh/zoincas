@@ -1,11 +1,9 @@
-"use client";
+'use client';
 
-import type { Option } from "@/types/data-table";
-import type { Column } from "@tanstack/react-table";
-import { Check, PlusCircle, XCircle } from "lucide-react";
+import * as React from 'react';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Command,
   CommandEmpty,
@@ -14,15 +12,17 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@/components/ui/command";
+} from '@/components/ui/command';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utilities";
-import * as React from "react";
+} from '@/components/ui/popover';
+import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utilities';
+import type { Option } from '@/types/data-table';
+import type { Column } from '@tanstack/react-table';
+import { Check, PlusCircle, XCircle } from 'lucide-react';
 
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
@@ -41,12 +41,14 @@ export function DataTableFacetedFilter<TData, TValue>({
 
   const columnFilterValue = column?.getFilterValue();
   const selectedValues = new Set(
-    Array.isArray(columnFilterValue) ? columnFilterValue : [],
+    Array.isArray(columnFilterValue) ? columnFilterValue : []
   );
 
   const onItemSelect = React.useCallback(
     (option: Option, isSelected: boolean) => {
-      if (!column) return;
+      if (!column) {
+        return;
+      }
 
       if (multiple) {
         const newSelectedValues = new Set(selectedValues);
@@ -62,7 +64,7 @@ export function DataTableFacetedFilter<TData, TValue>({
         setOpen(false);
       }
     },
-    [column, multiple, selectedValues],
+    [column, multiple, selectedValues]
   );
 
   const onReset = React.useCallback(
@@ -70,7 +72,7 @@ export function DataTableFacetedFilter<TData, TValue>({
       event?.stopPropagation();
       column?.setFilterValue(undefined);
     },
-    [column],
+    [column]
   );
 
   return (
@@ -78,6 +80,7 @@ export function DataTableFacetedFilter<TData, TValue>({
       <PopoverTrigger asChild>
         <Button variant="outline" size="sm" className="border-dashed">
           {selectedValues?.size > 0 ? (
+            // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
             <div
               role="button"
               aria-label={`Clear ${title} filter`}
@@ -145,10 +148,10 @@ export function DataTableFacetedFilter<TData, TValue>({
                   >
                     <div
                       className={cn(
-                        "flex size-4 items-center justify-center rounded-sm border border-primary",
+                        'flex size-4 items-center justify-center rounded-sm border border-primary',
                         isSelected
-                          ? "bg-primary"
-                          : "opacity-50 [&_svg]:invisible",
+                          ? 'bg-primary'
+                          : 'opacity-50 [&_svg]:invisible'
                       )}
                     >
                       <Check />

@@ -1,12 +1,12 @@
-import { createParser } from "nuqs/server";
-import { z } from "zod";
+import { createParser } from 'nuqs/server';
+import { z } from 'zod';
 
-import { dataTableConfig } from "@/config/data-table";
+import { dataTableConfig } from '@/config/data-table';
 
 import type {
   ExtendedColumnFilter,
   ExtendedColumnSort,
-} from "@/types/data-table";
+} from '@/types/data-table';
 
 const sortingItemSchema = z.object({
   id: z.string(),
@@ -14,10 +14,11 @@ const sortingItemSchema = z.object({
 });
 
 export const getSortingStateParser = <TData>(
-  columnIds?: string[] | Set<string>,
+  columnIds?: string[] | Set<string>
 ) => {
   const validKeys = columnIds
-    ? columnIds instanceof Set
+    ? // biome-ignore lint/nursery/noNestedTernary: <explanation>
+      columnIds instanceof Set
       ? columnIds
       : new Set(columnIds)
     : null;
@@ -28,7 +29,9 @@ export const getSortingStateParser = <TData>(
         const parsed = JSON.parse(value);
         const result = z.array(sortingItemSchema).safeParse(parsed);
 
-        if (!result.success) return null;
+        if (!result.success) {
+          return null;
+        }
 
         if (validKeys && result.data.some((item) => !validKeys.has(item.id))) {
           return null;
@@ -44,7 +47,7 @@ export const getSortingStateParser = <TData>(
       a.length === b.length &&
       a.every(
         (item, index) =>
-          item.id === b[index]?.id && item.desc === b[index]?.desc,
+          item.id === b[index]?.id && item.desc === b[index]?.desc
       ),
   });
 };
@@ -60,10 +63,11 @@ const filterItemSchema = z.object({
 export type FilterItemSchema = z.infer<typeof filterItemSchema>;
 
 export const getFiltersStateParser = <TData>(
-  columnIds?: string[] | Set<string>,
+  columnIds?: string[] | Set<string>
 ) => {
   const validKeys = columnIds
-    ? columnIds instanceof Set
+    ? // biome-ignore lint/nursery/noNestedTernary: <explanation>
+      columnIds instanceof Set
       ? columnIds
       : new Set(columnIds)
     : null;
@@ -74,7 +78,9 @@ export const getFiltersStateParser = <TData>(
         const parsed = JSON.parse(value);
         const result = z.array(filterItemSchema).safeParse(parsed);
 
-        if (!result.success) return null;
+        if (!result.success) {
+          return null;
+        }
 
         if (validKeys && result.data.some((item) => !validKeys.has(item.id))) {
           return null;
@@ -93,7 +99,7 @@ export const getFiltersStateParser = <TData>(
           filter.id === b[index]?.id &&
           filter.value === b[index]?.value &&
           filter.variant === b[index]?.variant &&
-          filter.operator === b[index]?.operator,
+          filter.operator === b[index]?.operator
       ),
   });
 };
