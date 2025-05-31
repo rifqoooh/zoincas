@@ -4,10 +4,10 @@ import { timestamps } from './utilities';
 export const users = pgTable('users', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),
-  email: text('email').notNull().unique(),
+  email: text('email').unique().notNull(),
   emailVerified: boolean('email_verified').notNull(),
   image: text('image'),
-  role: text('role'),
+  role: text('role').default('user').notNull(),
   banned: boolean('banned').default(false).notNull(),
   banReason: text('ban_reason'),
   banExpires: timestamp('ban_expires'),
@@ -34,7 +34,7 @@ export const accounts = pgTable('accounts', {
 export const sessions = pgTable('sessions', {
   id: text('id').primaryKey(),
   expiresAt: timestamp('expires_at').notNull(),
-  token: text('token').notNull().unique(),
+  token: text('token').unique().notNull(),
   ipAddress: text('ip_address'),
   userAgent: text('user_agent'),
   impersonatedBy: text('impersonated_by'),
