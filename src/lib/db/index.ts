@@ -1,9 +1,8 @@
-import { env } from '@/env';
-import { Pool, neonConfig } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-serverless';
-import ws from 'ws';
+import 'server-only';
 
-neonConfig.webSocketConstructor = ws;
+import { env } from '@/env';
+import { Pool } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-serverless';
 
 const pool = new Pool({ connectionString: env().DATABASE_URL });
 

@@ -2,6 +2,7 @@
   "name": "zoincas-ai",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -10,7 +11,7 @@
     "db:push": "bunx --bun drizzle-kit push",
     "db:pull": "bunx --bun drizzle-kit pull",
     "db:studio": "bunx --bun drizzle-kit studio",
-    "db:seed": "tsx src/lib/db/seed.ts"
+    "db:seed": "bun src/lib/db/seed.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.0",
@@ -27,7 +28,6 @@
     "@tanstack/react-query": "^5.79.0",
     "@tanstack/react-table": "^8.21.3",
     "better-auth": "^1.2.8",
-    "bufferutil": "^4.0.9",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
@@ -45,7 +45,6 @@
     "server-only": "^0.0.1",
     "sonner": "^2.0.4",
     "tailwind-merge": "^3.3.0",
-    "ws": "^8.18.2",
     "zod": "^3.25.42"
   },
   "devDependencies": {
@@ -56,8 +55,8 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@types/ws": "^8.18.1",
     "drizzle-kit": "^0.31.1",
+    "pg": "^8.16.0",
     "tailwindcss": "^4",
     "tsx": "^4.19.4",
     "tw-animate-css": "^1.3.2",
