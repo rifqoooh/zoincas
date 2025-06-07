@@ -8,7 +8,7 @@ import { nextCookies } from 'better-auth/next-js';
 import { admin } from 'better-auth/plugins';
 
 export const auth = betterAuth({
-  baseURL: env().NEXT_PUBLIC_BETTER_AUTH_URL,
+  baseURL: env().NEXT_PUBLIC_APP_URL,
   database: drizzleAdapter(db, {
     provider: 'pg',
     usePlural: true,
@@ -49,7 +49,7 @@ export const auth = betterAuth({
   session: {
     cookieCache: {
       enabled: true,
-      maxAge: 5 * 60,
+      maxAge: 2 * 60,
     },
   },
   plugins: [admin(), nextCookies()],
