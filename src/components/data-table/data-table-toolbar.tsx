@@ -14,11 +14,15 @@ import { X } from 'lucide-react';
 
 interface DataTableToolbarProps<TData> extends React.ComponentProps<'div'> {
   table: Table<TData>;
+  isLoading?: boolean;
+  fallback?: React.ReactNode;
 }
 
 export function DataTableToolbar<TData>({
   table,
   children,
+  isLoading,
+  fallback,
   className,
   ...props
 }: DataTableToolbarProps<TData>) {
@@ -33,21 +37,26 @@ export function DataTableToolbar<TData>({
     table.resetColumnFilters();
   }, [table]);
 
+  if (isLoading) {
+    return fallback;
+  }
+
   return (
     // biome-ignore lint/nursery/useAriaPropsSupportedByRole: <explanation>
     <div
       role="toolbar"
       aria-orientation="horizontal"
       className={cn(
-        'flex w-full items-start justify-between gap-2 p-1',
+        'flex w-full flex-wrap items-start justify-between gap-2 py-1',
         className
       )}
       {...props}
     >
-      <div className="flex flex-1 flex-wrap items-center gap-2">
+      <div className="flex w-full flex-1 flex-row flex-wrap gap-2 sm:items-center">
         {columns.map((column) => (
           <DataTableToolbarFilter key={column.id} column={column} />
         ))}
+
         {isFiltered && (
           <Button
             aria-label="Reset filters"
@@ -60,11 +69,16 @@ export function DataTableToolbar<TData>({
             Reset
           </Button>
         )}
+
+        <div className="flex items-center gap-2 md:ml-auto">
+          {children}
+          <DataTableViewOptions table={table} />
+        </div>
       </div>
-      <div className="flex items-center gap-2">
+      {/* <div className="">
         {children}
         <DataTableViewOptions table={table} />
-      </div>
+      </div> */}
     </div>
   );
 }
@@ -90,7 +104,7 @@ function DataTableToolbarFilter<TData>({
               placeholder={columnMeta.placeholder ?? columnMeta.label}
               value={(column.getFilterValue() as string) ?? ''}
               onChange={(event) => column.setFilterValue(event.target.value)}
-              className="h-8 w-40 lg:w-56"
+              className="h-8 w-full md:w-full lg:w-56"
             />
           );
 

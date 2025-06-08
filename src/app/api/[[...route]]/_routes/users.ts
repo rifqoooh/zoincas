@@ -12,9 +12,7 @@ import { getUsersQuerySchema } from '@/validators/api/users/request';
 
 const app = new Hono<{
   Variables: SessionVariables;
-}>();
-
-app.get(
+}>().get(
   '/',
   adminAPIMiddleware(),
   validator('query', getUsersQuerySchema, undefined, {
@@ -43,14 +41,12 @@ app.get(
   async (c) => {
     const query = c.req.valid('query');
 
-    try {
-      const data = await getUsers(query);
-      return c.json(data, 200);
-    } catch (error) {
-      if (error instanceof Error) {
-        return c.json({ error: 'INTERNAL_SERVER_ERROR' }, 500);
-      }
+    const data = await getUsers(query);
+    if (!data) {
+      return c.json({ error: 'INTERNAL_SERVER_ERROR' }, 500);
     }
+
+    return c.json(data, 200);
   }
 );
 

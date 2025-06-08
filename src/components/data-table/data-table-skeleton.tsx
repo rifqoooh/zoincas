@@ -39,24 +39,28 @@ export function DataTableSkeleton({
 
   return (
     <div
-      className={cn('flex w-full flex-col gap-2.5 overflow-auto', className)}
+      className={cn(
+        'flex w-full flex-col overflow-auto',
+        withViewOptions ? 'gap-2.5' : 'gap-0',
+        className
+      )}
       {...props}
     >
-      <div className="flex w-full items-center justify-between gap-2 overflow-auto p-1">
+      <div className="flex w-full items-center justify-between gap-2 overflow-auto">
         <div className="flex flex-1 items-center gap-2">
           {filterCount > 0
             ? Array.from({ length: filterCount }).map((_, i) => (
-                <Skeleton key={i} className="h-7 w-[4.5rem] border-dashed" />
+                <Skeleton key={i} className="h-8 w-[4.5rem] border-dashed" />
               ))
             : null}
         </div>
         {withViewOptions ? (
-          <Skeleton className="ml-auto hidden h-7 w-[4.5rem] lg:flex" />
+          <Skeleton className="ml-auto hidden h-8 w-[4.5rem] lg:flex" />
         ) : null}
       </div>
-      <div className="rounded-md border">
+      <div className="rounded-md border border-transparent">
         <Table>
-          <TableHeader>
+          <TableHeader className="[&_tr]:border-transparent">
             {Array.from({ length: 1 }).map((_, i) => (
               <TableRow key={i} className="hover:bg-transparent">
                 {Array.from({ length: columnCount }).map((_, j) => (
@@ -75,7 +79,10 @@ export function DataTableSkeleton({
           </TableHeader>
           <TableBody>
             {Array.from({ length: rowCount }).map((_, i) => (
-              <TableRow key={i} className="hover:bg-transparent">
+              <TableRow
+                key={i}
+                className="border-transparent hover:bg-transparent"
+              >
                 {Array.from({ length: columnCount }).map((_, j) => (
                   <TableCell
                     key={j}
@@ -84,7 +91,7 @@ export function DataTableSkeleton({
                       minWidth: shrinkZero ? cozyCellWidths[j] : 'auto',
                     }}
                   >
-                    <Skeleton className="h-6 w-full" />
+                    <Skeleton className="h-9 w-full" />
                   </TableCell>
                 ))}
               </TableRow>
@@ -94,14 +101,14 @@ export function DataTableSkeleton({
       </div>
       {withPagination ? (
         <div className="flex w-full items-center justify-between gap-4 overflow-auto p-1 sm:gap-8">
-          <Skeleton className="h-7 w-40 shrink-0" />
+          <Skeleton className="h-8 w-40 shrink-0" />
           <div className="flex items-center gap-4 sm:gap-6 lg:gap-8">
             <div className="flex items-center gap-2">
-              <Skeleton className="h-7 w-24" />
-              <Skeleton className="h-7 w-[4.5rem]" />
+              <Skeleton className="h-8 w-24" />
+              <Skeleton className="h-8 w-[4.5rem]" />
             </div>
             <div className="flex items-center justify-center font-medium text-sm">
-              <Skeleton className="h-7 w-20" />
+              <Skeleton className="h-8 w-20" />
             </div>
             <div className="flex items-center gap-2">
               <Skeleton className="hidden size-7 lg:block" />

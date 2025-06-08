@@ -3,9 +3,7 @@ import { Hono } from 'hono';
 
 const app = new Hono<{
   Variables: SessionVariables;
-}>();
-
-app.get('/', (c) => {
+}>().get('/', (c) => {
   const session = c.get('session');
   const user = c.get('user');
 
