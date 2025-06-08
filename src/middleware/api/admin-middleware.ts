@@ -2,7 +2,7 @@ import type { SessionVariables } from '@/lib/auth/types';
 
 import { createMiddleware } from 'hono/factory';
 
-export const adminAPIMiddleware = () =>
+export const adminMiddleware = () =>
   createMiddleware<{ Variables: SessionVariables }>(async (c, next) => {
     const session = c.get('session');
     const user = c.get('user');

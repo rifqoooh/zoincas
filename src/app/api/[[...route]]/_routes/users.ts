@@ -7,14 +7,14 @@ import qs from 'qs';
 import { z } from 'zod/v4';
 
 import { getUsers } from '@/lib/db/services/users';
-import { adminAPIMiddleware } from '@/middleware/admin-api-middleware';
+import { adminMiddleware } from '@/middleware/api/admin-middleware';
 import { getUsersQuerySchema } from '@/validators/api/users/request';
 
 const app = new Hono<{
   Variables: SessionVariables;
 }>().get(
   '/',
-  adminAPIMiddleware(),
+  adminMiddleware(),
   validator('query', getUsersQuerySchema, undefined, {
     validationFunction: async (schema, query) => {
       const search = qs.stringify(query);
