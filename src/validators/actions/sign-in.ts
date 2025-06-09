@@ -8,6 +8,8 @@ export const signInSchema = z.object({
     .max(64, 'Password must be at most 64 characters'),
 });
 
+export type SignInType = z.infer<typeof signInSchema>;
+
 export const SignInOutputSchema = z.object({
   redirect: z.boolean(),
   token: z.string(),
@@ -22,3 +24,5 @@ export const SignInOutputSchema = z.object({
     updatedAt: z.date(),
   }),
 });
+
+export type SignInOutputType = z.infer<typeof SignInOutputSchema>;

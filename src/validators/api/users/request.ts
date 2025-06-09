@@ -1,6 +1,6 @@
 import { z } from 'zod/v4';
 
-import { usersSchema } from '@/validators/db/users';
+import { usersSchema } from '@/validators/db/schema';
 import { zodLiteralsFromZodObject } from '@/validators/utilities';
 
 export const getUsersQuerySchema = z.object({
@@ -19,3 +19,5 @@ export const getUsersQuerySchema = z.object({
   banned: z.enum(['active', 'banned']).array().default([]),
   createdAt: z.coerce.number().array().default([]),
 });
+
+export type GetUsersQueryType = z.infer<typeof getUsersQuerySchema>;

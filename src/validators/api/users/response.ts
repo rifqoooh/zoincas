@@ -11,6 +11,8 @@ export const usersDataSchema = z.object({
   createdAt: z.coerce.date(),
 });
 
+export type UsersDataType = z.infer<typeof usersDataSchema>;
+
 export const getUsersOutputSchema = z.object({
   data: usersDataSchema.array(),
   pagination: z.object({
@@ -20,3 +22,5 @@ export const getUsersOutputSchema = z.object({
     pageCount: z.number(),
   }),
 });
+
+export type GetUsersOutputType = z.infer<typeof getUsersOutputSchema>;

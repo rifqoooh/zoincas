@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-// import { SignInForm } from '@/components/forms/sign-in/';
+import { SignInForm } from '@/components/forms/sign-in';
 import { createMetadata } from '@/lib/seo/metadata';
 import Link from 'next/link';
 
@@ -22,7 +22,7 @@ export default function SignInPage() {
           </p>
         </div>
 
-        {/* <SignInForm /> */}
+        <SignInForm />
 
         <Link
           href="/sign-up"

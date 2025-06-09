@@ -1,7 +1,8 @@
-import { auth } from '@/lib/auth/server';
-import { Routes } from '@/lib/safe-routes';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+
+import { auth } from '@/lib/auth/server';
+import { Routes } from '@/lib/safe-routes';
 
 export const adminMiddleware = async () => {
   const session = await auth.api.getSession({

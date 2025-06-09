@@ -1,4 +1,4 @@
-import type { GetUsersQueryType } from '@/types/api/users/request';
+import type { GetUsersQueryType } from '@/validators/api/users/request';
 
 import {
   and,

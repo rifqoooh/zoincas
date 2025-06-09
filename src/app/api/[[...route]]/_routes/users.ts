@@ -1,5 +1,5 @@
 import type { SessionVariables } from '@/lib/auth/types';
-import type { GetUsersQueryType } from '@/types/api/users/request';
+import type { GetUsersQueryType } from '@/validators/api/users/request';
 
 import { zValidator as validator } from '@hono/zod-validator';
 import { Hono } from 'hono';

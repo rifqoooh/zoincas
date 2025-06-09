@@ -1,4 +1,4 @@
-import type { UsersType } from '@/types/db/users';
+import type { UsersType } from '@/validators/db/schema';
 
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -7,12 +7,12 @@ import {
   parseAsString,
   useQueryStates,
 } from 'nuqs';
+import qs from 'qs';
 import { z } from 'zod/v4';
 
 import { client } from '@/lib/hono-rpc';
 import { getSortingStateParser } from '@/lib/parsers';
 import { getUsersOutputSchema } from '@/validators/api/users/response';
-import qs from 'qs';
 import { usersKeys } from './keys';
 
 export const useGetUsersQuery = () => {

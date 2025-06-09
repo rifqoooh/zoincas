@@ -3,7 +3,7 @@ import type { SessionVariables } from '@/lib/auth/types';
 import { Hono } from 'hono';
 import { handle } from 'hono/vercel';
 
-import session from './_routes/sessions';
+import sessions from './_routes/sessions';
 import users from './_routes/users';
 
 const app = new Hono<{
@@ -30,7 +30,7 @@ app.on(['GET', 'POST'], '/auth/*', async (c) => {
   return await auth.handler(c.req.raw);
 });
 
-const routes = app.route('/session', session).route('/users', users);
+const routes = app.route('/sessions', sessions).route('/users', users);
 
 export const GET = handle(app);
 export const POST = handle(app);

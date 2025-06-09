@@ -1,17 +1,24 @@
 import 'server-only';
 
-import { env } from '@/env';
-import { db } from '@/lib/db';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { nextCookies } from 'better-auth/next-js';
 import { admin } from 'better-auth/plugins';
 
+import { env } from '@/env';
+import { db } from '@/lib/db';
+import { accounts, sessions, users, verifications } from '@/lib/db/schema';
+
 export const auth = betterAuth({
   baseURL: env().NEXT_PUBLIC_APP_URL,
   database: drizzleAdapter(db, {
     provider: 'pg',
-    usePlural: true,
+    schema: {
+      user: users,
+      session: sessions,
+      account: accounts,
+      verification: verifications,
+    },
   }),
   user: {
     additionalFields: {

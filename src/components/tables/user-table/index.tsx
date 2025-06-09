@@ -8,7 +8,7 @@ import { DataTableSortList } from '@/components/data-table/data-table-sort-list'
 import { DataTableToolbar } from '@/components/data-table/data-table-toolbar';
 import { useGetUsersQuery } from '@/hooks/queries/users';
 import { useDataTable } from '@/hooks/use-data-table';
-import type { UsersDataType } from '@/types/api/users/response';
+import type { UsersDataType } from '@/validators/api/users/response';
 import { userColumns } from './columns';
 
 const paginationDefault = {
