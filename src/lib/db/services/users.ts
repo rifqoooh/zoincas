@@ -1,4 +1,4 @@
-import type { GetUsersQueryType } from '@/validators/api/users/request';
+import type { GetUsersQuery } from '@/validators/api/openapi/users/request';
 
 import {
   and,
@@ -16,7 +16,7 @@ import { db } from '@/lib/db';
 import { users } from '@/lib/db/schema';
 import { coalesce } from '@/lib/db/utilities';
 
-export const getUsers = async (query: GetUsersQueryType) => {
+export const getUsers = async (query: GetUsersQuery) => {
   const [startCreatedAt, endCreatedAt] = query.createdAt;
 
   const offset = (query.page - 1) * query.perPage;

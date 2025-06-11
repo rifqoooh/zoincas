@@ -13,7 +13,7 @@ export const env = () =>
         .string()
         .min(1)
         .endsWith('.apps.googleusercontent.com'),
-      GOOGLE_CLIENT_SECRET: z.string().min(1),
+      GOOGLE_CLIENT_SECRET: z.string().min(1).startsWith('GOCSPX-'),
     },
     client: {
       NEXT_PUBLIC_APP_URL: z.url().min(1),

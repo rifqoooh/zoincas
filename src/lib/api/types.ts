@@ -1,12 +1,13 @@
-import type { SessionsType, UsersType } from '@/validators/db/schema';
+import type { SelectSessionsType } from '@/validators/db/sessions';
+import type { SelectUsersType } from '@/validators/db/users';
 import type { OpenAPIHono, RouteConfig, RouteHandler } from '@hono/zod-openapi';
 import type { z } from '@hono/zod-openapi';
 import type { Schema } from 'hono';
 
 export interface AppBindings {
   Variables: {
-    user: UsersType | null;
-    session: SessionsType | null;
+    user: SelectUsersType | null;
+    session: SelectSessionsType | null;
   };
 }
 
@@ -21,3 +22,13 @@ export type AppRouteHandler<R extends RouteConfig> = RouteHandler<
 export type ZodSchema =
   // @ts-expect-error
   z.ZodUnion | z.AnyZodObject | z.ZodArray<z.AnyZodObject>;
+
+export interface ErrorResponseAPI {
+  error: {
+    code: string;
+    message: string;
+    path: string;
+    details?: string | string[];
+    stack?: string;
+  };
+}

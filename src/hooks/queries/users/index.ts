@@ -1,4 +1,5 @@
-import type { UsersType } from '@/validators/db/schema';
+import type { ErrorResponseAPI } from '@/lib/api/types';
+import type { SelectUsersType } from '@/validators/db/users';
 
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -7,29 +8,18 @@ import {
   parseAsString,
   useQueryStates,
 } from 'nuqs';
-import qs from 'qs';
 import { z } from 'zod';
 
 import { client } from '@/lib/api/rpc';
 import { getSortingStateParser } from '@/lib/parsers';
-import { getUsersOutputSchema } from '@/validators/api/users/response';
+import { getUsersResponse } from '@/validators/api/openapi/users/response';
 import { usersKeys } from './keys';
-
-interface ErrorResponseAPI {
-  error: {
-    code: string;
-    message: string;
-    path: string;
-    details?: string | string[];
-    stack?: string;
-  };
-}
 
 export const useGetUsersQuery = () => {
   const [search] = useQueryStates({
     page: parseAsInteger.withDefault(1),
     perPage: parseAsInteger.withDefault(10),
-    sort: getSortingStateParser<UsersType>().withDefault([
+    sort: getSortingStateParser<SelectUsersType>().withDefault([
       { id: 'createdAt', desc: true },
     ]),
     email: parseAsString.withDefault(''),
@@ -41,13 +31,17 @@ export const useGetUsersQuery = () => {
     createdAt: parseAsArrayOf(z.coerce.number()).withDefault([]),
   });
 
-  const queryString = qs.stringify(search, { allowDots: true });
+  const parsedQuery = {
+    ...search,
+    sort: JSON.stringify(search.sort),
+    createdAt: search.createdAt.toString(),
+  };
 
   const query = useQuery({
     queryKey: usersKeys.users(search),
     queryFn: async () => {
       const response = await client.api.users.$get({
-        query: qs.parse(queryString),
+        query: parsedQuery,
       });
       if (!response.ok) {
         const err = (await response.json()) as unknown as ErrorResponseAPI;
@@ -55,7 +49,7 @@ export const useGetUsersQuery = () => {
       }
 
       const data = await response.json();
-      const parsedData = getUsersOutputSchema.safeParse(data);
+      const parsedData = getUsersResponse.safeParse(data);
       if (!parsedData.success) {
         throw new Error('OUTPUT_VALIDATION_ERROR');
       }

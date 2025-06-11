@@ -1,7 +1,9 @@
+import type { ErrorResponseAPI } from '@/lib/api/types';
+
 import { useQuery } from '@tanstack/react-query';
 
 import { client } from '@/lib/api/rpc';
-import { getSessionsOutputSchema } from '@/validators/api/sessions/response';
+import { getSessionsResponse } from '@/validators/api/openapi/sessions/response';
 import { sessionsKeys } from './keys';
 
 export const useGetSessionsQuery = () => {
@@ -10,12 +12,12 @@ export const useGetSessionsQuery = () => {
     queryFn: async () => {
       const response = await client.api.sessions.$get();
       if (!response.ok) {
-        const err = await response.json();
-        throw new Error(err.error);
+        const err = (await response.json()) as unknown as ErrorResponseAPI;
+        throw new Error(err.error.message);
       }
 
       const data = await response.json();
-      const parsedData = getSessionsOutputSchema.safeParse(data);
+      const parsedData = getSessionsResponse.safeParse(data);
       if (!parsedData.success) {
         throw new Error('OUTPUT_VALIDATION_ERROR');
       }

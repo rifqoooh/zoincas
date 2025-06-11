@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
-import { sessionsSchema } from '@/validators/db/schema';
-import { usersSchema } from '@/validators/db/schema';
+import { selectSessionsSchema } from '@/validators/db/sessions';
+import { selectUsersSchema } from '@/validators/db/users';
 
 export const getSessionsResponse = z.object({
-  session: sessionsSchema.nullable(),
-  user: usersSchema.nullable(),
+  user: selectUsersSchema.nullable(),
+  session: selectSessionsSchema.nullable(),
 });
 
 export type GetSessionsResponse = z.infer<typeof getSessionsResponse>;
