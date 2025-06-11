@@ -1,9 +1,6 @@
-import type { SessionVariables } from '@/lib/auth/types';
-import { Hono } from 'hono';
+import { createRouter } from '@/lib/api/create-router';
 
-const app = new Hono<{
-  Variables: SessionVariables;
-}>().get('/', (c) => {
+const app = createRouter().get('/', (c) => {
   const session = c.get('session');
   const user = c.get('user');
   if (!session || !user) {

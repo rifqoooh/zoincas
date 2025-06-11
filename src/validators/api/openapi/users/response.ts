@@ -13,7 +13,7 @@ export const usersDataSchema = z.object({
 
 export type UsersDataType = z.infer<typeof usersDataSchema>;
 
-export const getUsersOutputSchema = z.object({
+export const getUsersResponse = z.object({
   data: usersDataSchema.array(),
   pagination: z.object({
     size: z.number(),
@@ -23,4 +23,4 @@ export const getUsersOutputSchema = z.object({
   }),
 });
 
-export type GetUsersOutputType = z.infer<typeof getUsersOutputSchema>;
+export type GetUsersResponse = z.infer<typeof getUsersResponse>;

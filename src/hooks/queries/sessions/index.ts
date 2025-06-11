@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { client } from '@/lib/hono-rpc';
+import { client } from '@/lib/api/rpc';
 import { getSessionsOutputSchema } from '@/validators/api/sessions/response';
 import { sessionsKeys } from './keys';
 

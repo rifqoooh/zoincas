@@ -8,12 +8,22 @@ import {
   useQueryStates,
 } from 'nuqs';
 import qs from 'qs';
-import { z } from 'zod/v4';
+import { z } from 'zod';
 
-import { client } from '@/lib/hono-rpc';
+import { client } from '@/lib/api/rpc';
 import { getSortingStateParser } from '@/lib/parsers';
 import { getUsersOutputSchema } from '@/validators/api/users/response';
 import { usersKeys } from './keys';
+
+interface ErrorResponseAPI {
+  error: {
+    code: string;
+    message: string;
+    path: string;
+    details?: string | string[];
+    stack?: string;
+  };
+}
 
 export const useGetUsersQuery = () => {
   const [search] = useQueryStates({
@@ -40,8 +50,8 @@ export const useGetUsersQuery = () => {
         query: qs.parse(queryString),
       });
       if (!response.ok) {
-        const err = await response.json();
-        throw new Error(err.error);
+        const err = (await response.json()) as unknown as ErrorResponseAPI;
+        throw new Error(err.error.message);
       }
 
       const data = await response.json();

@@ -1,5 +1,5 @@
 import { requiredString } from '@/validators/utilities';
-import { z } from 'zod/v4';
+import { z } from 'zod';
 
 export const signInSchema = z.object({
   email: requiredString.email('Invalid email address'),

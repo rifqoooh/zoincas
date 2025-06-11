@@ -1,7 +1,7 @@
 import type { ReadonlyURLSearchParams } from 'next/navigation';
 
 import qs from 'qs';
-import { z } from 'zod/v4';
+import { z } from 'zod';
 
 import { Routes } from './safe-routes';
 

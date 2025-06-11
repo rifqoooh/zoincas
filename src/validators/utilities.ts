@@ -1,4 +1,4 @@
-import { z } from 'zod/v4';
+import { z } from 'zod';
 
 export const requiredString = z.string().trim().min(1, 'Required');
 
@@ -13,6 +13,10 @@ export const zodLiteralsFromZodObject = <K extends string>(
 ): zodUnionLiteralType<K> => {
   const keys = Object.keys(zodObj.shape) as K[];
 
+  if (keys.length === 0) {
+    throw new Error('Cannot create union from empty object shape.');
+  }
+
   // If there's only one key, return just that literal
   if (keys.length === 1) {
     return z.literal(keys[0]);
@@ -26,4 +30,16 @@ export const zodLiteralsFromZodObject = <K extends string>(
   ];
 
   return z.union(literals);
+};
+
+export const zodEnumFromZodObject = <K extends string>(
+  zodObj: zodObjType<K>
+): z.ZodEnum<[K, ...K[]]> => {
+  const keys = Object.keys(zodObj.shape) as K[];
+
+  if (keys.length === 0) {
+    throw new Error('Cannot create enum from empty object shape.');
+  }
+
+  return z.enum(keys as [K, ...K[]]);
 };

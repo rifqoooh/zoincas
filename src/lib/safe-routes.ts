@@ -1,4 +1,4 @@
-import { z } from 'zod/v4';
+import { z } from 'zod';
 import { createRoute } from './create-route';
 
 export const SignInSearchParams = z.object({

@@ -1,23 +1,27 @@
-import type { SessionVariables } from '@/lib/auth/types';
+import type { AppBindings } from '@/lib/api/types';
 
 import { createMiddleware } from 'hono/factory';
 
+import { APIError } from '@/lib/api/api-exception';
+import { UNAUTHORIZED } from '@/lib/api/http-status-code';
+
 export const adminMiddleware = () =>
-  createMiddleware<{ Variables: SessionVariables }>(async (c, next) => {
+  createMiddleware<AppBindings>(async (c, next) => {
     const session = c.get('session');
     const user = c.get('user');
 
     if (!session || !user) {
-      return c.json(
-        {
-          error: 'UNAUTHENTICATED',
-        },
-        401
-      );
+      throw new APIError(UNAUTHORIZED, {
+        code: 'UNAUTHENTICATED',
+        message: 'You are not authenticated to access this resource.',
+      });
     }
 
     if (user.role !== 'admin') {
-      return c.json({ error: 'UNAUTHORIZED' }, 401);
+      throw new APIError(UNAUTHORIZED, {
+        code: 'UNAUTHORIZED',
+        message: 'You are not authorized as admin to access this resource.',
+      });
     }
 
     return await next();

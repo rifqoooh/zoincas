@@ -1,18 +1,15 @@
-import type { SessionVariables } from '@/lib/auth/types';
 import type { GetUsersQueryType } from '@/validators/api/users/request';
 
 import { zValidator as validator } from '@hono/zod-validator';
-import { Hono } from 'hono';
 import qs from 'qs';
 import { z } from 'zod/v4';
 
+import { createRouter } from '@/lib/api/create-router';
 import { getUsers } from '@/lib/db/services/users';
 import { adminMiddleware } from '@/middleware/api/admin-middleware';
 import { getUsersQuerySchema } from '@/validators/api/users/request';
 
-const app = new Hono<{
-  Variables: SessionVariables;
-}>().get(
+const app = createRouter().get(
   '/',
   adminMiddleware(),
   validator('query', getUsersQuerySchema, undefined, {

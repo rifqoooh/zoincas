@@ -3,7 +3,7 @@ import 'server-only';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { nextCookies } from 'better-auth/next-js';
-import { admin } from 'better-auth/plugins';
+import { admin, openAPI } from 'better-auth/plugins';
 
 import { env } from '@/env';
 import { db } from '@/lib/db';
@@ -59,5 +59,5 @@ export const auth = betterAuth({
       maxAge: 2 * 60,
     },
   },
-  plugins: [admin(), nextCookies()],
+  plugins: [admin(), openAPI(), nextCookies()],
 });
