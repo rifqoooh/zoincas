@@ -30,16 +30,17 @@ export const getUsersQuery = z.object({
   emailVerified: z.enum(['verified', 'unverified']).array().default([]),
   role: z.enum(['user', 'admin']).array().default([]),
   banned: z.enum(['active', 'banned']).array().default([]),
-  createdAt: z.preprocess((value) => {
-    if (Array.isArray(value)) {
-      const parsed = JSON.parse(String(value));
-      if (Array.isArray(parsed)) {
-        return parsed;
-      }
-      return value;
-    }
-    return value;
-  }, createdAtSchema),
+  // createdAt: z.preprocess((value) => {
+  //   if (Array.isArray(value)) {
+  //     const parsed = JSON.parse(String(value));
+  //     if (Array.isArray(parsed)) {
+  //       return parsed;
+  //     }
+  //     return value;
+  //   }
+  //   return value;
+  // }, createdAtSchema),
+  createdAt: createdAtSchema,
 });
 
 export type GetUsersQuery = z.infer<typeof getUsersQuery>;

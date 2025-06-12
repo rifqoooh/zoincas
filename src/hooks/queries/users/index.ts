@@ -34,7 +34,6 @@ export const useGetUsersQuery = () => {
   const parsedQuery = {
     ...search,
     sort: JSON.stringify(search.sort),
-    createdAt: search.createdAt.toString(),
   };
 
   const query = useQuery({
