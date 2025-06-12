@@ -1,8 +1,8 @@
-import type { GetUsersQueryType } from '@/validators/api/users/request';
+import type { GetUsersQuery } from '@/validators/api/openapi/users/request';
 
 export const usersKeys = {
   all: () => ['users'],
-  users: (search: GetUsersQueryType) => ['users', search],
+  users: (search: GetUsersQuery) => ['users', search],
   count: () => ['users', 'count'],
   countEmailVerified: () => ['users', 'count', 'email-verified'],
   countRole: () => ['users', 'count', 'role'],

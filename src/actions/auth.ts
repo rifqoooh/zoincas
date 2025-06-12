@@ -2,13 +2,11 @@
 
 import type { SignInType } from '@/validators/actions/sign-in';
 
-import { redirect } from 'next/navigation';
-
-import { env } from '@/env';
 import { auth } from '@/lib/auth/server';
 import { Routes } from '@/lib/safe-routes';
 import { signInSchema } from '@/validators/actions/sign-in';
 import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 export const signInAction = async (
   values: SignInType,
@@ -24,7 +22,7 @@ export const signInAction = async (
   });
 
   if (callbackURL) {
-    redirect(`${env().NEXT_PUBLIC_APP_URL}${callbackURL}`);
+    redirect(Routes.root({}, { search: { url: callbackURL } }));
   }
 
   redirect(Routes.root());

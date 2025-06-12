@@ -10,7 +10,7 @@ export const adminMiddleware = async () => {
   });
 
   if (!session) {
-    redirect(Routes.signIn({}, { search: { callbackURL: '/admin' } }));
+    redirect(Routes.signIn({}, { search: { callbackURL: 'admin' } }));
   }
 
   if (session.user.role !== 'admin') {
