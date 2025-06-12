@@ -2,7 +2,7 @@ export const usersQueryError = [
   {
     page: false,
     perPage: false,
-    sort: '[object Object]',
+    sort: ['[{"id":"undefined","desc":true}]'],
     email: 'test',
     emailVerified: 'undefined',
     role: 'undefined',
@@ -12,7 +12,6 @@ export const usersQueryError = [
   {
     page: true,
     perPage: true,
-    sort: ['[{"id":"undefined","desc":true}]'],
     email: 'test',
     emailVerified: ['undefined'],
     role: ['undefined'],

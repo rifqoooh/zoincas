@@ -11,7 +11,13 @@ const sortSchema = z
   .array()
   .default([{ id: 'createdAt', desc: true }]);
 
-const createdAtSchema = z.coerce.number().array().default([]);
+const emailVerifiedSchema = z
+  .enum(['verified', 'unverified'])
+  .array()
+  .default([]);
+const roleSchema = z.enum(['user', 'admin']).array().default([]);
+const bannedSchema = z.enum(['active', 'banned']).array().default([]);
+const createdAtSchema = z.coerce.number().array().max(2).default([]);
 
 export const getUsersQuery = z.object({
   page: z.coerce.number().int().positive().default(1),
@@ -24,23 +30,55 @@ export const getUsersQuery = z.object({
       }
       return value;
     }
+    if (typeof value === 'string') {
+      const parsed = JSON.parse(value);
+      if (Array.isArray(parsed)) {
+        return parsed;
+      }
+      return value;
+    }
     return value;
   }, sortSchema),
   email: z.string().default(''),
-  emailVerified: z.enum(['verified', 'unverified']).array().default([]),
-  role: z.enum(['user', 'admin']).array().default([]),
-  banned: z.enum(['active', 'banned']).array().default([]),
-  // createdAt: z.preprocess((value) => {
-  //   if (Array.isArray(value)) {
-  //     const parsed = JSON.parse(String(value));
-  //     if (Array.isArray(parsed)) {
-  //       return parsed;
-  //     }
-  //     return value;
-  //   }
-  //   return value;
-  // }, createdAtSchema),
-  createdAt: createdAtSchema,
+  emailVerified: z.preprocess((value) => {
+    if (typeof value === 'string') {
+      const parsed = [value];
+      if (Array.isArray(parsed)) {
+        return parsed;
+      }
+      return value;
+    }
+    return value;
+  }, emailVerifiedSchema),
+  role: z.preprocess((value) => {
+    if (typeof value === 'string') {
+      const parsed = [value];
+      if (Array.isArray(parsed)) {
+        return parsed;
+      }
+      return value;
+    }
+    return value;
+  }, roleSchema),
+  banned: z.preprocess((value) => {
+    if (typeof value === 'string') {
+      const parsed = [value];
+      if (Array.isArray(parsed)) {
+        return parsed;
+      }
+      return value;
+    }
+    return value;
+  }, bannedSchema),
+  createdAt: z.preprocess((value) => {
+    if (Array.isArray(value)) {
+      // biome-ignore lint/nursery/useCollapsedIf: <explanation>
+      if (value[1] === 'undefined') {
+        value[1] = value[0];
+      }
+    }
+    return value;
+  }, createdAtSchema),
 });
 
 export type GetUsersQuery = z.infer<typeof getUsersQuery>;
