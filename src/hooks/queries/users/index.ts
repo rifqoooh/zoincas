@@ -51,7 +51,7 @@ export const useGetUsersQuery = () => {
       const data = await response.json();
       const parsedData = getUsersResponse.safeParse(data);
       if (!parsedData.success) {
-        throw new Error("RESPONSE_VALIDATION_ERROR");
+        throw new Error("There is an error when parsing response data.");
       }
 
       return parsedData.data;
@@ -77,7 +77,7 @@ export const useCreateUserMutation = () => {
       const data = await response.json();
       const parsedData = selectUsersSchema.safeParse(data);
       if (!parsedData.success) {
-        throw new Error("RESPONSE_VALIDATION_ERROR");
+        throw new Error("There is an error when parsing response data.");
       }
 
       return parsedData.data;
@@ -92,7 +92,7 @@ export const useCreateUserMutation = () => {
   return mutation;
 };
 
-export const useDeleteMutation = (userId?: string) => {
+export const useDeleteUserMutation = (userId?: string) => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -110,7 +110,7 @@ export const useDeleteMutation = (userId?: string) => {
       const data = await response.json();
       const parsedData = selectUsersSchema.safeParse(data);
       if (!parsedData.success) {
-        throw new Error("RESPONSE_VALIDATION_ERROR");
+        throw new Error("There is an error when parsing response data.");
       }
 
       return parsedData.data;

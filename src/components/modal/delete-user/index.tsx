@@ -1,11 +1,15 @@
 "use client";
 
+import { toast } from "sonner";
+
 import { ConfirmationDialog } from "@/components/confirmation-dialog";
+import { useDeleteUserMutation } from "@/hooks/queries/users";
 import { useDeleteUserModal } from "@/hooks/store/delete-user";
 import { useIsClient } from "@/hooks/use-is-client";
 
 export function DeleteUserModal() {
   const store = useDeleteUserModal();
+  const mutation = useDeleteUserMutation(store.id);
 
   const isClient = useIsClient();
   if (!isClient) {
@@ -19,8 +23,24 @@ export function DeleteUserModal() {
   };
 
   const onConfirm = () => {
-    // TODO: delete user logic
-    store.onClose();
+    toast.promise(
+      mutation.mutateAsync(undefined, {
+        onSuccess: () => {
+          store.onClose();
+        },
+      }),
+      {
+        loading: "Deleting user...",
+        success: "User deleted successfully",
+        error: (error: unknown) => {
+          if (error instanceof Error) {
+            return error.message;
+          }
+
+          return "There is some internal error. Try again or contact support.";
+        },
+      },
+    );
   };
 
   return (

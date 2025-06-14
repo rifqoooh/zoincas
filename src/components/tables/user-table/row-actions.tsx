@@ -1,23 +1,30 @@
-import type { UsersDataType } from '@/validators/api/openapi/users/response';
-import type { Row } from '@tanstack/react-table';
+import type { UsersDataType } from "@/validators/api/openapi/users/response";
+import type { Row } from "@tanstack/react-table";
 
-import { MoreHorizontalIcon } from 'lucide-react';
+import { MoreHorizontalIcon } from "lucide-react";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
+import { useDeleteUserModal } from "@/hooks/store/delete-user";
 
 interface RowActionsProps {
   row: Row<UsersDataType>;
 }
 
 export function RowActions({ row }: RowActionsProps) {
-  const { banned } = row.original;
+  const { id: userId, banned } = row.original;
+
+  const deleteUserStore = useDeleteUserModal();
+
+  const onDeleteUser = () => {
+    deleteUserStore.onOpen({ id: userId });
+  };
 
   return (
     <DropdownMenu>
@@ -49,6 +56,7 @@ export function RowActions({ row }: RowActionsProps) {
         <DropdownMenuItem
           variant="destructive"
           className="dark:text-red-500 dark:focus:text-red-500"
+          onClick={onDeleteUser}
         >
           Delete user
         </DropdownMenuItem>
