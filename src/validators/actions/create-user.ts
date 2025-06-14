@@ -15,8 +15,9 @@ export const createUserSchema = z.object({
       z.literal("admin"),
       z.union([z.literal("user"), z.literal("admin")]).array(),
     ])
-    .default("user"),
-  emailVerified: z.boolean().default(false),
+    .default("user")
+    .optional(),
+  emailVerified: z.boolean().default(false).optional(),
 });
 
 export type CreateUserType = z.infer<typeof createUserSchema>;

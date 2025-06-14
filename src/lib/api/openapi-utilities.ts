@@ -37,14 +37,14 @@ interface createErrorSchemaProps<T extends ZodSchema> {
   schema: T;
   path: string;
   message: string;
-  potentioalInput?: Record<string, unknown> | Record<string, unknown>[] | null;
+  potentioalInput: Record<string, unknown> | Record<string, unknown>[] | null;
 }
 
 export const createErrorSchema = <T extends ZodSchema>({
   schema,
   path,
   message,
-  potentioalInput = {},
+  potentioalInput,
 }: createErrorSchemaProps<T>) => {
   let details: FormattedError;
   if (potentioalInput !== undefined) {

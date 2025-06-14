@@ -1,7 +1,7 @@
 "use client";
 
+import type { SignInType } from "@/validators/actions/sign-in";
 import type { SubmitHandler } from "react-hook-form";
-import type { z } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition } from "react";
@@ -12,8 +12,6 @@ import { toast } from "@/lib/toast-redirect";
 import { signInSchema } from "@/validators/actions/sign-in";
 import { parseAsString, useQueryStates } from "nuqs";
 
-type FormInputType = z.input<typeof signInSchema>;
-
 export const useSignIn = () => {
   const [search] = useQueryStates({
     callbackURL: parseAsString.withDefault(""),
@@ -23,7 +21,7 @@ export const useSignIn = () => {
 
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<FormInputType>({
+  const form = useForm<SignInType>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
       email: "",
@@ -31,7 +29,7 @@ export const useSignIn = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<FormInputType> = (values) => {
+  const onSubmit: SubmitHandler<SignInType> = (values) => {
     const parsedData = signInSchema.parse(values);
 
     startTransition(() => {

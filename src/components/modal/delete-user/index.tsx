@@ -22,11 +22,19 @@ export function DeleteUserModal() {
     action: "Delete",
   };
 
+  const onChange = () => {
+    store.onClose();
+  };
+
+  const onCancel = () => {
+    store.onClose({ reset: true });
+  };
+
   const onConfirm = () => {
     toast.promise(
       mutation.mutateAsync(undefined, {
         onSuccess: () => {
-          store.onClose();
+          store.onClose({ reset: true });
         },
       }),
       {
@@ -47,7 +55,8 @@ export function DeleteUserModal() {
     <ConfirmationDialog
       {...text}
       isOpen={store.isOpen}
-      onClose={store.onClose}
+      onChange={onChange}
+      onCancel={onCancel}
       onConfirm={onConfirm}
     />
   );

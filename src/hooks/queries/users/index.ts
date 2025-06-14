@@ -93,14 +93,14 @@ export const useCreateUserMutation = () => {
 };
 
 export const useDeleteUserMutation = (userId?: string) => {
+  console.log(userId);
+
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: async () => {
-      const response = await client.api.users[":id"].$delete({
-        param: {
-          userId: userId!,
-        },
+      const response = await client.api.users[":userId"].$delete({
+        param: { userId },
       });
       if (!response.ok) {
         const err = (await response.json()) as unknown as ErrorResponseAPI;

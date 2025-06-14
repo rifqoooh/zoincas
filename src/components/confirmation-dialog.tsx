@@ -14,7 +14,8 @@ interface ConfirmationDialogProps {
   title: string;
   description: string;
   action: string;
-  onClose: () => void;
+  onChange: () => void;
+  onCancel: () => void;
   onConfirm: () => void;
 }
 
@@ -23,18 +24,19 @@ export function ConfirmationDialog({
   title,
   description,
   action,
-  onClose,
+  onChange,
+  onCancel,
   onConfirm,
 }: ConfirmationDialogProps) {
   return (
-    <AlertDialog open={isOpen} onOpenChange={onClose}>
+    <AlertDialog open={isOpen} onOpenChange={onChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="pt-2">
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel onClick={onCancel}>Cancel</AlertDialogCancel>
           <AlertDialogAction className="gap-2" onClick={onConfirm}>
             {action}
           </AlertDialogAction>

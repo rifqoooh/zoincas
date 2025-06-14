@@ -15,21 +15,31 @@ export const createModalStore = () => {
 };
 
 export interface onOpenProps {
-  id: string | undefined;
+  id?: string;
+}
+
+export interface onCloseProps {
+  reset: boolean;
 }
 
 export type ModalStoreId = {
   id: string | undefined;
   isOpen: boolean;
   onOpen: (props?: onOpenProps) => void;
-  onClose: () => void;
+  onClose: (props?: onCloseProps) => void;
 };
 
 export const createModalStoreId = () => {
-  return create<ModalStoreId>((set) => ({
+  return create<ModalStoreId>((set, get) => ({
     id: undefined,
     isOpen: false,
-    onOpen: (props?: onOpenProps) => set({ id: props?.id, isOpen: true }),
-    onClose: () => set({ id: undefined, isOpen: false }),
+    onOpen: (props?: onOpenProps) => {
+      set({ id: props?.id, isOpen: true });
+    },
+    onClose: (props: onCloseProps = { reset: false }) => {
+      props.reset
+        ? set({ id: undefined, isOpen: false })
+        : set({ id: get().id, isOpen: false });
+    },
   }));
 };

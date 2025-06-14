@@ -17,15 +17,12 @@ import { getUsersQueryErrors, postUsersBodyErrors } from "./errors";
 const tags = ["Users"];
 
 const userIdParamSchema = z.object({
-  userId: z
-    .string()
-    .optional()
-    .openapi({
-      param: {
-        name: "userId",
-        in: "path",
-      },
-    }),
+  userId: z.string().openapi({
+    param: {
+      name: "userId",
+      in: "path",
+    },
+  }),
 });
 
 export const getUsers = createRoute({
@@ -74,17 +71,17 @@ export const postUser = createRoute({
 
 export const deleteUser = createRoute({
   method: "delete",
-  path: "/users/{id}",
+  path: "/users/{userId}",
   tags,
   middleware: [adminMiddleware()],
   request: {
-    params: userIdParamSchema,
+    params: userIdParamSchema.partial(),
   },
   responses: {
     [StatusCode.OK]: ContentJSON(selectUsersSchema, "The deleted user."),
     [StatusCode.NOT_FOUND]: ContentJSON(
       createNotFoundSchema({
-        path: "/users/{id}",
+        path: "/users/{userId}",
       }),
       "The user not found.",
     ),
@@ -93,6 +90,7 @@ export const deleteUser = createRoute({
         schema: userIdParamSchema,
         message: "The user deletion request input is invalid.",
         path: "/users",
+        potentioalInput: {},
       }),
       "The validation user deletion request input error(s).",
     ),
