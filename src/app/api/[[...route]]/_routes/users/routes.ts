@@ -28,7 +28,7 @@ const userIdParamSchema = z.object({
   }),
 });
 
-export const getUsers = createRoute({
+export const listUsers = createRoute({
   method: "get",
   path: "/users",
   tags,
@@ -50,7 +50,7 @@ export const getUsers = createRoute({
   },
 });
 
-export const postUser = createRoute({
+export const createUser = createRoute({
   method: "post",
   path: "/users",
   tags,
@@ -111,7 +111,27 @@ export const banUser = createRoute({
   },
 });
 
-export type GetUsers = typeof getUsers;
-export type PostUser = typeof postUser;
+export const unbanUser = createRoute({
+  method: "patch",
+  path: "/users/{userId}/unban",
+  tags,
+  middleware: [adminMiddleware()],
+  request: {
+    params: userIdParamSchema.partial(),
+  },
+  responses: {
+    [StatusCode.OK]: ContentJSON(selectUsersSchema, "The unbanned user."),
+    [StatusCode.NOT_FOUND]: ContentJSON(
+      createNotFoundSchema({
+        path: "/users/{userId}/unban",
+      }),
+      "The user with the requested ID does not exist in our resources.",
+    ),
+  },
+});
+
+export type ListUsers = typeof listUsers;
+export type CreateUser = typeof createUser;
 export type DeleteUser = typeof deleteUser;
 export type BanUser = typeof banUser;
+export type UnbanUser = typeof unbanUser;

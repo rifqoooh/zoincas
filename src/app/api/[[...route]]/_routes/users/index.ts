@@ -4,9 +4,10 @@ import * as handlers from "./handler";
 import * as routes from "./routes";
 
 const router = createRouter()
-  .openapi(routes.getUsers, handlers.getUsers)
-  .openapi(routes.postUser, handlers.postUser)
+  .openapi(routes.listUsers, handlers.listUsers)
+  .openapi(routes.createUser, handlers.createUser)
   .openapi(routes.deleteUser, handlers.deleteUser)
-  .openapi(routes.banUser, handlers.banUser);
+  .openapi(routes.banUser, handlers.banUser)
+  .openapi(routes.unbanUser, handlers.unbanUser);
 
 export default router;
