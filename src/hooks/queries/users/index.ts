@@ -1,33 +1,34 @@
-import type { ErrorResponseAPI } from '@/lib/api/types';
-import type { SelectUsersType } from '@/validators/db/users';
+import type { ErrorResponseAPI } from "@/lib/api/types";
+import { type SelectUsersType, selectUsersSchema } from "@/validators/db/users";
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   parseAsArrayOf,
   parseAsInteger,
   parseAsString,
   useQueryStates,
-} from 'nuqs';
-import { z } from 'zod';
+} from "nuqs";
+import { z } from "zod";
 
-import { client } from '@/lib/api/rpc';
-import { getSortingStateParser } from '@/lib/parsers';
-import { getUsersResponse } from '@/validators/api/openapi/users/response';
-import { usersKeys } from './keys';
+import { client } from "@/lib/api/rpc";
+import { getSortingStateParser } from "@/lib/parsers";
+import type { CreateUserType } from "@/validators/actions/create-user";
+import { getUsersResponse } from "@/validators/api/openapi/users/response";
+import { usersKeys } from "./keys";
 
 export const useGetUsersQuery = () => {
   const [search] = useQueryStates({
     page: parseAsInteger.withDefault(1),
     perPage: parseAsInteger.withDefault(10),
     sort: getSortingStateParser<SelectUsersType>().withDefault([
-      { id: 'createdAt', desc: true },
+      { id: "createdAt", desc: true },
     ]),
-    email: parseAsString.withDefault(''),
+    email: parseAsString.withDefault(""),
     emailVerified: parseAsArrayOf(
-      z.enum(['verified', 'unverified'])
+      z.enum(["verified", "unverified"]),
     ).withDefault([]),
-    role: parseAsArrayOf(z.enum(['user', 'admin'])).withDefault([]),
-    banned: parseAsArrayOf(z.enum(['banned', 'active'])).withDefault([]),
+    role: parseAsArrayOf(z.enum(["user", "admin"])).withDefault([]),
+    banned: parseAsArrayOf(z.enum(["banned", "active"])).withDefault([]),
     createdAt: parseAsArrayOf(z.coerce.number()).withDefault([]),
   });
 
@@ -50,7 +51,7 @@ export const useGetUsersQuery = () => {
       const data = await response.json();
       const parsedData = getUsersResponse.safeParse(data);
       if (!parsedData.success) {
-        throw new Error('OUTPUT_VALIDATION_ERROR');
+        throw new Error("RESPONSE_VALIDATION_ERROR");
       }
 
       return parsedData.data;
@@ -58,4 +59,68 @@ export const useGetUsersQuery = () => {
   });
 
   return query;
+};
+
+export const useCreateUserMutation = () => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: async (values: CreateUserType) => {
+      const response = await client.api.users.$post({
+        json: values,
+      });
+      if (!response.ok) {
+        const err = (await response.json()) as unknown as ErrorResponseAPI;
+        throw new Error(err.error.message);
+      }
+
+      const data = await response.json();
+      const parsedData = selectUsersSchema.safeParse(data);
+      if (!parsedData.success) {
+        throw new Error("RESPONSE_VALIDATION_ERROR");
+      }
+
+      return parsedData.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: usersKeys.all(),
+      });
+    },
+  });
+
+  return mutation;
+};
+
+export const useDeleteMutation = (userId?: string) => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: async () => {
+      const response = await client.api.users[":id"].$delete({
+        param: {
+          userId: userId!,
+        },
+      });
+      if (!response.ok) {
+        const err = (await response.json()) as unknown as ErrorResponseAPI;
+        throw new Error(err.error.message);
+      }
+
+      const data = await response.json();
+      const parsedData = selectUsersSchema.safeParse(data);
+      if (!parsedData.success) {
+        throw new Error("RESPONSE_VALIDATION_ERROR");
+      }
+
+      return parsedData.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: usersKeys.all(),
+      });
+    },
+  });
+
+  return mutation;
 };

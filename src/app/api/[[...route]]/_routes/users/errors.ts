@@ -1,4 +1,4 @@
-export const usersQueryError = [
+export const getUsersQueryErrors = [
   {
     page: false,
     perPage: false,
@@ -16,5 +16,24 @@ export const usersQueryError = [
     emailVerified: ['undefined'],
     role: ['undefined'],
     banned: ['undefined'],
+  },
+];
+
+export const postUsersBodyErrors = [
+  {},
+  {
+    name: 1,
+    email: 'test',
+    emailVerified: 'false',
+    role: 'undefined',
+    password: 'fYtLqWa',
+  },
+  {
+    name: 'test',
+    email: 'test@example.com',
+    emailVerified: false,
+    role: 'user',
+    password:
+      'WmTcjRvKzAYpNeLuqsGbJHTIMoakVXEdCBhfywZnxSrQPLgUemOdtFiNvkrBl1Znx',
   },
 ];

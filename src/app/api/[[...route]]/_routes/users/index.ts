@@ -1,8 +1,11 @@
-import { createRouter } from '@/lib/api/create-router';
+import { createRouter } from "@/lib/api/create-router";
 
-import * as handlers from './handler';
-import * as routes from './routes';
+import * as handlers from "./handler";
+import * as routes from "./routes";
 
-const router = createRouter().openapi(routes.getUsers, handlers.getUsers);
+const router = createRouter()
+  .openapi(routes.getUsers, handlers.getUsers)
+  .openapi(routes.postUser, handlers.postUser)
+  .openapi(routes.deleteUser, handlers.deleteUser);
 
 export default router;

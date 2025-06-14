@@ -1,33 +1,34 @@
-import type { GetUsersQuery } from '@/validators/api/openapi/users/request';
+import type { GetUsersQuery } from "@/validators/api/openapi/users/request";
 
 import {
   and,
   asc,
   count,
   desc,
+  eq,
   gte,
   ilike,
   inArray,
   lte,
   or,
-} from 'drizzle-orm';
+} from "drizzle-orm";
 
-import { db } from '@/lib/db';
-import { users } from '@/lib/db/schema';
-import { coalesce } from '@/lib/db/utilities';
+import { db } from "@/lib/db";
+import { users } from "@/lib/db/schema";
+import { coalesce } from "@/lib/db/utilities";
 
 export const getUsers = async (query: GetUsersQuery) => {
   const [startCreatedAt, endCreatedAt] = query.createdAt;
 
   const offset = (query.page - 1) * query.perPage;
-  const emailVerified = query.emailVerified.map((item) => item === 'verified');
-  const banned = query.banned.map((item) => item === 'banned');
+  const emailVerified = query.emailVerified.map((item) => item === "verified");
+  const banned = query.banned.map((item) => item === "banned");
 
   const where = and(
     query.email
       ? or(
           ilike(users.name, `%${query.email}%`),
-          ilike(users.email, `%${query.email}%`)
+          ilike(users.email, `%${query.email}%`),
         )
       : undefined,
     query.emailVerified.length > 0
@@ -44,7 +45,7 @@ export const getUsers = async (query: GetUsersQuery) => {
                   const date = new Date(query.createdAt[0]);
                   date.setHours(0, 0, 0, 0);
                   return date;
-                })()
+                })(),
               )
             : undefined,
           endCreatedAt
@@ -54,17 +55,17 @@ export const getUsers = async (query: GetUsersQuery) => {
                   const date = new Date(query.createdAt[1]);
                   date.setHours(23, 59, 59, 999);
                   return date;
-                })()
+                })(),
               )
-            : undefined
+            : undefined,
         )
-      : undefined
+      : undefined,
   );
 
   const orderBy =
     query.sort.length > 0
       ? query.sort.map((item) =>
-          item.desc ? desc(users[item.id]) : asc(users[item.id])
+          item.desc ? desc(users[item.id]) : asc(users[item.id]),
         )
       : [asc(users.createdAt)];
 
@@ -88,7 +89,7 @@ export const getUsers = async (query: GetUsersQuery) => {
 
     const [total] = await tx
       .select({
-        count: coalesce(count(), 0).mapWith(Number).as('count'),
+        count: coalesce(count(), 0).mapWith(Number).as("count"),
       })
       .from(users)
       .where(where)
@@ -110,4 +111,14 @@ export const getUsers = async (query: GetUsersQuery) => {
   };
 
   return { data, pagination };
+};
+
+export const getUser = async (userId: string) => {
+  const [data] = await db
+    .select()
+    .from(users)
+    .where(eq(users.id, userId))
+    .limit(1);
+
+  return data;
 };

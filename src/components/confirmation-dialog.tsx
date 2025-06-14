@@ -1,0 +1,45 @@
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+
+interface ConfirmationDialogProps {
+  isOpen: boolean;
+  title: string;
+  description: string;
+  action: string;
+  onClose: () => void;
+  onConfirm: () => void;
+}
+
+export function ConfirmationDialog({
+  isOpen,
+  title,
+  description,
+  action,
+  onClose,
+  onConfirm,
+}: ConfirmationDialogProps) {
+  return (
+    <AlertDialog open={isOpen} onOpenChange={onClose}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogDescription>{description}</AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter className="pt-2">
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction className="gap-2" onClick={onConfirm}>
+            {action}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}

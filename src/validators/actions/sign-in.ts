@@ -1,11 +1,11 @@
-import { requiredString } from '@/validators/utilities';
-import { z } from 'zod';
+import { requiredString } from "@/validators/utilities";
+import { z } from "zod";
 
 export const signInSchema = z.object({
-  email: requiredString.email('Invalid email address'),
+  email: requiredString.email("Invalid email address"),
   password: requiredString
-    .min(8, 'Password must be at least 8 characters')
-    .max(64, 'Password must be at most 64 characters'),
+    .min(8, "Password must be at least 8 characters")
+    .max(64, "Password must be at most 64 characters"),
 });
 
 export type SignInType = z.infer<typeof signInSchema>;

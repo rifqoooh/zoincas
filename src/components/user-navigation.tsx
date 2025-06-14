@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { CheckIcon, ChevronsUpDownIcon, LogOutIcon } from 'lucide-react';
-import { useTheme } from 'next-themes';
+import { CheckIcon, ChevronsUpDownIcon, LogOutIcon } from "lucide-react";
+import { useTheme } from "next-themes";
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,11 +13,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Skeleton } from '@/components/ui/skeleton';
-import { useGetSessionsQuery } from '@/hooks/queries/sessions';
-import { useSignOut } from '@/hooks/use-sign-out';
-import { cn } from '@/lib/utilities';
+} from "@/components/ui/dropdown-menu";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useSignOut } from "@/hooks/actions/use-sign-out";
+import { useGetSessionsQuery } from "@/hooks/queries/sessions";
+import { cn } from "@/lib/utilities";
 
 export function UserNavigation() {
   const { theme, setTheme } = useTheme();
@@ -77,29 +77,29 @@ export function UserNavigation() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => setTheme('light')}>
+          <DropdownMenuItem onClick={() => setTheme("light")}>
             <CheckIcon
               className={cn(
-                'opacity-0 transition-opacity',
-                theme === 'light' && 'opacity-100'
+                "opacity-0 transition-opacity",
+                theme === "light" && "opacity-100",
               )}
             />
             Light theme
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setTheme('dark')}>
+          <DropdownMenuItem onClick={() => setTheme("dark")}>
             <CheckIcon
               className={cn(
-                'opacity-0 transition-opacity',
-                theme === 'dark' && 'opacity-100'
+                "opacity-0 transition-opacity",
+                theme === "dark" && "opacity-100",
               )}
             />
             Dark theme
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setTheme('system')}>
+          <DropdownMenuItem onClick={() => setTheme("system")}>
             <CheckIcon
               className={cn(
-                'opacity-0 transition-opacity',
-                theme === 'system' && 'opacity-100'
+                "opacity-0 transition-opacity",
+                theme === "system" && "opacity-100",
               )}
             />
             System theme

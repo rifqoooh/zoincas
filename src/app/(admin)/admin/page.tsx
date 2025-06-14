@@ -1,12 +1,13 @@
-import { Container } from '@/components/container';
-import { UsersTable } from '@/components/tables/user-table';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { UserNavigation } from '@/components/user-navigation';
+import { Container } from "@/components/container";
+import { CreateNewUserButton } from "@/components/modal/create-user/button";
+import { UsersTable } from "@/components/tables/user-table";
+import { Separator } from "@/components/ui/separator";
+import { UserNavigation } from "@/components/user-navigation";
+import { AdminProviders } from "../_components/providers";
 
 export default function AdminPage() {
   return (
-    <>
+    <AdminProviders>
       <header className="sticky inset-0 z-10 border-b">
         <Container className="px-4 py-6">
           <div className="flex items-center gap-4">
@@ -28,7 +29,7 @@ export default function AdminPage() {
               </p>
             </div>
 
-            <Button>Create new user</Button>
+            <CreateNewUserButton />
           </div>
 
           <Separator />
@@ -38,6 +39,6 @@ export default function AdminPage() {
           </div>
         </Container>
       </main>
-    </>
+    </AdminProviders>
   );
 }

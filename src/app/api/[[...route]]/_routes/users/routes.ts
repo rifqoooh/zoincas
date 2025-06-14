@@ -1,38 +1,104 @@
-import * as StatusCode from '@/lib/api/http-status-code';
+import * as StatusCode from "@/lib/api/http-status-code";
 
-import { createRoute } from '@hono/zod-openapi';
+import { createRoute, z } from "@hono/zod-openapi";
 
-import { ContentJSON, createErrorSchema } from '@/lib/api/openapi-utilities';
-import { adminMiddleware } from '@/middleware/api/admin-middleware';
-import { getUsersQuery } from '@/validators/api/openapi/users/request';
-import { getUsersResponse } from '@/validators/api/openapi/users/response';
-import { usersQueryError } from './errors';
+import {
+  ContentJSON,
+  ContentJSONRequired,
+  createErrorSchema,
+  createNotFoundSchema,
+} from "@/lib/api/openapi-utilities";
+import { adminMiddleware } from "@/middleware/api/admin-middleware";
+import { getUsersQuery } from "@/validators/api/openapi/users/request";
+import { getUsersResponse } from "@/validators/api/openapi/users/response";
+import { insertUsersSchema, selectUsersSchema } from "@/validators/db/users";
+import { getUsersQueryErrors, postUsersBodyErrors } from "./errors";
 
-const tags = ['Users'];
+const tags = ["Users"];
+
+const userIdParamSchema = z.object({
+  userId: z
+    .string()
+    .optional()
+    .openapi({
+      param: {
+        name: "userId",
+        in: "path",
+      },
+    }),
+});
 
 export const getUsers = createRoute({
-  method: 'get',
-  path: '/users',
+  method: "get",
+  path: "/users",
   tags,
   middleware: [adminMiddleware()],
   request: {
     query: getUsersQuery,
   },
   responses: {
-    [StatusCode.OK]: ContentJSON(
-      getUsersResponse,
-      'Get the list of all users.'
-    ),
+    [StatusCode.OK]: ContentJSON(getUsersResponse, "The list of users."),
     [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
       createErrorSchema({
         schema: getUsersQuery,
-        message: 'The user query request input is invalid.',
-        path: '/users',
-        potentioalInput: usersQueryError,
+        message: "The user query request input is invalid.",
+        path: "/users",
+        potentioalInput: getUsersQueryErrors,
       }),
-      'The validation query parameters error(s).'
+      "The validation query parameters error(s).",
+    ),
+  },
+});
+
+export const postUser = createRoute({
+  method: "post",
+  path: "/users",
+  tags,
+  middleware: [adminMiddleware()],
+  request: {
+    body: ContentJSONRequired(insertUsersSchema, "The user to create."),
+  },
+  responses: {
+    [StatusCode.CREATED]: ContentJSON(selectUsersSchema, "The created user."),
+    [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
+      createErrorSchema({
+        schema: insertUsersSchema,
+        message: "The user creation request input is invalid.",
+        path: "/users",
+        potentioalInput: postUsersBodyErrors,
+      }),
+      "The validation user creation request input error(s).",
+    ),
+  },
+});
+
+export const deleteUser = createRoute({
+  method: "delete",
+  path: "/users/{id}",
+  tags,
+  middleware: [adminMiddleware()],
+  request: {
+    params: userIdParamSchema,
+  },
+  responses: {
+    [StatusCode.OK]: ContentJSON(selectUsersSchema, "The deleted user."),
+    [StatusCode.NOT_FOUND]: ContentJSON(
+      createNotFoundSchema({
+        path: "/users/{id}",
+      }),
+      "The user not found.",
+    ),
+    [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
+      createErrorSchema({
+        schema: userIdParamSchema,
+        message: "The user deletion request input is invalid.",
+        path: "/users",
+      }),
+      "The validation user deletion request input error(s).",
     ),
   },
 });
 
 export type GetUsers = typeof getUsers;
+export type PostUser = typeof postUser;
+export type DeleteUser = typeof deleteUser;
