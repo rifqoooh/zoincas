@@ -11,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useBanUserModal } from "@/hooks/store/ban-user";
 import { useDeleteUserModal } from "@/hooks/store/delete-user";
 
 interface RowActionsProps {
@@ -21,9 +22,14 @@ export function RowActions({ row }: RowActionsProps) {
   const { id: userId, banned } = row.original;
 
   const deleteUserStore = useDeleteUserModal();
+  const banUserStore = useBanUserModal();
 
   const onDeleteUser = () => {
     deleteUserStore.onOpen({ id: userId });
+  };
+
+  const onBanUser = () => {
+    banUserStore.onOpen({ id: userId });
   };
 
   return (
@@ -42,6 +48,7 @@ export function RowActions({ row }: RowActionsProps) {
           <DropdownMenuItem
             variant="destructive"
             className="dark:text-red-500 dark:focus:text-red-500"
+            onClick={onBanUser}
           >
             Ban user
           </DropdownMenuItem>

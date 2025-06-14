@@ -1,5 +1,7 @@
 import type { ErrorResponseAPI } from "@/lib/api/types";
-import { type SelectUsersType, selectUsersSchema } from "@/validators/db/users";
+import type { CreateUserType } from "@/validators/actions/create-user";
+import type { PatchUserBanInputType } from "@/validators/api/openapi/users/request";
+import type { SelectUsersType } from "@/validators/db/users";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -12,8 +14,8 @@ import { z } from "zod";
 
 import { client } from "@/lib/api/rpc";
 import { getSortingStateParser } from "@/lib/parsers";
-import type { CreateUserType } from "@/validators/actions/create-user";
 import { getUsersResponse } from "@/validators/api/openapi/users/response";
+import { selectUsersSchema } from "@/validators/db/users";
 import { usersKeys } from "./keys";
 
 export const useGetUsersQuery = () => {
@@ -93,14 +95,44 @@ export const useCreateUserMutation = () => {
 };
 
 export const useDeleteUserMutation = (userId?: string) => {
-  console.log(userId);
-
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: async () => {
       const response = await client.api.users[":userId"].$delete({
         param: { userId },
+      });
+      if (!response.ok) {
+        const err = (await response.json()) as unknown as ErrorResponseAPI;
+        throw new Error(err.error.message);
+      }
+
+      const data = await response.json();
+      const parsedData = selectUsersSchema.safeParse(data);
+      if (!parsedData.success) {
+        throw new Error("There is an error when parsing response data.");
+      }
+
+      return parsedData.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: usersKeys.all(),
+      });
+    },
+  });
+
+  return mutation;
+};
+
+export const useBanUserMutation = (userId?: string) => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: async (values: PatchUserBanInputType) => {
+      const response = await client.api.users[":userId"].ban.$patch({
+        param: { userId },
+        json: values,
       });
       if (!response.ok) {
         const err = (await response.json()) as unknown as ErrorResponseAPI;

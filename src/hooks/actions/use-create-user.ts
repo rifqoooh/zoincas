@@ -34,9 +34,6 @@ export const useCreateUser = () => {
         onSuccess: () => {
           store.onClose();
         },
-        onError: () => {
-          form.reset();
-        },
       }),
       {
         loading: "Creating user...",
