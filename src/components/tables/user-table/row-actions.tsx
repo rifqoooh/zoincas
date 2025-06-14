@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useBanUserModal } from "@/hooks/store/ban-user";
 import { useDeleteUserModal } from "@/hooks/store/delete-user";
+import { useUnbanUserModal } from "@/hooks/store/unban-user";
 
 interface RowActionsProps {
   row: Row<UsersDataType>;
@@ -21,15 +22,20 @@ interface RowActionsProps {
 export function RowActions({ row }: RowActionsProps) {
   const { id: userId, banned } = row.original;
 
-  const deleteUserStore = useDeleteUserModal();
   const banUserStore = useBanUserModal();
-
-  const onDeleteUser = () => {
-    deleteUserStore.onOpen({ id: userId });
-  };
+  const unbanUserStore = useUnbanUserModal();
+  const deleteUserStore = useDeleteUserModal();
 
   const onBanUser = () => {
     banUserStore.onOpen({ id: userId });
+  };
+
+  const onUnbanUser = () => {
+    unbanUserStore.onOpen({ id: userId });
+  };
+
+  const onDeleteUser = () => {
+    deleteUserStore.onOpen({ id: userId });
   };
 
   return (
@@ -44,20 +50,21 @@ export function RowActions({ row }: RowActionsProps) {
         <DropdownMenuItem>Change Password</DropdownMenuItem>
         <DropdownMenuItem>Revoke all sessions</DropdownMenuItem>
         <DropdownMenuSeparator />
-        {banned === null || banned === false ? (
+        {banned ? (
+          <DropdownMenuItem
+            variant="destructive"
+            className="dark:text-red-500 dark:focus:text-red-500"
+            onClick={onUnbanUser}
+          >
+            Unban user
+          </DropdownMenuItem>
+        ) : (
           <DropdownMenuItem
             variant="destructive"
             className="dark:text-red-500 dark:focus:text-red-500"
             onClick={onBanUser}
           >
             Ban user
-          </DropdownMenuItem>
-        ) : (
-          <DropdownMenuItem
-            variant="destructive"
-            className="dark:text-red-500 dark:focus:text-red-500"
-          >
-            Unban user
           </DropdownMenuItem>
         )}
         <DropdownMenuItem

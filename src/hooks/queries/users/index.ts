@@ -156,3 +156,34 @@ export const useBanUserMutation = (userId?: string) => {
 
   return mutation;
 };
+
+export const useUnbanUserMutation = (userId?: string) => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: async () => {
+      const response = await client.api.users[":userId"].unban.$patch({
+        param: { userId },
+      });
+      if (!response.ok) {
+        const err = (await response.json()) as unknown as ErrorResponseAPI;
+        throw new Error(err.error.message);
+      }
+
+      const data = await response.json();
+      const parsedData = selectUsersSchema.safeParse(data);
+      if (!parsedData.success) {
+        throw new Error("There is an error when parsing response data.");
+      }
+
+      return parsedData.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: usersKeys.all(),
+      });
+    },
+  });
+
+  return mutation;
+};

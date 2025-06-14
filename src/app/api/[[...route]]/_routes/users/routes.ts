@@ -72,6 +72,25 @@ export const createUser = createRoute({
   },
 });
 
+export const revokeSession = createRoute({
+  method: "delete",
+  path: "/users/{userId}/revoke-sessions",
+  tags,
+  middleware: [adminMiddleware()],
+  request: {
+    params: userIdParamSchema.partial(),
+  },
+  responses: {
+    [StatusCode.OK]: ContentJSON(selectUsersSchema, "The revoked session."),
+    [StatusCode.NOT_FOUND]: ContentJSON(
+      createNotFoundSchema({
+        path: "/users/{userId}/revoke-sessions",
+      }),
+      "The user with the requested ID does not exist in our resources.",
+    ),
+  },
+});
+
 export const deleteUser = createRoute({
   method: "delete",
   path: "/users/{userId}",
@@ -132,6 +151,7 @@ export const unbanUser = createRoute({
 
 export type ListUsers = typeof listUsers;
 export type CreateUser = typeof createUser;
+export type RevokeSession = typeof revokeSession;
 export type DeleteUser = typeof deleteUser;
 export type BanUser = typeof banUser;
 export type UnbanUser = typeof unbanUser;

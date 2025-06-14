@@ -7,6 +7,7 @@ import type {
   CreateUser,
   DeleteUser,
   ListUsers,
+  RevokeSession,
   UnbanUser,
 } from "./routes";
 
@@ -41,13 +42,38 @@ export const createUser: AppRouteHandler<CreateUser> = async (c) => {
   return c.json(data.user, StatusCode.CREATED);
 };
 
+export const revokeSession: AppRouteHandler<RevokeSession> = async (c) => {
+  const { userId } = c.req.valid("param");
+
+  const data = await users.getUser(userId!);
+  if (!data) {
+    return c.json(
+      createNotFoundResponse({ path: c.req.path }),
+      StatusCode.NOT_FOUND,
+    );
+  }
+
+  const { success: isSuccess } = await auth.api.revokeUserSessions({
+    headers: c.req.raw.headers,
+    body: { userId: userId! },
+  });
+  if (!isSuccess) {
+    return c.json(
+      createNotFoundResponse({ path: c.req.path }),
+      StatusCode.NOT_FOUND,
+    );
+  }
+
+  return c.json(data, StatusCode.OK);
+};
+
 export const deleteUser: AppRouteHandler<DeleteUser> = async (c) => {
   const { userId } = c.req.valid("param");
 
   const data = await users.getUser(userId!);
   if (!data) {
     return c.json(
-      createNotFoundResponse({ path: "/users/{id}" }),
+      createNotFoundResponse({ path: c.req.path }),
       StatusCode.NOT_FOUND,
     );
   }
@@ -58,7 +84,7 @@ export const deleteUser: AppRouteHandler<DeleteUser> = async (c) => {
   });
   if (!isSuccess) {
     return c.json(
-      createNotFoundResponse({ path: "/users/{id}" }),
+      createNotFoundResponse({ path: c.req.path }),
       StatusCode.NOT_FOUND,
     );
   }
@@ -86,7 +112,7 @@ export const banUser: AppRouteHandler<BanUser> = async (c) => {
   })) as unknown as { user: SelectUsersType };
   if (!data.user) {
     return c.json(
-      createNotFoundResponse({ path: "/users/{id}/ban" }),
+      createNotFoundResponse({ path: c.req.path }),
       StatusCode.NOT_FOUND,
     );
   }
@@ -103,7 +129,7 @@ export const unbanUser: AppRouteHandler<UnbanUser> = async (c) => {
   })) as unknown as { user: SelectUsersType };
   if (!data.user) {
     return c.json(
-      createNotFoundResponse({ path: "/users/{id}/unban" }),
+      createNotFoundResponse({ path: c.req.path }),
       StatusCode.NOT_FOUND,
     );
   }
