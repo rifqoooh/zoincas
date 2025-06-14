@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export interface ZodIssue {
   code: string;
@@ -22,7 +22,7 @@ export const formatZodIssues = (issues: ZodIssue[]): FormattedError => {
       message: issue.message,
     };
 
-    const field = issue.path.join('.');
+    const field = issue.path.join(".");
 
     // If the field doesn't exist in the accumulator, initialize it as an empty array
     if (!acc[field]) {
@@ -31,29 +31,9 @@ export const formatZodIssues = (issues: ZodIssue[]): FormattedError => {
 
     acc[field].push(formatted);
 
-    // // Apply the issue to each field in the path
-    // for (const segment of issue.path) {
-    //   // Ensure it's a string key
-    //   const field = String(segment);
-
-    //   // If the field doesn't exist in the accumulator, initialize it as an empty array
-    //   if (!acc[field]) {
-    //     acc[field] = [];
-    //   }
-
-    //   acc[field].push(formatted);
-    // }
-
     return acc;
   }, {});
 };
-
-// type ErrorDetail = {
-//   code: string;
-//   message: string;
-// };
-
-// type ErrorMap = Record<string, ErrorDetail[]>;
 
 export const ErrorIssuesMapSchema = z.record(
   z
@@ -61,7 +41,7 @@ export const ErrorIssuesMapSchema = z.record(
       code: z.string(),
       message: z.string(),
     })
-    .array()
+    .array(),
 );
 
 type ErrorIssuesMap = z.infer<typeof ErrorIssuesMapSchema>;

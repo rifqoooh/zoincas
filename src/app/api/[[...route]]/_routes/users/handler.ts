@@ -1,7 +1,8 @@
 import * as StatusCode from "@/lib/api/http-status-code";
 
 import type { AppRouteHandler } from "@/lib/api/types";
-import type { DeleteUser, GetUsers, PostUser } from "./routes";
+import type { SelectUsersType } from "@/validators/db/users";
+import type { BanUser, DeleteUser, GetUsers, PostUser } from "./routes";
 
 import { createNotFoundResponse } from "@/lib/api/openapi-utilities";
 import { auth } from "@/lib/auth/server";
@@ -57,4 +58,32 @@ export const deleteUser: AppRouteHandler<DeleteUser> = async (c) => {
   }
 
   return c.json(data, StatusCode.OK);
+};
+
+export const banUser: AppRouteHandler<BanUser> = async (c) => {
+  const { userId } = c.req.valid("param");
+  const input = c.req.valid("json");
+
+  const banReason = input.banReason || "";
+  const banExpiresIn =
+    input.banExpiresInDays !== undefined
+      ? input.banExpiresInDays * 24 * 60 * 60
+      : undefined;
+
+  const data = (await auth.api.banUser({
+    headers: c.req.raw.headers,
+    body: {
+      userId: userId!,
+      banReason,
+      banExpiresIn,
+    },
+  })) as unknown as { user: SelectUsersType };
+  if (!data.user) {
+    return c.json(
+      createNotFoundResponse({ path: "/users/{id}/ban" }),
+      StatusCode.NOT_FOUND,
+    );
+  }
+
+  return c.json(data.user, StatusCode.OK);
 };

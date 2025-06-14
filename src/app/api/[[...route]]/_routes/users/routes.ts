@@ -9,7 +9,10 @@ import {
   createNotFoundSchema,
 } from "@/lib/api/openapi-utilities";
 import { adminMiddleware } from "@/middleware/api/admin-middleware";
-import { getUsersQuery } from "@/validators/api/openapi/users/request";
+import {
+  getUsersQuery,
+  patchUserBanInputSchema,
+} from "@/validators/api/openapi/users/request";
 import { getUsersResponse } from "@/validators/api/openapi/users/response";
 import { insertUsersSchema, selectUsersSchema } from "@/validators/db/users";
 import { getUsersQueryErrors, postUsersBodyErrors } from "./errors";
@@ -83,16 +86,27 @@ export const deleteUser = createRoute({
       createNotFoundSchema({
         path: "/users/{userId}",
       }),
-      "The user not found.",
+      "The user with the requested ID does not exist in our resources.",
     ),
-    [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
-      createErrorSchema({
-        schema: userIdParamSchema,
-        message: "The user deletion request input is invalid.",
-        path: "/users",
-        potentioalInput: {},
+  },
+});
+
+export const banUser = createRoute({
+  method: "patch",
+  path: "/users/{userId}/ban",
+  tags,
+  middleware: [adminMiddleware()],
+  request: {
+    params: userIdParamSchema.partial(),
+    body: ContentJSONRequired(patchUserBanInputSchema, "The user to ban."),
+  },
+  responses: {
+    [StatusCode.OK]: ContentJSON(selectUsersSchema, "The banned user."),
+    [StatusCode.NOT_FOUND]: ContentJSON(
+      createNotFoundSchema({
+        path: "/users/{userId}/ban",
       }),
-      "The validation user deletion request input error(s).",
+      "The user with the requested ID does not exist in our resources.",
     ),
   },
 });
@@ -100,3 +114,4 @@ export const deleteUser = createRoute({
 export type GetUsers = typeof getUsers;
 export type PostUser = typeof postUser;
 export type DeleteUser = typeof deleteUser;
+export type BanUser = typeof banUser;

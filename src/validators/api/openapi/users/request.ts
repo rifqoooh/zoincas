@@ -1,7 +1,7 @@
-import { z } from 'zod';
+import { z } from "zod";
 
-import { selectUsersSchema } from '@/validators/db/users';
-import { zodEnumFromZodObject } from '@/validators/utilities';
+import { selectUsersSchema } from "@/validators/db/users";
+import { zodEnumFromZodObject } from "@/validators/utilities";
 
 const sortSchema = z
   .object({
@@ -9,14 +9,14 @@ const sortSchema = z
     desc: z.boolean(),
   })
   .array()
-  .default([{ id: 'createdAt', desc: true }]);
+  .default([{ id: "createdAt", desc: true }]);
 
 const emailVerifiedSchema = z
-  .enum(['verified', 'unverified'])
+  .enum(["verified", "unverified"])
   .array()
   .default([]);
-const roleSchema = z.enum(['user', 'admin']).array().default([]);
-const bannedSchema = z.enum(['active', 'banned']).array().default([]);
+const roleSchema = z.enum(["user", "admin"]).array().default([]);
+const bannedSchema = z.enum(["active", "banned"]).array().default([]);
 const createdAtSchema = z.coerce.number().array().max(2).default([]);
 
 export const getUsersQuery = z.object({
@@ -30,7 +30,7 @@ export const getUsersQuery = z.object({
       }
       return value;
     }
-    if (typeof value === 'string') {
+    if (typeof value === "string") {
       const parsed = JSON.parse(value);
       if (Array.isArray(parsed)) {
         return parsed;
@@ -39,9 +39,9 @@ export const getUsersQuery = z.object({
     }
     return value;
   }, sortSchema),
-  email: z.string().default(''),
+  email: z.string().default(""),
   emailVerified: z.preprocess((value) => {
-    if (typeof value === 'string') {
+    if (typeof value === "string") {
       const parsed = [value];
       if (Array.isArray(parsed)) {
         return parsed;
@@ -51,7 +51,7 @@ export const getUsersQuery = z.object({
     return value;
   }, emailVerifiedSchema),
   role: z.preprocess((value) => {
-    if (typeof value === 'string') {
+    if (typeof value === "string") {
       const parsed = [value];
       if (Array.isArray(parsed)) {
         return parsed;
@@ -61,7 +61,7 @@ export const getUsersQuery = z.object({
     return value;
   }, roleSchema),
   banned: z.preprocess((value) => {
-    if (typeof value === 'string') {
+    if (typeof value === "string") {
       const parsed = [value];
       if (Array.isArray(parsed)) {
         return parsed;
@@ -73,7 +73,7 @@ export const getUsersQuery = z.object({
   createdAt: z.preprocess((value) => {
     if (Array.isArray(value)) {
       // biome-ignore lint/nursery/useCollapsedIf: <explanation>
-      if (value[1] === 'undefined') {
+      if (value[1] === "undefined") {
         value[1] = value[0];
       }
     }
@@ -82,3 +82,10 @@ export const getUsersQuery = z.object({
 });
 
 export type GetUsersQuery = z.infer<typeof getUsersQuery>;
+
+export const patchUserBanInputSchema = z.object({
+  banReason: z.string().optional(),
+  banExpiresInDays: z.coerce.number().optional(),
+});
+
+export type PatchUserBanInputType = z.infer<typeof patchUserBanInputSchema>;
