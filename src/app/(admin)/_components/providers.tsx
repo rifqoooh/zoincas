@@ -11,11 +11,11 @@ export function AdminProviders({ children }: { children: React.ReactNode }) {
       <CreateNewUserModal />
 
       {/* Table row actions providers */}
+      <DeleteUserModal />
       <ResetPasswordModal />
       <RevokeSessionsModal />
       <BanUserModal />
       <UnbanUserModal />
-      <DeleteUserModal />
 
       {children}
     </>
