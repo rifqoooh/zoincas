@@ -1,10 +1,10 @@
-import type { GetUsersQuery } from '@/validators/api/openapi/users/request';
+import type { listUsersQuery } from "@/validators/api/openapi/users/request";
 
 export const usersKeys = {
-  all: () => ['users'],
-  users: (search: GetUsersQuery) => ['users', search],
-  count: () => ['users', 'count'],
-  countEmailVerified: () => ['users', 'count', 'email-verified'],
-  countRole: () => ['users', 'count', 'role'],
-  countBanned: () => ['users', 'count', 'banned'],
+  all: () => ["users"],
+  users: (search: listUsersQuery) => ["users", search],
+  count: () => ["users", "count"],
+  countEmailVerified: () => ["users", "count", "email-verified"],
+  countRole: () => ["users", "count", "role"],
+  countBanned: () => ["users", "count", "banned"],
 };

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { selectUsersSchema } from "@/validators/db/users";
-import { zodEnumFromZodObject } from "@/validators/utilities";
+import { requiredString, zodEnumFromZodObject } from "@/validators/utilities";
 
 const sortSchema = z
   .object({
@@ -19,7 +19,7 @@ const roleSchema = z.enum(["user", "admin"]).array().default([]);
 const bannedSchema = z.enum(["active", "banned"]).array().default([]);
 const createdAtSchema = z.coerce.number().array().max(2).default([]);
 
-export const getUsersQuery = z.object({
+export const listUsersQuery = z.object({
   page: z.coerce.number().int().positive().default(1),
   perPage: z.coerce.number().int().positive().default(10),
   sort: z.preprocess((value) => {
@@ -81,11 +81,17 @@ export const getUsersQuery = z.object({
   }, createdAtSchema),
 });
 
-export type GetUsersQuery = z.infer<typeof getUsersQuery>;
+export type listUsersQuery = z.infer<typeof listUsersQuery>;
 
-export const patchUserBanInputSchema = z.object({
+export const banUserInput = z.object({
   banReason: z.string().optional(),
   banExpiresInDays: z.coerce.number().optional(),
 });
 
-export type PatchUserBanInputType = z.infer<typeof patchUserBanInputSchema>;
+export type BanUserInput = z.infer<typeof banUserInput>;
+
+export const resetPasswordInput = z.object({
+  password: requiredString.min(8).max(64),
+});
+
+export type ResetPasswordInput = z.infer<typeof resetPasswordInput>;

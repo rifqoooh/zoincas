@@ -1,19 +1,19 @@
 import * as StatusCode from "@/lib/api/http-status-code";
+import * as users from "@/lib/db/services/users";
 
+import { createNotFoundResponse } from "@/lib/api/openapi-utilities";
 import type { AppRouteHandler } from "@/lib/api/types";
+import { auth } from "@/lib/auth/server";
 import type { SelectUsersType } from "@/validators/db/users";
 import type {
   BanUser,
   CreateUser,
   DeleteUser,
   ListUsers,
+  ResetPassword,
   RevokeSession,
   UnbanUser,
 } from "./routes";
-
-import { createNotFoundResponse } from "@/lib/api/openapi-utilities";
-import { auth } from "@/lib/auth/server";
-import * as users from "@/lib/db/services/users";
 
 export const listUsers: AppRouteHandler<ListUsers> = async (c) => {
   const query = c.req.valid("query");
@@ -24,9 +24,9 @@ export const listUsers: AppRouteHandler<ListUsers> = async (c) => {
 };
 
 export const createUser: AppRouteHandler<CreateUser> = async (c) => {
-  const json = c.req.valid("json");
+  const input = c.req.valid("json");
 
-  const { name, email, password, role, ...rest } = json;
+  const { name, email, password, role, ...rest } = input;
 
   const data = await auth.api.createUser({
     headers: c.req.raw.headers,
@@ -42,7 +42,7 @@ export const createUser: AppRouteHandler<CreateUser> = async (c) => {
   return c.json(data.user, StatusCode.CREATED);
 };
 
-export const revokeSession: AppRouteHandler<RevokeSession> = async (c) => {
+export const deleteUser: AppRouteHandler<DeleteUser> = async (c) => {
   const { userId } = c.req.valid("param");
 
   const data = await users.getUser(userId!);
@@ -53,7 +53,7 @@ export const revokeSession: AppRouteHandler<RevokeSession> = async (c) => {
     );
   }
 
-  const { success: isSuccess } = await auth.api.revokeUserSessions({
+  const { success: isSuccess } = await auth.api.removeUser({
     headers: c.req.raw.headers,
     body: { userId: userId! },
   });
@@ -67,7 +67,35 @@ export const revokeSession: AppRouteHandler<RevokeSession> = async (c) => {
   return c.json(data, StatusCode.OK);
 };
 
-export const deleteUser: AppRouteHandler<DeleteUser> = async (c) => {
+export const resetPassword: AppRouteHandler<ResetPassword> = async (c) => {
+  const { userId } = c.req.valid("param");
+  const input = c.req.valid("json");
+
+  const data = await users.getUser(userId!);
+  if (!data) {
+    return c.json(
+      createNotFoundResponse({ path: c.req.path }),
+      StatusCode.NOT_FOUND,
+    );
+  }
+
+  const ctx = await auth.$context;
+  const hashedPassword = await ctx.password.hash(input.password);
+
+  await ctx.internalAdapter.deleteSessions(userId!);
+
+  const { isSuccess } = await users.resetPassword(userId!, { hashedPassword });
+  if (!isSuccess) {
+    return c.json(
+      createNotFoundResponse({ path: c.req.path }),
+      StatusCode.NOT_FOUND,
+    );
+  }
+
+  return c.json(data, StatusCode.OK);
+};
+
+export const revokeSession: AppRouteHandler<RevokeSession> = async (c) => {
   const { userId } = c.req.valid("param");
 
   const data = await users.getUser(userId!);
@@ -78,7 +106,7 @@ export const deleteUser: AppRouteHandler<DeleteUser> = async (c) => {
     );
   }
 
-  const { success: isSuccess } = await auth.api.removeUser({
+  const { success: isSuccess } = await auth.api.revokeUserSessions({
     headers: c.req.raw.headers,
     body: { userId: userId! },
   });

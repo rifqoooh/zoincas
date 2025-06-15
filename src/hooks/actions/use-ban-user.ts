@@ -1,6 +1,6 @@
 "use client";
 
-import type { PatchUserBanInputType } from "@/validators/api/openapi/users/request";
+import type { BanUserInput } from "@/validators/api/openapi/users/request";
 import type { SubmitHandler } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,21 +9,21 @@ import { toast } from "sonner";
 
 import { useBanUserMutation } from "@/hooks/queries/users";
 import { useBanUserModal } from "@/hooks/store/ban-user";
-import { patchUserBanInputSchema } from "@/validators/api/openapi/users/request";
+import { banUserInput } from "@/validators/api/openapi/users/request";
 
 export const useBanUser = () => {
   const store = useBanUserModal();
   const mutation = useBanUserMutation(store.id);
 
-  const form = useForm<PatchUserBanInputType>({
-    resolver: zodResolver(patchUserBanInputSchema),
+  const form = useForm<BanUserInput>({
+    resolver: zodResolver(banUserInput),
     defaultValues: {
       banReason: "No reason",
       banExpiresInDays: 9999,
     },
   });
 
-  const onSubmit: SubmitHandler<PatchUserBanInputType> = (values) => {
+  const onSubmit: SubmitHandler<BanUserInput> = (values) => {
     toast.promise(
       mutation.mutateAsync(values, {
         onSuccess: () => {

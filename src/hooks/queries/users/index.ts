@@ -1,6 +1,6 @@
 import type { ErrorResponseAPI } from "@/lib/api/types";
 import type { CreateUserType } from "@/validators/actions/create-user";
-import type { PatchUserBanInputType } from "@/validators/api/openapi/users/request";
+import type { BanUserInput } from "@/validators/api/openapi/users/request";
 import type { SelectUsersType } from "@/validators/db/users";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -94,7 +94,7 @@ export const useCreateUserMutation = () => {
   return mutation;
 };
 
-export const useRevokeUserSessionsMutation = (userId?: string) => {
+export const useRevokeSessionsMutation = (userId?: string) => {
   const mutation = useMutation({
     mutationFn: async () => {
       const response = await client.api.users[":userId"][
@@ -155,7 +155,7 @@ export const useBanUserMutation = (userId?: string) => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: async (values: PatchUserBanInputType) => {
+    mutationFn: async (values: BanUserInput) => {
       const response = await client.api.users[":userId"].ban.$patch({
         param: { userId },
         json: values,

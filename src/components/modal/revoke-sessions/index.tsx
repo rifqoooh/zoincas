@@ -3,13 +3,13 @@
 import { toast } from "sonner";
 
 import { ConfirmationDialog } from "@/components/confirmation-dialog";
-import { useRevokeUserSessionsMutation } from "@/hooks/queries/users";
-import { useRevokeUserSessionsModal } from "@/hooks/store/revoke-user-sessions";
+import { useRevokeSessionsMutation } from "@/hooks/queries/users";
+import { useRevokeSessionsModal } from "@/hooks/store/revoke-sessions";
 import { useIsClient } from "@/hooks/use-is-client";
 
-export function RevokeUserSessionsModal() {
-  const store = useRevokeUserSessionsModal();
-  const mutation = useRevokeUserSessionsMutation(store.id);
+export function RevokeSessionsModal() {
+  const store = useRevokeSessionsModal();
+  const mutation = useRevokeSessionsMutation(store.id);
 
   const isClient = useIsClient();
   if (!isClient) {

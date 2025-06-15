@@ -10,12 +10,17 @@ import {
 } from "@/lib/api/openapi-utilities";
 import { adminMiddleware } from "@/middleware/api/admin-middleware";
 import {
-  getUsersQuery,
-  patchUserBanInputSchema,
+  banUserInput,
+  listUsersQuery,
+  resetPasswordInput,
 } from "@/validators/api/openapi/users/request";
 import { getUsersResponse } from "@/validators/api/openapi/users/response";
 import { insertUsersSchema, selectUsersSchema } from "@/validators/db/users";
-import { getUsersQueryErrors, postUsersBodyErrors } from "./errors";
+import {
+  createUserInputErrors,
+  listUsersQueryErrors,
+  resetPasswordInputErrors,
+} from "./errors";
 
 const tags = ["Users"];
 
@@ -34,16 +39,16 @@ export const listUsers = createRoute({
   tags,
   middleware: [adminMiddleware()],
   request: {
-    query: getUsersQuery,
+    query: listUsersQuery,
   },
   responses: {
     [StatusCode.OK]: ContentJSON(getUsersResponse, "The list of users."),
     [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
       createErrorSchema({
-        schema: getUsersQuery,
+        schema: listUsersQuery,
         message: "The user query request input is invalid.",
         path: "/users",
-        potentioalInput: getUsersQueryErrors,
+        potentioalInput: listUsersQueryErrors,
       }),
       "The validation query parameters error(s).",
     ),
@@ -65,28 +70,9 @@ export const createUser = createRoute({
         schema: insertUsersSchema,
         message: "The user creation request input is invalid.",
         path: "/users",
-        potentioalInput: postUsersBodyErrors,
+        potentioalInput: createUserInputErrors,
       }),
       "The validation user creation request input error(s).",
-    ),
-  },
-});
-
-export const revokeSession = createRoute({
-  method: "delete",
-  path: "/users/{userId}/revoke-sessions",
-  tags,
-  middleware: [adminMiddleware()],
-  request: {
-    params: userIdParamSchema.partial(),
-  },
-  responses: {
-    [StatusCode.OK]: ContentJSON(selectUsersSchema, "The revoked session."),
-    [StatusCode.NOT_FOUND]: ContentJSON(
-      createNotFoundSchema({
-        path: "/users/{userId}/revoke-sessions",
-      }),
-      "The user with the requested ID does not exist in our resources.",
     ),
   },
 });
@@ -110,6 +96,54 @@ export const deleteUser = createRoute({
   },
 });
 
+export const resetPassword = createRoute({
+  method: "patch",
+  path: "/users/{userId}/reset-password",
+  tags,
+  middleware: [adminMiddleware()],
+  request: {
+    params: userIdParamSchema.partial(),
+    body: ContentJSONRequired(resetPasswordInput, "The new password."),
+  },
+  responses: {
+    [StatusCode.OK]: ContentJSON(selectUsersSchema, "The reset password user."),
+    [StatusCode.NOT_FOUND]: ContentJSON(
+      createNotFoundSchema({
+        path: "/users/{userId}/reset-password",
+      }),
+      "The user with the requested ID does not exist in our resources.",
+    ),
+    [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
+      createErrorSchema({
+        schema: resetPasswordInput,
+        message: "The reset password request input is invalid.",
+        path: "/users/{userId}/reset-password",
+        potentioalInput: resetPasswordInputErrors,
+      }),
+      "The validation reset password request input error(s).",
+    ),
+  },
+});
+
+export const revokeSession = createRoute({
+  method: "delete",
+  path: "/users/{userId}/revoke-sessions",
+  tags,
+  middleware: [adminMiddleware()],
+  request: {
+    params: userIdParamSchema.partial(),
+  },
+  responses: {
+    [StatusCode.OK]: ContentJSON(selectUsersSchema, "The revoked session."),
+    [StatusCode.NOT_FOUND]: ContentJSON(
+      createNotFoundSchema({
+        path: "/users/{userId}/revoke-sessions",
+      }),
+      "The user with the requested ID does not exist in our resources.",
+    ),
+  },
+});
+
 export const banUser = createRoute({
   method: "patch",
   path: "/users/{userId}/ban",
@@ -117,7 +151,7 @@ export const banUser = createRoute({
   middleware: [adminMiddleware()],
   request: {
     params: userIdParamSchema.partial(),
-    body: ContentJSONRequired(patchUserBanInputSchema, "The user to ban."),
+    body: ContentJSONRequired(banUserInput, "The user to ban."),
   },
   responses: {
     [StatusCode.OK]: ContentJSON(selectUsersSchema, "The banned user."),
@@ -151,6 +185,7 @@ export const unbanUser = createRoute({
 
 export type ListUsers = typeof listUsers;
 export type CreateUser = typeof createUser;
+export type ResetPassword = typeof resetPassword;
 export type RevokeSession = typeof revokeSession;
 export type DeleteUser = typeof deleteUser;
 export type BanUser = typeof banUser;

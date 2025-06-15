@@ -1,4 +1,4 @@
-import type { GetUsersQuery } from "@/validators/api/openapi/users/request";
+import type { listUsersQuery } from "@/validators/api/openapi/users/request";
 
 import {
   and,
@@ -14,10 +14,10 @@ import {
 } from "drizzle-orm";
 
 import { db } from "@/lib/db";
-import { users } from "@/lib/db/schema";
+import { accounts, users } from "@/lib/db/schema";
 import { coalesce } from "@/lib/db/utilities";
 
-export const getUsers = async (query: GetUsersQuery) => {
+export const getUsers = async (query: listUsersQuery) => {
   const [startCreatedAt, endCreatedAt] = query.createdAt;
 
   const offset = (query.page - 1) * query.perPage;
@@ -121,4 +121,24 @@ export const getUser = async (userId: string) => {
     .limit(1);
 
   return data;
+};
+
+export const resetPassword = async (
+  userId: string,
+  input: { hashedPassword: string },
+) => {
+  const [data] = await db
+    .update(accounts)
+    .set({
+      password: input.hashedPassword,
+      updatedAt: new Date(),
+    })
+    .where(eq(accounts.userId, userId))
+    .returning({
+      id: accounts.userId,
+    });
+
+  const isSuccess = data.id ? true : false;
+
+  return { isSuccess };
 };
