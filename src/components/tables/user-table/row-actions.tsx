@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useBanUserModal } from "@/hooks/store/ban-user";
 import { useDeleteUserModal } from "@/hooks/store/delete-user";
+import { useRevokeUserSessionsModal } from "@/hooks/store/revoke-user-sessions";
 import { useUnbanUserModal } from "@/hooks/store/unban-user";
 
 interface RowActionsProps {
@@ -22,9 +23,14 @@ interface RowActionsProps {
 export function RowActions({ row }: RowActionsProps) {
   const { id: userId, banned } = row.original;
 
+  const revokeSessionStore = useRevokeUserSessionsModal();
   const banUserStore = useBanUserModal();
   const unbanUserStore = useUnbanUserModal();
   const deleteUserStore = useDeleteUserModal();
+
+  const onRevokeUserSessions = () => {
+    revokeSessionStore.onOpen({ id: userId });
+  };
 
   const onBanUser = () => {
     banUserStore.onOpen({ id: userId });
@@ -47,8 +53,10 @@ export function RowActions({ row }: RowActionsProps) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem>Change Password</DropdownMenuItem>
-        <DropdownMenuItem>Revoke all sessions</DropdownMenuItem>
+        <DropdownMenuItem>Reset Password</DropdownMenuItem>
+        <DropdownMenuItem onClick={onRevokeUserSessions}>
+          Revoke all sessions
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         {banned ? (
           <DropdownMenuItem

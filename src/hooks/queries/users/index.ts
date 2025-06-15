@@ -94,6 +94,32 @@ export const useCreateUserMutation = () => {
   return mutation;
 };
 
+export const useRevokeUserSessionsMutation = (userId?: string) => {
+  const mutation = useMutation({
+    mutationFn: async () => {
+      const response = await client.api.users[":userId"][
+        "revoke-sessions"
+      ].$delete({
+        param: { userId },
+      });
+      if (!response.ok) {
+        const err = (await response.json()) as unknown as ErrorResponseAPI;
+        throw new Error(err.error.message);
+      }
+
+      const data = await response.json();
+      const parsedData = selectUsersSchema.safeParse(data);
+      if (!parsedData.success) {
+        throw new Error("There is an error when parsing response data.");
+      }
+
+      return parsedData.data;
+    },
+  });
+
+  return mutation;
+};
+
 export const useDeleteUserMutation = (userId?: string) => {
   const queryClient = useQueryClient();
 
