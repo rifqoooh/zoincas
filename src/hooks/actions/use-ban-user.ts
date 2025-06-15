@@ -38,7 +38,7 @@ export const useBanUser = () => {
             return error.message;
           }
 
-          return "Something went wrong";
+          return "There is an error in the internal server.";
         },
       },
     );

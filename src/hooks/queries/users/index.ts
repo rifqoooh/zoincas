@@ -1,6 +1,9 @@
 import type { ErrorResponseAPI } from "@/lib/api/types";
 import type { CreateUserType } from "@/validators/actions/create-user";
-import type { BanUserInput } from "@/validators/api/openapi/users/request";
+import type {
+  BanUserInput,
+  ResetPasswordInput,
+} from "@/validators/api/openapi/users/request";
 import type { SelectUsersType } from "@/validators/db/users";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -67,9 +70,9 @@ export const useCreateUserMutation = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: async (values: CreateUserType) => {
+    mutationFn: async (input: CreateUserType) => {
       const response = await client.api.users.$post({
-        json: values,
+        json: input,
       });
       if (!response.ok) {
         const err = (await response.json()) as unknown as ErrorResponseAPI;
@@ -88,32 +91,6 @@ export const useCreateUserMutation = () => {
       queryClient.invalidateQueries({
         queryKey: usersKeys.all(),
       });
-    },
-  });
-
-  return mutation;
-};
-
-export const useRevokeSessionsMutation = (userId?: string) => {
-  const mutation = useMutation({
-    mutationFn: async () => {
-      const response = await client.api.users[":userId"][
-        "revoke-sessions"
-      ].$delete({
-        param: { userId },
-      });
-      if (!response.ok) {
-        const err = (await response.json()) as unknown as ErrorResponseAPI;
-        throw new Error(err.error.message);
-      }
-
-      const data = await response.json();
-      const parsedData = selectUsersSchema.safeParse(data);
-      if (!parsedData.success) {
-        throw new Error("There is an error when parsing response data.");
-      }
-
-      return parsedData.data;
     },
   });
 
@@ -151,14 +128,67 @@ export const useDeleteUserMutation = (userId?: string) => {
   return mutation;
 };
 
+export const useResetPasswordMutation = (userId?: string) => {
+  const mutation = useMutation({
+    mutationFn: async (input: ResetPasswordInput) => {
+      const response = await client.api.users[":userId"][
+        "reset-password"
+      ].$patch({
+        param: { userId },
+        json: input,
+      });
+      if (!response.ok) {
+        const err = (await response.json()) as unknown as ErrorResponseAPI;
+        throw new Error(err.error.message);
+      }
+
+      const data = await response.json();
+      const parsedData = selectUsersSchema.safeParse(data);
+      if (!parsedData.success) {
+        throw new Error("There is an error when parsing response data.");
+      }
+
+      return parsedData.data;
+    },
+  });
+
+  return mutation;
+};
+
+export const useRevokeSessionsMutation = (userId?: string) => {
+  const mutation = useMutation({
+    mutationFn: async () => {
+      const response = await client.api.users[":userId"][
+        "revoke-sessions"
+      ].$delete({
+        param: { userId },
+      });
+      if (!response.ok) {
+        const err = (await response.json()) as unknown as ErrorResponseAPI;
+        throw new Error(err.error.message);
+      }
+
+      const data = await response.json();
+      const parsedData = selectUsersSchema.safeParse(data);
+      if (!parsedData.success) {
+        throw new Error("There is an error when parsing response data.");
+      }
+
+      return parsedData.data;
+    },
+  });
+
+  return mutation;
+};
+
 export const useBanUserMutation = (userId?: string) => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: async (values: BanUserInput) => {
+    mutationFn: async (input: BanUserInput) => {
       const response = await client.api.users[":userId"].ban.$patch({
         param: { userId },
-        json: values,
+        json: input,
       });
       if (!response.ok) {
         const err = (await response.json()) as unknown as ErrorResponseAPI;

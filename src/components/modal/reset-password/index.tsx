@@ -1,12 +1,12 @@
 "use client";
 
-import { BanUserForm } from "@/components/forms/ban-user";
+import { ResetPasswordForm } from "@/components/forms/reset-password";
 import { ResponsiveModal } from "@/components/responsive-modal";
-import { useBanUserModal } from "@/hooks/store/ban-user";
+import { useResetPasswordModal } from "@/hooks/store/reset-password";
 import { useIsClient } from "@/hooks/use-is-client";
 
-export function BanUserModal() {
-  const store = useBanUserModal();
+export function ResetPasswordModal() {
+  const store = useResetPasswordModal();
 
   const isClient = useIsClient();
   if (!isClient) {
@@ -14,8 +14,8 @@ export function BanUserModal() {
   }
 
   const text = {
-    title: "Ban user",
-    description: "Fill the form to ban a user",
+    title: "Reset password",
+    description: "Fill the form to reset a user password",
   };
 
   const onClose = () => {
@@ -24,7 +24,7 @@ export function BanUserModal() {
 
   return (
     <ResponsiveModal {...text} isOpen={store.isOpen} onClose={onClose}>
-      <BanUserForm />
+      <ResetPasswordForm />
     </ResponsiveModal>
   );
 }
