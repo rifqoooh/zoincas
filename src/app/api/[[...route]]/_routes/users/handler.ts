@@ -1,10 +1,12 @@
-import * as StatusCode from "@/lib/api/http-status-code";
-import * as users from "@/lib/db/services/users";
+import * as StatusCode from '@/lib/api/http-status-code';
+import * as users from '@/lib/db/services/users';
 
-import { createNotFoundResponse } from "@/lib/api/openapi-utilities";
-import type { AppRouteHandler } from "@/lib/api/types";
-import { auth } from "@/lib/auth/server";
-import type { SelectUsersType } from "@/validators/db/users";
+import type { z } from '@hono/zod-openapi';
+
+import { createNotFoundResponse } from '@/lib/api/openapi-utilities';
+import type { AppRouteHandler } from '@/lib/api/types';
+import { auth } from '@/lib/auth/server';
+import type { SelectUsersType } from '@/validators/db/users';
 import type {
   BanUser,
   CreateUser,
@@ -13,10 +15,13 @@ import type {
   ResetPassword,
   RevokeSession,
   UnbanUser,
-} from "./routes";
+  userIdParamSchema,
+} from './routes';
+
+export type UserIdParam = z.infer<typeof userIdParamSchema>;
 
 export const listUsers: AppRouteHandler<ListUsers> = async (c) => {
-  const query = c.req.valid("query");
+  const query = c.req.valid('query');
 
   const data = await users.getUsers(query);
 
@@ -24,7 +29,7 @@ export const listUsers: AppRouteHandler<ListUsers> = async (c) => {
 };
 
 export const createUser: AppRouteHandler<CreateUser> = async (c) => {
-  const input = c.req.valid("json");
+  const input = c.req.valid('json');
 
   const { name, email, password, role, ...rest } = input;
 
@@ -43,24 +48,24 @@ export const createUser: AppRouteHandler<CreateUser> = async (c) => {
 };
 
 export const deleteUser: AppRouteHandler<DeleteUser> = async (c) => {
-  const { userId } = c.req.valid("param");
+  const { userId } = c.req.valid('param') as UserIdParam;
 
-  const data = await users.getUser(userId!);
+  const data = await users.getUser(userId);
   if (!data) {
     return c.json(
       createNotFoundResponse({ path: c.req.path }),
-      StatusCode.NOT_FOUND,
+      StatusCode.NOT_FOUND
     );
   }
 
   const { success: isSuccess } = await auth.api.removeUser({
     headers: c.req.raw.headers,
-    body: { userId: userId! },
+    body: { userId },
   });
   if (!isSuccess) {
     return c.json(
       createNotFoundResponse({ path: c.req.path }),
-      StatusCode.NOT_FOUND,
+      StatusCode.NOT_FOUND
     );
   }
 
@@ -68,27 +73,27 @@ export const deleteUser: AppRouteHandler<DeleteUser> = async (c) => {
 };
 
 export const resetPassword: AppRouteHandler<ResetPassword> = async (c) => {
-  const { userId } = c.req.valid("param");
-  const input = c.req.valid("json");
+  const { userId } = c.req.valid('param') as UserIdParam;
+  const input = c.req.valid('json');
 
-  const data = await users.getUser(userId!);
+  const data = await users.getUser(userId);
   if (!data) {
     return c.json(
       createNotFoundResponse({ path: c.req.path }),
-      StatusCode.NOT_FOUND,
+      StatusCode.NOT_FOUND
     );
   }
 
   const ctx = await auth.$context;
   const hashedPassword = await ctx.password.hash(input.password);
 
-  await ctx.internalAdapter.deleteSessions(userId!);
+  await ctx.internalAdapter.deleteSessions(userId);
 
-  const { isSuccess } = await users.resetPassword(userId!, { hashedPassword });
+  const { isSuccess } = await users.resetPassword(userId, { hashedPassword });
   if (!isSuccess) {
     return c.json(
       createNotFoundResponse({ path: c.req.path }),
-      StatusCode.NOT_FOUND,
+      StatusCode.NOT_FOUND
     );
   }
 
@@ -96,24 +101,24 @@ export const resetPassword: AppRouteHandler<ResetPassword> = async (c) => {
 };
 
 export const revokeSession: AppRouteHandler<RevokeSession> = async (c) => {
-  const { userId } = c.req.valid("param");
+  const { userId } = c.req.valid('param') as UserIdParam;
 
-  const data = await users.getUser(userId!);
+  const data = await users.getUser(userId);
   if (!data) {
     return c.json(
       createNotFoundResponse({ path: c.req.path }),
-      StatusCode.NOT_FOUND,
+      StatusCode.NOT_FOUND
     );
   }
 
   const { success: isSuccess } = await auth.api.revokeUserSessions({
     headers: c.req.raw.headers,
-    body: { userId: userId! },
+    body: { userId },
   });
   if (!isSuccess) {
     return c.json(
       createNotFoundResponse({ path: c.req.path }),
-      StatusCode.NOT_FOUND,
+      StatusCode.NOT_FOUND
     );
   }
 
@@ -121,10 +126,10 @@ export const revokeSession: AppRouteHandler<RevokeSession> = async (c) => {
 };
 
 export const banUser: AppRouteHandler<BanUser> = async (c) => {
-  const { userId } = c.req.valid("param");
-  const input = c.req.valid("json");
+  const { userId } = c.req.valid('param') as UserIdParam;
+  const input = c.req.valid('json');
 
-  const banReason = input.banReason || "";
+  const banReason = input.banReason || '';
   const banExpiresIn =
     input.banExpiresInDays !== undefined
       ? input.banExpiresInDays * 24 * 60 * 60
@@ -133,7 +138,7 @@ export const banUser: AppRouteHandler<BanUser> = async (c) => {
   const data = (await auth.api.banUser({
     headers: c.req.raw.headers,
     body: {
-      userId: userId!,
+      userId,
       banReason,
       banExpiresIn,
     },
@@ -141,7 +146,7 @@ export const banUser: AppRouteHandler<BanUser> = async (c) => {
   if (!data.user) {
     return c.json(
       createNotFoundResponse({ path: c.req.path }),
-      StatusCode.NOT_FOUND,
+      StatusCode.NOT_FOUND
     );
   }
 
@@ -149,16 +154,16 @@ export const banUser: AppRouteHandler<BanUser> = async (c) => {
 };
 
 export const unbanUser: AppRouteHandler<UnbanUser> = async (c) => {
-  const { userId } = c.req.valid("param");
+  const { userId } = c.req.valid('param') as UserIdParam;
 
   const data = (await auth.api.unbanUser({
     headers: c.req.raw.headers,
-    body: { userId: userId! },
+    body: { userId },
   })) as unknown as { user: SelectUsersType };
   if (!data.user) {
     return c.json(
       createNotFoundResponse({ path: c.req.path }),
-      StatusCode.NOT_FOUND,
+      StatusCode.NOT_FOUND
     );
   }
 

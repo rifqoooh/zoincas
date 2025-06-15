@@ -1,184 +1,184 @@
-import * as StatusCode from "@/lib/api/http-status-code";
+import * as StatusCode from '@/lib/api/http-status-code';
 
-import { createRoute, z } from "@hono/zod-openapi";
+import { createRoute, z } from '@hono/zod-openapi';
 
 import {
   ContentJSON,
   ContentJSONRequired,
   createErrorSchema,
   createNotFoundSchema,
-} from "@/lib/api/openapi-utilities";
-import { adminMiddleware } from "@/middleware/api/admin-middleware";
+} from '@/lib/api/openapi-utilities';
+import { adminMiddleware } from '@/middleware/api/admin-middleware';
 import {
   banUserInput,
   listUsersQuery,
   resetPasswordInput,
-} from "@/validators/api/openapi/users/request";
-import { getUsersResponse } from "@/validators/api/openapi/users/response";
-import { insertUsersSchema, selectUsersSchema } from "@/validators/db/users";
+} from '@/validators/api/openapi/users/request';
+import { getUsersResponse } from '@/validators/api/openapi/users/response';
+import { insertUsersSchema, selectUsersSchema } from '@/validators/db/users';
 import {
   createUserInputErrors,
   listUsersQueryErrors,
   resetPasswordInputErrors,
-} from "./errors";
+} from './errors';
 
-const tags = ["Users"];
+const tags = ['Users'];
 
-const userIdParamSchema = z.object({
+export const userIdParamSchema = z.object({
   userId: z.string().openapi({
     param: {
-      name: "userId",
-      in: "path",
+      name: 'userId',
+      in: 'path',
     },
   }),
 });
 
 export const listUsers = createRoute({
-  method: "get",
-  path: "/users",
+  method: 'get',
+  path: '/users',
   tags,
   middleware: [adminMiddleware()],
   request: {
     query: listUsersQuery,
   },
   responses: {
-    [StatusCode.OK]: ContentJSON(getUsersResponse, "The list of users."),
+    [StatusCode.OK]: ContentJSON(getUsersResponse, 'The list of users.'),
     [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
       createErrorSchema({
         schema: listUsersQuery,
-        message: "The user query request input is invalid.",
-        path: "/users",
+        message: 'The user query request input is invalid.',
+        path: '/users',
         potentioalInput: listUsersQueryErrors,
       }),
-      "The validation query parameters error(s).",
+      'The validation query parameters error(s).'
     ),
   },
 });
 
 export const createUser = createRoute({
-  method: "post",
-  path: "/users",
+  method: 'post',
+  path: '/users',
   tags,
   middleware: [adminMiddleware()],
   request: {
-    body: ContentJSONRequired(insertUsersSchema, "The user to create."),
+    body: ContentJSONRequired(insertUsersSchema, 'The user to create.'),
   },
   responses: {
-    [StatusCode.CREATED]: ContentJSON(selectUsersSchema, "The created user."),
+    [StatusCode.CREATED]: ContentJSON(selectUsersSchema, 'The created user.'),
     [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
       createErrorSchema({
         schema: insertUsersSchema,
-        message: "The user creation request input is invalid.",
-        path: "/users",
+        message: 'The user creation request input is invalid.',
+        path: '/users',
         potentioalInput: createUserInputErrors,
       }),
-      "The validation user creation request input error(s).",
+      'The validation user creation request input error(s).'
     ),
   },
 });
 
 export const deleteUser = createRoute({
-  method: "delete",
-  path: "/users/{userId}",
+  method: 'delete',
+  path: '/users/{userId}',
   tags,
   middleware: [adminMiddleware()],
   request: {
     params: userIdParamSchema.partial(),
   },
   responses: {
-    [StatusCode.OK]: ContentJSON(selectUsersSchema, "The deleted user."),
+    [StatusCode.OK]: ContentJSON(selectUsersSchema, 'The deleted user.'),
     [StatusCode.NOT_FOUND]: ContentJSON(
       createNotFoundSchema({
-        path: "/users/{userId}",
+        path: '/users/{userId}',
       }),
-      "The user with the requested ID does not exist in our resources.",
+      'The user with the requested ID does not exist in our resources.'
     ),
   },
 });
 
 export const resetPassword = createRoute({
-  method: "patch",
-  path: "/users/{userId}/reset-password",
+  method: 'patch',
+  path: '/users/{userId}/reset-password',
   tags,
   middleware: [adminMiddleware()],
   request: {
     params: userIdParamSchema.partial(),
-    body: ContentJSONRequired(resetPasswordInput, "The new password."),
+    body: ContentJSONRequired(resetPasswordInput, 'The new password.'),
   },
   responses: {
-    [StatusCode.OK]: ContentJSON(selectUsersSchema, "The reset password user."),
+    [StatusCode.OK]: ContentJSON(selectUsersSchema, 'The reset password user.'),
     [StatusCode.NOT_FOUND]: ContentJSON(
       createNotFoundSchema({
-        path: "/users/{userId}/reset-password",
+        path: '/users/{userId}/reset-password',
       }),
-      "The user with the requested ID does not exist in our resources.",
+      'The user with the requested ID does not exist in our resources.'
     ),
     [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
       createErrorSchema({
         schema: resetPasswordInput,
-        message: "The reset password request input is invalid.",
-        path: "/users/{userId}/reset-password",
+        message: 'The reset password request input is invalid.',
+        path: '/users/{userId}/reset-password',
         potentioalInput: resetPasswordInputErrors,
       }),
-      "The validation reset password request input error(s).",
+      'The validation reset password request input error(s).'
     ),
   },
 });
 
 export const revokeSession = createRoute({
-  method: "delete",
-  path: "/users/{userId}/revoke-sessions",
+  method: 'delete',
+  path: '/users/{userId}/revoke-sessions',
   tags,
   middleware: [adminMiddleware()],
   request: {
     params: userIdParamSchema.partial(),
   },
   responses: {
-    [StatusCode.OK]: ContentJSON(selectUsersSchema, "The revoked session."),
+    [StatusCode.OK]: ContentJSON(selectUsersSchema, 'The revoked session.'),
     [StatusCode.NOT_FOUND]: ContentJSON(
       createNotFoundSchema({
-        path: "/users/{userId}/revoke-sessions",
+        path: '/users/{userId}/revoke-sessions',
       }),
-      "The user with the requested ID does not exist in our resources.",
+      'The user with the requested ID does not exist in our resources.'
     ),
   },
 });
 
 export const banUser = createRoute({
-  method: "patch",
-  path: "/users/{userId}/ban",
+  method: 'patch',
+  path: '/users/{userId}/ban',
   tags,
   middleware: [adminMiddleware()],
   request: {
     params: userIdParamSchema.partial(),
-    body: ContentJSONRequired(banUserInput, "The user to ban."),
+    body: ContentJSONRequired(banUserInput, 'The user to ban.'),
   },
   responses: {
-    [StatusCode.OK]: ContentJSON(selectUsersSchema, "The banned user."),
+    [StatusCode.OK]: ContentJSON(selectUsersSchema, 'The banned user.'),
     [StatusCode.NOT_FOUND]: ContentJSON(
       createNotFoundSchema({
-        path: "/users/{userId}/ban",
+        path: '/users/{userId}/ban',
       }),
-      "The user with the requested ID does not exist in our resources.",
+      'The user with the requested ID does not exist in our resources.'
     ),
   },
 });
 
 export const unbanUser = createRoute({
-  method: "patch",
-  path: "/users/{userId}/unban",
+  method: 'patch',
+  path: '/users/{userId}/unban',
   tags,
   middleware: [adminMiddleware()],
   request: {
     params: userIdParamSchema.partial(),
   },
   responses: {
-    [StatusCode.OK]: ContentJSON(selectUsersSchema, "The unbanned user."),
+    [StatusCode.OK]: ContentJSON(selectUsersSchema, 'The unbanned user.'),
     [StatusCode.NOT_FOUND]: ContentJSON(
       createNotFoundSchema({
-        path: "/users/{userId}/unban",
+        path: '/users/{userId}/unban',
       }),
-      "The user with the requested ID does not exist in our resources.",
+      'The user with the requested ID does not exist in our resources.'
     ),
   },
 });
