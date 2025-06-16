@@ -1,39 +1,39 @@
-import type { ErrorResponseAPI } from "@/lib/api/types";
-import type { CreateUserType } from "@/validators/actions/create-user";
+import type { ErrorResponseAPI } from '@/lib/api/types';
+import type { CreateUserType } from '@/validators/actions/create-user';
 import type {
   BanUserInput,
   ResetPasswordInput,
-} from "@/validators/api/openapi/users/request";
-import type { SelectUsersType } from "@/validators/db/users";
+} from '@/validators/api/openapi/users/request';
+import type { SelectUsersType } from '@/validators/db/users';
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   parseAsArrayOf,
   parseAsInteger,
   parseAsString,
   useQueryStates,
-} from "nuqs";
-import { z } from "zod";
+} from 'nuqs';
+import { z } from 'zod';
 
-import { client } from "@/lib/api/rpc";
-import { getSortingStateParser } from "@/lib/parsers";
-import { getUsersResponse } from "@/validators/api/openapi/users/response";
-import { selectUsersSchema } from "@/validators/db/users";
-import { usersKeys } from "./keys";
+import { client } from '@/lib/api/rpc';
+import { getSortingStateParser } from '@/lib/parsers';
+import { getUsersResponse } from '@/validators/api/openapi/users/response';
+import { selectUsersSchema } from '@/validators/db/users';
+import { usersKeys } from './keys';
 
 export const useGetUsersQuery = () => {
   const [search] = useQueryStates({
     page: parseAsInteger.withDefault(1),
     perPage: parseAsInteger.withDefault(10),
     sort: getSortingStateParser<SelectUsersType>().withDefault([
-      { id: "createdAt", desc: true },
+      { id: 'createdAt', desc: true },
     ]),
-    email: parseAsString.withDefault(""),
+    email: parseAsString.withDefault(''),
     emailVerified: parseAsArrayOf(
-      z.enum(["verified", "unverified"]),
+      z.enum(['verified', 'unverified'])
     ).withDefault([]),
-    role: parseAsArrayOf(z.enum(["user", "admin"])).withDefault([]),
-    banned: parseAsArrayOf(z.enum(["banned", "active"])).withDefault([]),
+    role: parseAsArrayOf(z.enum(['user', 'admin'])).withDefault([]),
+    banned: parseAsArrayOf(z.enum(['banned', 'active'])).withDefault([]),
     createdAt: parseAsArrayOf(z.coerce.number()).withDefault([]),
   });
 
@@ -56,7 +56,7 @@ export const useGetUsersQuery = () => {
       const data = await response.json();
       const parsedData = getUsersResponse.safeParse(data);
       if (!parsedData.success) {
-        throw new Error("There is an error when parsing response data.");
+        throw new Error('There is an error when parsing response data.');
       }
 
       return parsedData.data;
@@ -82,7 +82,7 @@ export const useCreateUserMutation = () => {
       const data = await response.json();
       const parsedData = selectUsersSchema.safeParse(data);
       if (!parsedData.success) {
-        throw new Error("There is an error when parsing response data.");
+        throw new Error('There is an error when parsing response data.');
       }
 
       return parsedData.data;
@@ -102,7 +102,11 @@ export const useDeleteUserMutation = (userId?: string) => {
 
   const mutation = useMutation({
     mutationFn: async () => {
-      const response = await client.api.users[":userId"].$delete({
+      if (!userId) {
+        throw new Error('The user ID is required.');
+      }
+
+      const response = await client.api.users[':userId'].$delete({
         param: { userId },
       });
       if (!response.ok) {
@@ -113,7 +117,7 @@ export const useDeleteUserMutation = (userId?: string) => {
       const data = await response.json();
       const parsedData = selectUsersSchema.safeParse(data);
       if (!parsedData.success) {
-        throw new Error("There is an error when parsing response data.");
+        throw new Error('There is an error when parsing response data.');
       }
 
       return parsedData.data;
@@ -131,8 +135,12 @@ export const useDeleteUserMutation = (userId?: string) => {
 export const useResetPasswordMutation = (userId?: string) => {
   const mutation = useMutation({
     mutationFn: async (input: ResetPasswordInput) => {
-      const response = await client.api.users[":userId"][
-        "reset-password"
+      if (!userId) {
+        throw new Error('The user ID is required.');
+      }
+
+      const response = await client.api.users[':userId'][
+        'reset-password'
       ].$patch({
         param: { userId },
         json: input,
@@ -145,7 +153,7 @@ export const useResetPasswordMutation = (userId?: string) => {
       const data = await response.json();
       const parsedData = selectUsersSchema.safeParse(data);
       if (!parsedData.success) {
-        throw new Error("There is an error when parsing response data.");
+        throw new Error('There is an error when parsing response data.');
       }
 
       return parsedData.data;
@@ -158,8 +166,12 @@ export const useResetPasswordMutation = (userId?: string) => {
 export const useRevokeSessionsMutation = (userId?: string) => {
   const mutation = useMutation({
     mutationFn: async () => {
-      const response = await client.api.users[":userId"][
-        "revoke-sessions"
+      if (!userId) {
+        throw new Error('The user ID is required.');
+      }
+
+      const response = await client.api.users[':userId'][
+        'revoke-sessions'
       ].$delete({
         param: { userId },
       });
@@ -171,7 +183,7 @@ export const useRevokeSessionsMutation = (userId?: string) => {
       const data = await response.json();
       const parsedData = selectUsersSchema.safeParse(data);
       if (!parsedData.success) {
-        throw new Error("There is an error when parsing response data.");
+        throw new Error('There is an error when parsing response data.');
       }
 
       return parsedData.data;
@@ -186,7 +198,11 @@ export const useBanUserMutation = (userId?: string) => {
 
   const mutation = useMutation({
     mutationFn: async (input: BanUserInput) => {
-      const response = await client.api.users[":userId"].ban.$patch({
+      if (!userId) {
+        throw new Error('The user ID is required.');
+      }
+
+      const response = await client.api.users[':userId'].ban.$patch({
         param: { userId },
         json: input,
       });
@@ -198,7 +214,7 @@ export const useBanUserMutation = (userId?: string) => {
       const data = await response.json();
       const parsedData = selectUsersSchema.safeParse(data);
       if (!parsedData.success) {
-        throw new Error("There is an error when parsing response data.");
+        throw new Error('There is an error when parsing response data.');
       }
 
       return parsedData.data;
@@ -218,7 +234,11 @@ export const useUnbanUserMutation = (userId?: string) => {
 
   const mutation = useMutation({
     mutationFn: async () => {
-      const response = await client.api.users[":userId"].unban.$patch({
+      if (!userId) {
+        throw new Error('The user ID is required.');
+      }
+
+      const response = await client.api.users[':userId'].unban.$patch({
         param: { userId },
       });
       if (!response.ok) {
@@ -229,7 +249,7 @@ export const useUnbanUserMutation = (userId?: string) => {
       const data = await response.json();
       const parsedData = selectUsersSchema.safeParse(data);
       if (!parsedData.success) {
-        throw new Error("There is an error when parsing response data.");
+        throw new Error('There is an error when parsing response data.');
       }
 
       return parsedData.data;

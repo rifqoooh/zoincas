@@ -50,7 +50,7 @@ export const listUsers = createRoute({
         path: '/users',
         potentioalInput: listUsersQueryErrors,
       }),
-      'The validation query parameters error(s).'
+      'The validation users request error(s).'
     ),
   },
 });
@@ -72,7 +72,7 @@ export const createUser = createRoute({
         path: '/users',
         potentioalInput: createUserInputErrors,
       }),
-      'The validation user creation request input error(s).'
+      'The validation user creation request error(s).'
     ),
   },
 });
@@ -83,7 +83,7 @@ export const deleteUser = createRoute({
   tags,
   middleware: [adminMiddleware()],
   request: {
-    params: userIdParamSchema.partial(),
+    params: userIdParamSchema,
   },
   responses: {
     [StatusCode.OK]: ContentJSON(selectUsersSchema, 'The deleted user.'),
@@ -92,6 +92,15 @@ export const deleteUser = createRoute({
         path: '/users/{userId}',
       }),
       'The user with the requested ID does not exist in our resources.'
+    ),
+    [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
+      createErrorSchema({
+        schema: userIdParamSchema,
+        message: 'The user id request params is required.',
+        path: '/users/{userId}',
+        potentioalInput: [],
+      }),
+      'The validation delete user request error(s).'
     ),
   },
 });
@@ -102,7 +111,7 @@ export const resetPassword = createRoute({
   tags,
   middleware: [adminMiddleware()],
   request: {
-    params: userIdParamSchema.partial(),
+    params: userIdParamSchema,
     body: ContentJSONRequired(resetPasswordInput, 'The new password.'),
   },
   responses: {
@@ -115,12 +124,19 @@ export const resetPassword = createRoute({
     ),
     [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
       createErrorSchema({
-        schema: resetPasswordInput,
-        message: 'The reset password request input is invalid.',
+        schema: userIdParamSchema,
+        message: 'The user id request params is required.',
         path: '/users/{userId}/reset-password',
-        potentioalInput: resetPasswordInputErrors,
-      }),
-      'The validation reset password request input error(s).'
+        potentioalInput: [],
+      }).or(
+        createErrorSchema({
+          schema: resetPasswordInput,
+          message: 'The reset password request input is invalid.',
+          path: '/users/{userId}/reset-password',
+          potentioalInput: resetPasswordInputErrors,
+        })
+      ),
+      'The validation reset password request error(s).'
     ),
   },
 });
@@ -131,7 +147,7 @@ export const revokeSession = createRoute({
   tags,
   middleware: [adminMiddleware()],
   request: {
-    params: userIdParamSchema.partial(),
+    params: userIdParamSchema,
   },
   responses: {
     [StatusCode.OK]: ContentJSON(selectUsersSchema, 'The revoked session.'),
@@ -140,6 +156,15 @@ export const revokeSession = createRoute({
         path: '/users/{userId}/revoke-sessions',
       }),
       'The user with the requested ID does not exist in our resources.'
+    ),
+    [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
+      createErrorSchema({
+        schema: userIdParamSchema,
+        message: 'The user id request params is required.',
+        path: '/users/{userId}/revoke-sessions',
+        potentioalInput: [],
+      }),
+      'The validation revoke sessions request error(s).'
     ),
   },
 });
@@ -150,7 +175,7 @@ export const banUser = createRoute({
   tags,
   middleware: [adminMiddleware()],
   request: {
-    params: userIdParamSchema.partial(),
+    params: userIdParamSchema,
     body: ContentJSONRequired(banUserInput, 'The user to ban.'),
   },
   responses: {
@@ -161,6 +186,15 @@ export const banUser = createRoute({
       }),
       'The user with the requested ID does not exist in our resources.'
     ),
+    [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
+      createErrorSchema({
+        schema: userIdParamSchema,
+        message: 'The user id request params is required.',
+        path: '/users/{userId}/ban',
+        potentioalInput: [],
+      }),
+      'The validation ban user request error(s).'
+    ),
   },
 });
 
@@ -170,7 +204,7 @@ export const unbanUser = createRoute({
   tags,
   middleware: [adminMiddleware()],
   request: {
-    params: userIdParamSchema.partial(),
+    params: userIdParamSchema,
   },
   responses: {
     [StatusCode.OK]: ContentJSON(selectUsersSchema, 'The unbanned user.'),
@@ -179,6 +213,15 @@ export const unbanUser = createRoute({
         path: '/users/{userId}/unban',
       }),
       'The user with the requested ID does not exist in our resources.'
+    ),
+    [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
+      createErrorSchema({
+        schema: userIdParamSchema,
+        message: 'The user id request params is required.',
+        path: '/users/{userId}/unban',
+        potentioalInput: [],
+      }),
+      'The validation unban user request error(s).'
     ),
   },
 });

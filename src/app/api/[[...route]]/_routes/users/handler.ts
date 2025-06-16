@@ -48,7 +48,7 @@ export const createUser: AppRouteHandler<CreateUser> = async (c) => {
 };
 
 export const deleteUser: AppRouteHandler<DeleteUser> = async (c) => {
-  const { userId } = c.req.valid('param') as UserIdParam;
+  const { userId } = c.req.valid('param');
 
   const data = await users.getUser(userId);
   if (!data) {
@@ -73,7 +73,7 @@ export const deleteUser: AppRouteHandler<DeleteUser> = async (c) => {
 };
 
 export const resetPassword: AppRouteHandler<ResetPassword> = async (c) => {
-  const { userId } = c.req.valid('param') as UserIdParam;
+  const { userId } = c.req.valid('param');
   const input = c.req.valid('json');
 
   const data = await users.getUser(userId);
@@ -101,7 +101,7 @@ export const resetPassword: AppRouteHandler<ResetPassword> = async (c) => {
 };
 
 export const revokeSession: AppRouteHandler<RevokeSession> = async (c) => {
-  const { userId } = c.req.valid('param') as UserIdParam;
+  const { userId } = c.req.valid('param');
 
   const data = await users.getUser(userId);
   if (!data) {
@@ -126,7 +126,7 @@ export const revokeSession: AppRouteHandler<RevokeSession> = async (c) => {
 };
 
 export const banUser: AppRouteHandler<BanUser> = async (c) => {
-  const { userId } = c.req.valid('param') as UserIdParam;
+  const { userId } = c.req.valid('param');
   const input = c.req.valid('json');
 
   const banReason = input.banReason || '';
@@ -154,7 +154,7 @@ export const banUser: AppRouteHandler<BanUser> = async (c) => {
 };
 
 export const unbanUser: AppRouteHandler<UnbanUser> = async (c) => {
-  const { userId } = c.req.valid('param') as UserIdParam;
+  const { userId } = c.req.valid('param');
 
   const data = (await auth.api.unbanUser({
     headers: c.req.raw.headers,

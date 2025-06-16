@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { toast } from "sonner";
+import { toast } from 'sonner';
 
-import { ConfirmationDialog } from "@/components/confirmation-dialog";
-import { useDeleteUserMutation } from "@/hooks/queries/users";
-import { useDeleteUserModal } from "@/hooks/store/delete-user";
-import { useIsClient } from "@/hooks/use-is-client";
+import { ConfirmationDialog } from '@/components/confirmation-dialog';
+import { useDeleteUserMutation } from '@/hooks/queries/users';
+import { useDeleteUserModal } from '@/hooks/store/delete-user';
+import { useIsClient } from '@/hooks/use-is-client';
 
 export function DeleteUserModal() {
   const store = useDeleteUserModal();
@@ -17,9 +17,9 @@ export function DeleteUserModal() {
   }
 
   const text = {
-    title: "Delete User",
-    description: "Just checking - are you sure you want to delete this user?",
-    action: "Delete",
+    title: 'Delete User',
+    description: 'Just checking - are you sure you want to delete this user?',
+    action: 'Delete',
   };
 
   const onChange = () => {
@@ -38,16 +38,16 @@ export function DeleteUserModal() {
         },
       }),
       {
-        loading: "Deleting user...",
-        success: "User deleted successfully",
+        loading: 'Deleting user...',
+        success: 'User deleted successfully',
         error: (error: unknown) => {
           if (error instanceof Error) {
             return error.message;
           }
 
-          return "There is some internal error. Try again or contact support.";
+          return 'There is some internal error. Try again or contact support.';
         },
-      },
+      }
     );
   };
 
