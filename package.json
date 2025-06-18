@@ -58,6 +58,7 @@
     "react-day-picker": "8.10.1",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.57.0",
+    "remeda": "^2.23.0",
     "server-only": "^0.0.1",
     "sonner": "^2.0.4",
     "tailwind-merge": "^3.3.0",

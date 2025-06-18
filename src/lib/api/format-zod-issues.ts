@@ -1,4 +1,17 @@
-import { z } from "zod";
+import * as r from 'remeda';
+
+import { z } from 'zod';
+
+export const ErrorIssuesMapSchema = z.record(
+  z
+    .object({
+      code: z.string(),
+      message: z.string(),
+    })
+    .array()
+);
+
+export type ErrorIssuesMap = z.infer<typeof ErrorIssuesMapSchema>;
 
 export interface ZodIssue {
   code: string;
@@ -8,21 +21,14 @@ export interface ZodIssue {
   [key: string]: any;
 }
 
-export interface FormattedError {
-  [field: string]: {
-    code: string;
-    message: string;
-  }[];
-}
-
-export const formatZodIssues = (issues: ZodIssue[]): FormattedError => {
-  return issues.reduce<FormattedError>((acc, issue) => {
+export const formatZodIssues = (issues: ZodIssue[]): ErrorIssuesMap => {
+  return issues.reduce<ErrorIssuesMap>((acc, issue) => {
     const formatted = {
       code: issue.code.toUpperCase(),
       message: issue.message,
     };
 
-    const field = issue.path.join(".");
+    const field = issue.path.join('.');
 
     // If the field doesn't exist in the accumulator, initialize it as an empty array
     if (!acc[field]) {
@@ -35,17 +41,6 @@ export const formatZodIssues = (issues: ZodIssue[]): FormattedError => {
   }, {});
 };
 
-export const ErrorIssuesMapSchema = z.record(
-  z
-    .object({
-      code: z.string(),
-      message: z.string(),
-    })
-    .array(),
-);
-
-type ErrorIssuesMap = z.infer<typeof ErrorIssuesMapSchema>;
-
 export const combineIssues = (objects: ErrorIssuesMap[]): ErrorIssuesMap => {
   const combined: ErrorIssuesMap = {};
 
@@ -55,6 +50,7 @@ export const combineIssues = (objects: ErrorIssuesMap[]): ErrorIssuesMap => {
         combined[key] = [];
       }
       combined[key].push(...value);
+      combined[key] = r.uniqueWith(combined[key], r.isDeepEqual);
     }
   }
 
