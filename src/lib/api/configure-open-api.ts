@@ -18,6 +18,7 @@ export default function configureOpenAPI(app: AppOpenAPI) {
     Scalar({
       url: '/api/doc',
       theme: 'kepler',
+      layout: 'classic',
       defaultHttpClient: {
         targetKey: 'js',
         clientKey: 'fetch',

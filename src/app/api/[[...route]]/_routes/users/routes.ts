@@ -98,7 +98,7 @@ export const deleteUser = createRoute({
         schema: userIdParamSchema,
         message: 'The user id request params is required.',
         path: '/users/{userId}',
-        potentioalInput: [],
+        potentioalInput: {},
       }),
       'The validation delete user request error(s).'
     ),
@@ -124,16 +124,16 @@ export const resetPassword = createRoute({
     ),
     [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
       createErrorSchema({
-        schema: userIdParamSchema,
-        message: 'The user id request params is required.',
+        schema: resetPasswordInput,
+        message: 'The reset password request input is invalid.',
         path: '/users/{userId}/reset-password',
-        potentioalInput: [],
+        potentioalInput: resetPasswordInputErrors,
       }).or(
         createErrorSchema({
-          schema: resetPasswordInput,
-          message: 'The reset password request input is invalid.',
+          schema: userIdParamSchema,
+          message: 'The user id request params is required.',
           path: '/users/{userId}/reset-password',
-          potentioalInput: resetPasswordInputErrors,
+          potentioalInput: {},
         })
       ),
       'The validation reset password request error(s).'
@@ -162,7 +162,7 @@ export const revokeSession = createRoute({
         schema: userIdParamSchema,
         message: 'The user id request params is required.',
         path: '/users/{userId}/revoke-sessions',
-        potentioalInput: [],
+        potentioalInput: {},
       }),
       'The validation revoke sessions request error(s).'
     ),
@@ -191,7 +191,7 @@ export const banUser = createRoute({
         schema: userIdParamSchema,
         message: 'The user id request params is required.',
         path: '/users/{userId}/ban',
-        potentioalInput: [],
+        potentioalInput: {},
       }),
       'The validation ban user request error(s).'
     ),
@@ -219,7 +219,7 @@ export const unbanUser = createRoute({
         schema: userIdParamSchema,
         message: 'The user id request params is required.',
         path: '/users/{userId}/unban',
-        potentioalInput: [],
+        potentioalInput: {},
       }),
       'The validation unban user request error(s).'
     ),
