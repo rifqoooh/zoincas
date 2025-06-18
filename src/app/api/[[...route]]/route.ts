@@ -2,6 +2,7 @@ import { handle } from 'hono/vercel';
 
 import configureOpenAPI from '@/lib/api/configure-open-api';
 import { createApp } from '@/lib/api/create-app';
+
 import sessions from './_routes/sessions';
 import users from './_routes/users';
 
