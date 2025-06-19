@@ -25,15 +25,5 @@
   "prettier.enable": false,
   "typescript.tsdk": "node_modules/typescript/lib",
   "css.lint.unknownAtRules": "ignore",
-  "tailwindCSS.experimental.configFile": "src/app/globals.css",
-  "editor.tokenColorCustomizations": {
-    "textMateRules": [
-      {
-        "scope": ["entity.name.type.alias.tsx", "entity.name.type.tsx"],
-        "settings": {
-          "fontStyle": "underline"
-        }
-      }
-    ]
-  }
+  "tailwindCSS.experimental.configFile": "src/app/globals.css"
 }
