@@ -6,7 +6,7 @@ import { createApp } from '@/lib/api/create-app';
 import sessions from './_routes/sessions';
 import users from './_routes/users';
 
-const app = createApp();
+const app = createApp().basePath('/api');
 
 configureOpenAPI(app);
 

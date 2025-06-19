@@ -2,7 +2,7 @@ import type { ErrorResponseAPI } from '@/lib/api/types';
 
 import { useQuery } from '@tanstack/react-query';
 
-import { client } from '@/lib/api/rpc';
+import { api } from '@/lib/api/rpc';
 import { getSessionsResponse } from '@/validators/api/openapi/sessions/response';
 import { sessionsKeys } from './keys';
 
@@ -10,7 +10,7 @@ export const useGetSessionsQuery = () => {
   const query = useQuery({
     queryKey: sessionsKeys.all(),
     queryFn: async () => {
-      const response = await client.api.sessions.$get();
+      const response = await api.sessions.$get();
       if (!response.ok) {
         const err = (await response.json()) as unknown as ErrorResponseAPI;
         throw new Error(err.error.message);

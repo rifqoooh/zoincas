@@ -10,7 +10,7 @@ import {
 import { auth } from '@/lib/auth/server';
 
 export function createApp() {
-  const app = createRouter().basePath('/api');
+  const app = createRouter();
 
   app.use('*', async (c, next) => {
     const session = await auth.api.getSession({

@@ -3,6 +3,7 @@ import type { AppOpenAPI } from './types';
 import { Scalar } from '@scalar/hono-api-reference';
 
 import { env } from '@/env';
+import betterAuthOpenAPI from '@/lib/auth/better-auth.json';
 import packageJSON from '../../../package.json' with { type: 'json' };
 
 export default function configureOpenAPI(app: AppOpenAPI) {
@@ -18,9 +19,21 @@ export default function configureOpenAPI(app: AppOpenAPI) {
     app.get(
       '/reference',
       Scalar({
-        url: '/api/doc',
+        sources: [
+          {
+            title: 'Zoincas API',
+            url: '/api/doc',
+            default: true,
+          },
+          {
+            title: 'Auth API',
+            content: betterAuthOpenAPI,
+          },
+        ],
         theme: 'kepler',
-        layout: 'classic',
+        layout: 'modern',
+        hideDownloadButton: env().NODE_ENV === 'production',
+        hideTestRequestButton: env().NODE_ENV === 'production',
         defaultHttpClient: {
           targetKey: 'js',
           clientKey: 'fetch',
