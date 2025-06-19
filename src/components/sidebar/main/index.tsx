@@ -3,7 +3,9 @@
 import type * as React from 'react';
 
 import { CommandIcon } from 'lucide-react';
+import Link from 'next/link';
 
+import { BalancesNavigation } from '@/components/sidebar/main/balances-navigation';
 import { MainNavigation } from '@/components/sidebar/main/main-navigation';
 import { UserNavigation } from '@/components/sidebar/main/user-navigation';
 import {
@@ -24,22 +26,21 @@ export function MainSidebar({
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <div>
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <CommandIcon className="size-4" />
-                </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">Acme Inc</span>
-                  <span className="truncate text-xs">Enterprise</span>
-                </div>
-              </div>
+            <SidebarMenuButton
+              asChild
+              className="data-[slot=sidebar-menu-button]:!p-1.5"
+            >
+              <Link href="/dashboard">
+                <CommandIcon className="!size-5" />
+                <span className="font-medium text-base">zoincas</span>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
         <MainNavigation />
+        <BalancesNavigation />
       </SidebarContent>
       <SidebarFooter>
         <UserNavigation />

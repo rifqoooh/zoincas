@@ -1,6 +1,9 @@
 import {
   BookOpenIcon,
   BotIcon,
+  FrameIcon,
+  MapIcon,
+  PieChartIcon,
   Settings2Icon,
   SquareTerminalIcon,
 } from 'lucide-react';
@@ -48,5 +51,23 @@ export const menus = [
     title: 'Budget Plans',
     url: '#',
     icon: Settings2Icon,
+  },
+];
+
+export const balances = [
+  {
+    name: 'Design Engineering',
+    url: '#',
+    icon: FrameIcon,
+  },
+  {
+    name: 'Sales & Marketing',
+    url: '#',
+    icon: PieChartIcon,
+  },
+  {
+    name: 'Travel',
+    url: '#',
+    icon: MapIcon,
   },
 ];

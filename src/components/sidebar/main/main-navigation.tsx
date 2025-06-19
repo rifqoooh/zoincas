@@ -10,7 +10,6 @@ import {
 } from '@/components/ui/collapsible';
 import {
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuAction,
   SidebarMenuButton,
@@ -24,7 +23,6 @@ import { menus } from './constants';
 export function MainNavigation() {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Menu</SidebarGroupLabel>
       <SidebarMenu>
         {menus.map((menu) => (
           <Collapsible key={menu.title} asChild>
