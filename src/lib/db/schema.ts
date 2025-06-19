@@ -1,6 +1,16 @@
-import { boolean, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import {
+  boolean,
+  index,
+  integer,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+  varchar,
+} from 'drizzle-orm/pg-core';
 import { timestamps } from './utilities';
 
+// #region auth schema table definition
 export const users = pgTable('users', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),
@@ -51,3 +61,93 @@ export const verifications = pgTable('verifications', {
   expiresAt: timestamp('expires_at').notNull(),
   ...timestamps,
 });
+// #endregion auth schema table definition
+
+// #region main schema table defenition
+export const balances = pgTable(
+  'balances',
+  {
+    id: uuid('id').primaryKey().defaultRandom().notNull(),
+    name: varchar('name', { length: 256 }).notNull(),
+    initialAmount: integer('initial_amount').default(0).notNull(),
+    userId: text('user_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    ...timestamps,
+  },
+  (table) => [index('balances_user_id_idx').on(table.userId)]
+);
+
+export const categories = pgTable(
+  'categories',
+  {
+    id: uuid('id').primaryKey().defaultRandom().notNull(),
+    name: varchar('name', { length: 256 }).default('Untitled').notNull(),
+    userId: text('user_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    ...timestamps,
+  },
+  (table) => [index('categories_user_id_idx').on(table.userId)]
+);
+
+export const transactions = pgTable(
+  'transactions',
+  {
+    id: uuid('id').primaryKey().defaultRandom().notNull(),
+    datetime: timestamp('datetime').notNull(),
+    description: varchar('description', { length: 256 })
+      .default('Untitled')
+      .notNull(),
+    amount: integer('amount').default(0).notNull(),
+    balanceId: uuid('balance_id')
+      .references(() => balances.id, { onDelete: 'cascade' })
+      .notNull(),
+    categoryId: uuid('category_id').references(() => categories.id, {
+      onDelete: 'set null',
+    }),
+    budgetCategoryId: uuid('budget_category_id').references(
+      () => budgetCategories.id,
+      {
+        onDelete: 'set null',
+      }
+    ),
+    ...timestamps,
+  },
+  (table) => [
+    index('transactions_balance_id_idx').on(table.balanceId),
+    index('transactions_budget_category_id_idx').on(table.budgetCategoryId),
+  ]
+);
+
+export const budgetPlans = pgTable(
+  'budget_plans',
+  {
+    id: uuid('id').primaryKey().defaultRandom().notNull(),
+    title: varchar('title', { length: 256 }).default('Untitled').notNull(),
+    userId: text('user_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    ...timestamps,
+  },
+  (table) => [index('budget_plans_user_id_idx').on(table.userId)]
+);
+
+export const budgetCategories = pgTable(
+  'budget_categories',
+  {
+    id: uuid('id').primaryKey().defaultRandom().notNull(),
+    name: varchar('name', { length: 256 }).default('Uncategorized').notNull(),
+    amount: integer('amount').default(0).notNull(),
+    budgetPlanId: uuid('budget_plan_id')
+      .references(() => budgetPlans.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    ...timestamps,
+  },
+  (table) => [
+    index('budget_categories_budget_plan_id_idx').on(table.budgetPlanId),
+  ]
+);
+// #endregion main schema table defenition
