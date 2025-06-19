@@ -1,12 +1,7 @@
 'use client';
 
-import {
-  BookOpenIcon,
-  BotIcon,
-  ChevronRightIcon,
-  Settings2Icon,
-  SquareTerminalIcon,
-} from 'lucide-react';
+import { ChevronRightIcon } from 'lucide-react';
+import Link from 'next/link';
 
 import {
   Collapsible,
@@ -24,117 +19,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
-
-const menus = [
-  {
-    title: 'Dashboard',
-    url: '#',
-    icon: SquareTerminalIcon,
-    isActive: true,
-    items: [
-      {
-        title: 'History',
-        url: '#',
-      },
-      {
-        title: 'Starred',
-        url: '#',
-      },
-      {
-        title: 'Settings',
-        url: '#',
-      },
-    ],
-  },
-  {
-    title: 'Balances',
-    url: '#',
-    icon: BotIcon,
-    items: [
-      {
-        title: 'Genesis',
-        url: '#',
-      },
-      {
-        title: 'Explorer',
-        url: '#',
-      },
-      {
-        title: 'Quantum',
-        url: '#',
-      },
-    ],
-  },
-  {
-    title: 'Categories',
-    url: '#',
-    icon: BookOpenIcon,
-    items: [
-      {
-        title: 'Introduction',
-        url: '#',
-      },
-      {
-        title: 'Get Started',
-        url: '#',
-      },
-      {
-        title: 'Tutorials',
-        url: '#',
-      },
-      {
-        title: 'Changelog',
-        url: '#',
-      },
-    ],
-  },
-  {
-    title: 'Transactions',
-    url: '#',
-    icon: Settings2Icon,
-    items: [
-      {
-        title: 'General',
-        url: '#',
-      },
-      {
-        title: 'Team',
-        url: '#',
-      },
-      {
-        title: 'Billing',
-        url: '#',
-      },
-      {
-        title: 'Limits',
-        url: '#',
-      },
-    ],
-  },
-  {
-    title: 'Budget Plans',
-    url: '#',
-    icon: Settings2Icon,
-    items: [
-      {
-        title: 'General',
-        url: '#',
-      },
-      {
-        title: 'Team',
-        url: '#',
-      },
-      {
-        title: 'Billing',
-        url: '#',
-      },
-      {
-        title: 'Limits',
-        url: '#',
-      },
-    ],
-  },
-];
+import { menus } from './constants';
 
 export function MainNavigation() {
   return (
@@ -142,15 +27,16 @@ export function MainNavigation() {
       <SidebarGroupLabel>Menu</SidebarGroupLabel>
       <SidebarMenu>
         {menus.map((menu) => (
-          <Collapsible key={menu.title} asChild defaultOpen={menu.isActive}>
+          <Collapsible key={menu.title} asChild>
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip={menu.title}>
-                <a href={menu.url}>
+                <Link href={menu.url}>
                   <menu.icon />
                   <span>{menu.title}</span>
-                </a>
+                </Link>
               </SidebarMenuButton>
-              {menu.items?.length ? (
+
+              {menu.items !== undefined && menu.items?.length > 0 && (
                 <>
                   <CollapsibleTrigger asChild>
                     <SidebarMenuAction className="data-[state=open]:rotate-90">
@@ -163,16 +49,16 @@ export function MainNavigation() {
                       {menu.items?.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
                           <SidebarMenuSubButton asChild>
-                            <a href={subItem.url}>
+                            <Link href={subItem.url}>
                               <span>{subItem.title}</span>
-                            </a>
+                            </Link>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}
                     </SidebarMenuSub>
                   </CollapsibleContent>
                 </>
-              ) : null}
+              )}
             </SidebarMenuItem>
           </Collapsible>
         ))}

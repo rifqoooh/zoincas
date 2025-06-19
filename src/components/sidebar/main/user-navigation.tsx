@@ -33,7 +33,7 @@ export function UserNavigation() {
   const { user } = sessionsQuery.data || {};
 
   if (sessionsQuery.isPending) {
-    return <Skeleton className="h-10" />;
+    return <Skeleton className="h-10 bg-gray-200" />;
   }
 
   return (
