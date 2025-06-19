@@ -25,111 +25,132 @@ import {
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
 
-const data = {
-  mainNavigation: [
-    {
-      title: 'Playground',
-      url: '#',
-      icon: SquareTerminalIcon,
-      isActive: true,
-      items: [
-        {
-          title: 'History',
-          url: '#',
-        },
-        {
-          title: 'Starred',
-          url: '#',
-        },
-        {
-          title: 'Settings',
-          url: '#',
-        },
-      ],
-    },
-    {
-      title: 'Models',
-      url: '#',
-      icon: BotIcon,
-      items: [
-        {
-          title: 'Genesis',
-          url: '#',
-        },
-        {
-          title: 'Explorer',
-          url: '#',
-        },
-        {
-          title: 'Quantum',
-          url: '#',
-        },
-      ],
-    },
-    {
-      title: 'Documentation',
-      url: '#',
-      icon: BookOpenIcon,
-      items: [
-        {
-          title: 'Introduction',
-          url: '#',
-        },
-        {
-          title: 'Get Started',
-          url: '#',
-        },
-        {
-          title: 'Tutorials',
-          url: '#',
-        },
-        {
-          title: 'Changelog',
-          url: '#',
-        },
-      ],
-    },
-    {
-      title: 'Settings',
-      url: '#',
-      icon: Settings2Icon,
-      items: [
-        {
-          title: 'General',
-          url: '#',
-        },
-        {
-          title: 'Team',
-          url: '#',
-        },
-        {
-          title: 'Billing',
-          url: '#',
-        },
-        {
-          title: 'Limits',
-          url: '#',
-        },
-      ],
-    },
-  ],
-};
+const menus = [
+  {
+    title: 'Dashboard',
+    url: '#',
+    icon: SquareTerminalIcon,
+    isActive: true,
+    items: [
+      {
+        title: 'History',
+        url: '#',
+      },
+      {
+        title: 'Starred',
+        url: '#',
+      },
+      {
+        title: 'Settings',
+        url: '#',
+      },
+    ],
+  },
+  {
+    title: 'Balances',
+    url: '#',
+    icon: BotIcon,
+    items: [
+      {
+        title: 'Genesis',
+        url: '#',
+      },
+      {
+        title: 'Explorer',
+        url: '#',
+      },
+      {
+        title: 'Quantum',
+        url: '#',
+      },
+    ],
+  },
+  {
+    title: 'Categories',
+    url: '#',
+    icon: BookOpenIcon,
+    items: [
+      {
+        title: 'Introduction',
+        url: '#',
+      },
+      {
+        title: 'Get Started',
+        url: '#',
+      },
+      {
+        title: 'Tutorials',
+        url: '#',
+      },
+      {
+        title: 'Changelog',
+        url: '#',
+      },
+    ],
+  },
+  {
+    title: 'Transactions',
+    url: '#',
+    icon: Settings2Icon,
+    items: [
+      {
+        title: 'General',
+        url: '#',
+      },
+      {
+        title: 'Team',
+        url: '#',
+      },
+      {
+        title: 'Billing',
+        url: '#',
+      },
+      {
+        title: 'Limits',
+        url: '#',
+      },
+    ],
+  },
+  {
+    title: 'Budget Plans',
+    url: '#',
+    icon: Settings2Icon,
+    items: [
+      {
+        title: 'General',
+        url: '#',
+      },
+      {
+        title: 'Team',
+        url: '#',
+      },
+      {
+        title: 'Billing',
+        url: '#',
+      },
+      {
+        title: 'Limits',
+        url: '#',
+      },
+    ],
+  },
+];
 
 export function MainNavigation() {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      <SidebarGroupLabel>Menu</SidebarGroupLabel>
       <SidebarMenu>
-        {data.mainNavigation.map((item) => (
-          <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
+        {menus.map((menu) => (
+          <Collapsible key={menu.title} asChild defaultOpen={menu.isActive}>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip={item.title}>
-                <a href={item.url}>
-                  <item.icon />
-                  <span>{item.title}</span>
+              <SidebarMenuButton asChild tooltip={menu.title}>
+                <a href={menu.url}>
+                  <menu.icon />
+                  <span>{menu.title}</span>
                 </a>
               </SidebarMenuButton>
-              {item.items?.length ? (
+              {menu.items?.length ? (
                 <>
                   <CollapsibleTrigger asChild>
                     <SidebarMenuAction className="data-[state=open]:rotate-90">
@@ -139,7 +160,7 @@ export function MainNavigation() {
                   </CollapsibleTrigger>
                   <CollapsibleContent>
                     <SidebarMenuSub>
-                      {item.items?.map((subItem) => (
+                      {menu.items?.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
                           <SidebarMenuSubButton asChild>
                             <a href={subItem.url}>

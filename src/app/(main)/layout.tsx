@@ -1,5 +1,7 @@
 import type * as React from 'react';
 
+import type { Metadata } from 'next';
+
 import { MainSidebar } from '@/components/sidebar/main';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -7,6 +9,13 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
+import { createMetadata } from '@/lib/seo/metadata';
+
+export const metadata: Metadata = createMetadata({
+  title: 'Dashboard',
+  description:
+    'Zoincas is a personal financial management app powered with AI.',
+});
 
 type MainLayoutProps = {
   readonly children: React.ReactNode;
