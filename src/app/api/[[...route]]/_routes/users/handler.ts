@@ -23,7 +23,7 @@ export type UserIdParam = z.infer<typeof userIdParamSchema>;
 export const listUsers: AppRouteHandler<ListUsers> = async (c) => {
   const query = c.req.valid('query');
 
-  const data = await users.getUsers(query);
+  const data = await users.listUsers(query);
 
   return c.json(data, StatusCode.OK);
 };

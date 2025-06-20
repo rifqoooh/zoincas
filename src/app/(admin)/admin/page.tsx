@@ -1,9 +1,9 @@
-import { Container } from "@/components/container";
-import { CreateNewUserButton } from "@/components/modal/create-user/button";
-import { UsersTable } from "@/components/tables/user-table";
-import { Separator } from "@/components/ui/separator";
-import { UserNavigation } from "@/components/user-navigation";
-import { AdminProviders } from "../_components/providers";
+import { Container } from '@/components/container';
+import { CreateNewUserButton } from '@/components/modal/create-user/button';
+import { UsersTable } from '@/components/tables/users';
+import { Separator } from '@/components/ui/separator';
+import { UserNavigation } from '@/components/user-navigation';
+import { AdminProviders } from '../_components/providers';
 
 export default function AdminPage() {
   return (

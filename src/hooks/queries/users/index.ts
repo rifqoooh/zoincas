@@ -17,7 +17,7 @@ import { z } from 'zod';
 
 import { api } from '@/lib/api/rpc';
 import { getSortingStateParser } from '@/lib/parsers';
-import { getUsersResponse } from '@/validators/api/openapi/users/response';
+import { listUsersResponse } from '@/validators/api/openapi/users/response';
 import { selectUsersSchema } from '@/validators/db/users';
 import { usersKeys } from './keys';
 
@@ -54,7 +54,7 @@ export const useGetUsersQuery = () => {
       }
 
       const data = await response.json();
-      const parsedData = getUsersResponse.safeParse(data);
+      const parsedData = listUsersResponse.safeParse(data);
       if (!parsedData.success) {
         throw new Error('There is an error when parsing response data.');
       }

@@ -14,7 +14,7 @@ import {
   listUsersQuery,
   resetPasswordInput,
 } from '@/validators/api/openapi/users/request';
-import { getUsersResponse } from '@/validators/api/openapi/users/response';
+import { listUsersResponse } from '@/validators/api/openapi/users/response';
 import { insertUsersSchema, selectUsersSchema } from '@/validators/db/users';
 import {
   createUserInputErrors,
@@ -42,7 +42,7 @@ export const listUsers = createRoute({
     query: listUsersQuery,
   },
   responses: {
-    [StatusCode.OK]: ContentJSON(getUsersResponse, 'The list of users.'),
+    [StatusCode.OK]: ContentJSON(listUsersResponse, 'The list of users.'),
     [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
       createErrorSchema({
         schema: listUsersQuery,
