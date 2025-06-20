@@ -18,7 +18,8 @@ export function DeleteUserModal() {
 
   const text = {
     title: 'Delete User',
-    description: 'Just checking - are you sure you want to delete this user?',
+    description:
+      'Just checking - are you sure you want to delete this user? This action can not be undone.',
     action: 'Delete',
   };
 
