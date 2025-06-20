@@ -1,5 +1,5 @@
-import { db } from './';
-import { accounts, sessions, users, verifications } from './schema';
+import { db } from '../';
+import { accounts, sessions, users, verifications } from '../schema';
 
 const admin = {
   users: {
