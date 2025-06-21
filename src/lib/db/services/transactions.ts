@@ -1,12 +1,30 @@
 import type { ListTransactionsQuery } from '@/validators/api/openapi/transactions/request';
 
-import { and, asc, count, desc, gte, ilike, inArray, lte } from 'drizzle-orm';
+import {
+  and,
+  asc,
+  count,
+  desc,
+  eq,
+  gte,
+  ilike,
+  inArray,
+  lte,
+} from 'drizzle-orm';
 
 import { db } from '@/lib/db';
-import { transactions } from '@/lib/db/schema';
+import {
+  balances,
+  budgetCategories,
+  categories,
+  transactions,
+} from '@/lib/db/schema';
 import { coalesce } from '@/lib/db/utilities';
 
-export const listTransactions = async (query: ListTransactionsQuery) => {
+export const listTransactions = async (
+  userId: string,
+  query: ListTransactionsQuery
+) => {
   const [startCreatedAt, endCreatedAt] = query.createdAt;
 
   const offset = (query.page - 1) * query.perPage;
@@ -44,7 +62,8 @@ export const listTransactions = async (query: ListTransactionsQuery) => {
               )
             : undefined
         )
-      : undefined
+      : undefined,
+    eq(balances.userId, userId)
   );
 
   const orderBy =
@@ -61,12 +80,27 @@ export const listTransactions = async (query: ListTransactionsQuery) => {
         description: transactions.description,
         amount: transactions.amount,
         datetime: transactions.datetime,
-        balanceId: transactions.balanceId,
-        categoryId: transactions.categoryId,
-        budgetCategoryId: transactions.budgetCategoryId,
+        balance: {
+          id: transactions.balanceId,
+          name: balances.name,
+        },
+        category: {
+          id: transactions.categoryId,
+          name: categories.name,
+        },
+        budgetCategory: {
+          id: transactions.budgetCategoryId,
+          name: budgetCategories.name,
+        },
         createdAt: transactions.createdAt,
       })
       .from(transactions)
+      .innerJoin(balances, eq(transactions.balanceId, balances.id))
+      .leftJoin(categories, eq(transactions.categoryId, categories.id))
+      .leftJoin(
+        budgetCategories,
+        eq(transactions.budgetCategoryId, budgetCategories.id)
+      )
       .where(where)
       .orderBy(...orderBy)
       .limit(query.perPage)
@@ -77,6 +111,12 @@ export const listTransactions = async (query: ListTransactionsQuery) => {
         count: coalesce(count(), 0).mapWith(Number).as('count'),
       })
       .from(transactions)
+      .innerJoin(balances, eq(transactions.balanceId, balances.id))
+      .leftJoin(categories, eq(transactions.categoryId, categories.id))
+      .leftJoin(
+        budgetCategories,
+        eq(transactions.budgetCategoryId, budgetCategories.id)
+      )
       .where(where)
       .limit(1);
 

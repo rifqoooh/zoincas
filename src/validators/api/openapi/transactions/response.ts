@@ -2,9 +2,27 @@ import { z } from 'zod';
 
 import { selectTransactionsSchema } from '@/validators/db/transactions';
 
-export const transactionsDataSchema = selectTransactionsSchema.omit({
-  updatedAt: true,
-});
+export const transactionsDataSchema = selectTransactionsSchema
+  .extend({
+    balance: z.object({
+      id: z.string().uuid(),
+      name: z.string(),
+    }),
+    category: z.object({
+      id: z.string().uuid().nullable(),
+      name: z.string().nullable(),
+    }),
+    budgetCategory: z.object({
+      id: z.string().uuid().nullable(),
+      name: z.string().nullable(),
+    }),
+  })
+  .omit({
+    balanceId: true,
+    categoryId: true,
+    budgetCategoryId: true,
+    updatedAt: true,
+  });
 
 export type TransactionsDataType = z.infer<typeof transactionsDataSchema>;
 
