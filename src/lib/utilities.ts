@@ -21,3 +21,24 @@ export const mergeRefs = <T = any>(
     });
   };
 };
+
+
+export function formatCurrency(
+  value: number | string,
+  options: {
+    currency?: 'USD' | 'IDR';
+    notation?: Intl.NumberFormatOptions['notation'];
+  } = {}
+) {
+  const { currency = 'IDR', notation = 'standard' } = options;
+
+  // convert to float if passed price is string
+  const number = typeof value === 'string' ? parseFloat(value) : value;
+
+  return new Intl.NumberFormat('id', {
+    style: 'currency',
+    currency,
+    notation,
+    maximumFractionDigits: 2,
+  }).format(number);
+}

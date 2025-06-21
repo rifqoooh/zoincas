@@ -14,7 +14,7 @@ import { DataTableColumnHeader } from '@/components/data-table/data-table-column
 import { Badge } from '@/components/ui/badge';
 import { RowActions } from './row-actions';
 
-export const userColumns = (): ColumnDef<UsersDataType>[] => {
+export const usersColumns = (): ColumnDef<UsersDataType>[] => {
   return [
     {
       id: 'email',
