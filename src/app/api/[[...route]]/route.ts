@@ -3,6 +3,7 @@ import { handle } from 'hono/vercel';
 import configureOpenAPI from '@/lib/api/configure-open-api';
 import { createApp } from '@/lib/api/create-app';
 
+import balances from './_routes/balances';
 import sessions from './_routes/sessions';
 import transactions from './_routes/transactions';
 import users from './_routes/users';
@@ -14,7 +15,8 @@ configureOpenAPI(app);
 const routes = app
   .route('/', sessions)
   .route('/', users)
-  .route('/', transactions);
+  .route('/', transactions)
+  .route('/', balances);
 
 export const GET = handle(app);
 export const POST = handle(app);

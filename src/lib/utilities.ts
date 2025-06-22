@@ -4,6 +4,11 @@ import { type ClassValue, clsx } from 'clsx';
 
 import { twMerge } from 'tailwind-merge';
 
+export type Prettify<T> = {
+  [K in keyof T]: T[K] extends object ? Prettify<T[K]> : T[K];
+} & unknown;
+
+
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
 };
@@ -42,3 +47,4 @@ export function formatCurrency(
     maximumFractionDigits: 2,
   }).format(number);
 }
+
