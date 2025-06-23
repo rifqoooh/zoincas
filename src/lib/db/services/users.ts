@@ -1,4 +1,4 @@
-import type { ListUsersQuery } from '@/validators/api/openapi/users/request';
+import type { ListUsersQuery } from '@/validators/api/users/request';
 
 import {
   and,

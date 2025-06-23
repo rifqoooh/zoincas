@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import type { TransactionsDataType } from '@/validators/api/openapi/transactions/response';
+import type { TransactionsDataType } from '@/validators/api/transactions/response';
 
 import { DataTable } from '@/components/data-table/data-table';
 import { DataTableSkeleton } from '@/components/data-table/data-table-skeleton';

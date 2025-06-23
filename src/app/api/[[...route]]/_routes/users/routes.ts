@@ -13,8 +13,8 @@ import {
   banUserInput,
   listUsersQuery,
   resetPasswordInput,
-} from '@/validators/api/openapi/users/request';
-import { listUsersResponse } from '@/validators/api/openapi/users/response';
+} from '@/validators/api/users/request';
+import { listUsersResponse } from '@/validators/api/users/response';
 import { insertUsersSchema, selectUsersSchema } from '@/validators/db/users';
 import {
   createUserInputErrors,

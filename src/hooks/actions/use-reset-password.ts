@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import type { ResetPasswordInput } from "@/validators/api/openapi/users/request";
-import type { SubmitHandler } from "react-hook-form";
+import type { ResetPasswordInput } from '@/validators/api/users/request';
+import type { SubmitHandler } from 'react-hook-form';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
-import { useResetPasswordMutation } from "@/hooks/queries/users";
-import { useResetPasswordModal } from "@/hooks/store/reset-password";
-import { resetPasswordInput } from "@/validators/api/openapi/users/request";
+import { useResetPasswordMutation } from '@/hooks/queries/users';
+import { useResetPasswordModal } from '@/hooks/store/reset-password';
+import { resetPasswordInput } from '@/validators/api/users/request';
 
 export const useResetPassword = () => {
   const store = useResetPasswordModal();
@@ -18,7 +18,7 @@ export const useResetPassword = () => {
   const form = useForm<ResetPasswordInput>({
     resolver: zodResolver(resetPasswordInput),
     defaultValues: {
-      password: "",
+      password: '',
     },
   });
 
@@ -30,16 +30,16 @@ export const useResetPassword = () => {
         },
       }),
       {
-        loading: "Resetting password...",
-        success: "User password reset successfully",
+        loading: 'Resetting password...',
+        success: 'User password reset successfully',
         error: (error: unknown) => {
           if (error instanceof Error) {
             return error.message;
           }
 
-          return "There is an error in the internal server.";
+          return 'There is an error in the internal server.';
         },
-      },
+      }
     );
   };
 

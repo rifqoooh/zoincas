@@ -1,4 +1,4 @@
-import type { UsersDataType } from '@/validators/api/openapi/users/response';
+import type { UsersDataType } from '@/validators/api/users/response';
 import type { Column, ColumnDef } from '@tanstack/react-table';
 
 import {

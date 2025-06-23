@@ -12,7 +12,7 @@ import { z } from 'zod';
 
 import { api } from '@/lib/api/rpc';
 import { getSortingStateParser } from '@/lib/parsers';
-import { listTransactionsResponse } from '@/validators/api/openapi/transactions/response';
+import { listTransactionsResponse } from '@/validators/api/transactions/response';
 import { transactionsKeys } from './keys';
 
 export const useGetTransactionsQuery = () => {

@@ -1,4 +1,4 @@
-import type { ListTransactionsQuery } from '@/validators/api/openapi/transactions/request';
+import type { ListTransactionsQuery } from '@/validators/api/transactions/request';
 
 import {
   and,

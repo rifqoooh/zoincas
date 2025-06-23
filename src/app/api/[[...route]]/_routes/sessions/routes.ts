@@ -3,7 +3,7 @@ import * as StatusCode from '@/lib/api/http-status-code';
 import { createRoute } from '@hono/zod-openapi';
 
 import { ContentJSON } from '@/lib/api/openapi-utilities';
-import { getSessionsResponse } from '@/validators/api/openapi/sessions/response';
+import { getSessionsResponse } from '@/validators/api/sessions/response';
 
 const tags = ['Sessions'];
 

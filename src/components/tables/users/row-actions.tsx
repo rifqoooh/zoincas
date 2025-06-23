@@ -1,21 +1,21 @@
-import type { UsersDataType } from "@/validators/api/openapi/users/response";
-import type { Row } from "@tanstack/react-table";
+import type { UsersDataType } from '@/validators/api/users/response';
+import type { Row } from '@tanstack/react-table';
 
-import { MoreHorizontalIcon } from "lucide-react";
+import { MoreHorizontalIcon } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useBanUserModal } from "@/hooks/store/ban-user";
-import { useDeleteUserModal } from "@/hooks/store/delete-user";
-import { useResetPasswordModal } from "@/hooks/store/reset-password";
-import { useRevokeSessionsModal } from "@/hooks/store/revoke-sessions";
-import { useUnbanUserModal } from "@/hooks/store/unban-user";
+} from '@/components/ui/dropdown-menu';
+import { useBanUserModal } from '@/hooks/store/ban-user';
+import { useDeleteUserModal } from '@/hooks/store/delete-user';
+import { useResetPasswordModal } from '@/hooks/store/reset-password';
+import { useRevokeSessionsModal } from '@/hooks/store/revoke-sessions';
+import { useUnbanUserModal } from '@/hooks/store/unban-user';
 
 interface RowActionsProps {
   row: Row<UsersDataType>;

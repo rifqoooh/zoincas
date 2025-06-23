@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import type { BanUserInput } from "@/validators/api/openapi/users/request";
-import type { SubmitHandler } from "react-hook-form";
+import type { BanUserInput } from '@/validators/api/users/request';
+import type { SubmitHandler } from 'react-hook-form';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
-import { useBanUserMutation } from "@/hooks/queries/users";
-import { useBanUserModal } from "@/hooks/store/ban-user";
-import { banUserInput } from "@/validators/api/openapi/users/request";
+import { useBanUserMutation } from '@/hooks/queries/users';
+import { useBanUserModal } from '@/hooks/store/ban-user';
+import { banUserInput } from '@/validators/api/users/request';
 
 export const useBanUser = () => {
   const store = useBanUserModal();
@@ -18,7 +18,7 @@ export const useBanUser = () => {
   const form = useForm<BanUserInput>({
     resolver: zodResolver(banUserInput),
     defaultValues: {
-      banReason: "No reason",
+      banReason: 'No reason',
       banExpiresInDays: 9999,
     },
   });
@@ -31,16 +31,16 @@ export const useBanUser = () => {
         },
       }),
       {
-        loading: "Banning user...",
-        success: "User banned successfully",
+        loading: 'Banning user...',
+        success: 'User banned successfully',
         error: (error: unknown) => {
           if (error instanceof Error) {
             return error.message;
           }
 
-          return "There is an error in the internal server.";
+          return 'There is an error in the internal server.';
         },
-      },
+      }
     );
   };
 

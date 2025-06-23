@@ -3,7 +3,7 @@ import type { CreateUserType } from '@/validators/actions/create-user';
 import type {
   BanUserInput,
   ResetPasswordInput,
-} from '@/validators/api/openapi/users/request';
+} from '@/validators/api/users/request';
 import type { SelectUsersType } from '@/validators/db/users';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -17,7 +17,7 @@ import { z } from 'zod';
 
 import { api } from '@/lib/api/rpc';
 import { getSortingStateParser } from '@/lib/parsers';
-import { listUsersResponse } from '@/validators/api/openapi/users/response';
+import { listUsersResponse } from '@/validators/api/users/response';
 import { selectUsersSchema } from '@/validators/db/users';
 import { usersKeys } from './keys';
 

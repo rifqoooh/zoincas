@@ -5,7 +5,7 @@ import { createRoute } from '@hono/zod-openapi';
 import { ContentJSON } from '@/lib/api/openapi-utilities';
 
 import { protectedMiddleware } from '@/middleware/api/protected-middleware';
-import { listBalancesSummaryResponse } from '@/validators/api/openapi/balances/response';
+import { listBalancesSummaryResponse } from '@/validators/api/balances/response';
 
 const tags = ['Balances'];
 

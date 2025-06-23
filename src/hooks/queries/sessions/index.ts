@@ -3,7 +3,7 @@ import type { ErrorResponseAPI } from '@/lib/api/types';
 import { useQuery } from '@tanstack/react-query';
 
 import { api } from '@/lib/api/rpc';
-import { getSessionsResponse } from '@/validators/api/openapi/sessions/response';
+import { getSessionsResponse } from '@/validators/api/sessions/response';
 import { sessionsKeys } from './keys';
 
 export const useGetSessionsQuery = () => {

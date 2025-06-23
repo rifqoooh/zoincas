@@ -4,8 +4,8 @@ import { createRoute, z } from '@hono/zod-openapi';
 
 import { ContentJSON, createErrorSchema } from '@/lib/api/openapi-utilities';
 import { protectedMiddleware } from '@/middleware/api/protected-middleware';
-import { listTransactionsQuery } from '@/validators/api/openapi/transactions/request';
-import { listTransactionsResponse } from '@/validators/api/openapi/transactions/response';
+import { listTransactionsQuery } from '@/validators/api/transactions/request';
+import { listTransactionsResponse } from '@/validators/api/transactions/response';
 import { listTransactionsQueryErrors } from './errors';
 
 const tags = ['Transactions'];

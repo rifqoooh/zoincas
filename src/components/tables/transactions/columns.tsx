@@ -1,4 +1,4 @@
-import type { TransactionsDataType } from '@/validators/api/openapi/transactions/response';
+import type { TransactionsDataType } from '@/validators/api/transactions/response';
 import type { Column, ColumnDef } from '@tanstack/react-table';
 
 import { format } from 'date-fns';
