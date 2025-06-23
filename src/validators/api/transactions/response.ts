@@ -37,3 +37,7 @@ export const listTransactionsResponse = z.object({
 });
 
 export type ListTransactionsResponse = z.infer<typeof listTransactionsResponse>;
+
+export const getTransactionResponse = transactionsDataSchema;
+
+export type GetTransactionResponse = z.infer<typeof getTransactionResponse>;

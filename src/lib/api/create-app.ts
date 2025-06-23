@@ -32,7 +32,7 @@ export function createApp() {
     return c.json(
       {
         error: {
-          code: 'RESOURCE_NOT_FOUND',
+          code: 'NOT_FOUND',
           message: 'The requested resource was not found.',
           path: c.req.path,
         },
@@ -53,11 +53,16 @@ export function createApp() {
     const code = 'code' in err ? err.code : 'INTERNAL_SERVER_ERROR';
     const detail = 'detail' in err ? err.detail : undefined;
 
+    const message =
+      statusCode === INTERNAL_SERVER_ERROR
+        ? 'Internal server error.'
+        : err.message;
+
     return c.json(
       {
         error: {
           code: code,
-          message: err.message,
+          message,
           path: c.req.path,
           details: detail,
           stack: env().NODE_ENV === 'development' ? err.stack : undefined,

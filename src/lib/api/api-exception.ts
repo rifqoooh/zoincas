@@ -1,16 +1,16 @@
-import type { FormattedError } from './format-zod-issues';
+import type { ErrorIssuesMap } from './format-zod-issues';
 
 type APIErrorOptions = {
   code?: string;
   message?: string;
-  detail?: FormattedError;
+  detail?: ErrorIssuesMap;
   stack?: string;
 };
 
 export class APIError extends Error {
   readonly status: number;
   readonly code?: string;
-  readonly detail?: FormattedError;
+  readonly detail?: ErrorIssuesMap;
 
   constructor(status = 500, options?: APIErrorOptions) {
     super(options?.message);

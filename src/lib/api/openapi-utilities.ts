@@ -109,7 +109,7 @@ export const createNotFoundSchema = ({ path }: createNotFoundSchemaProps) => {
 export const createNotFoundResponse = ({ path }: createNotFoundSchemaProps) => {
   return {
     error: {
-      code: 'RESOURCE_NOT_FOUND',
+      code: 'NOT_FOUND',
       message: 'The requested resource was not found.',
       path,
     },

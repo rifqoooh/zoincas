@@ -1,5 +1,13 @@
 import type { ListTransactionsQuery } from '@/validators/api/transactions/request';
 
+import { db } from '@/lib/db';
+import {
+  balances,
+  budgetCategories,
+  categories,
+  transactions,
+} from '@/lib/db/schema';
+import { coalesce } from '@/lib/db/utilities';
 import {
   and,
   asc,
@@ -11,15 +19,6 @@ import {
   inArray,
   lte,
 } from 'drizzle-orm';
-
-import { db } from '@/lib/db';
-import {
-  balances,
-  budgetCategories,
-  categories,
-  transactions,
-} from '@/lib/db/schema';
-import { coalesce } from '@/lib/db/utilities';
 
 export const listTransactions = async (
   userId: string,
@@ -136,4 +135,38 @@ export const listTransactions = async (
   };
 
   return { data, pagination };
+};
+
+export const getTransaction = async (userId: string, transactionId: string) => {
+  const [data] = await db
+    .select({
+      id: transactions.id,
+      description: transactions.description,
+      amount: transactions.amount,
+      datetime: transactions.datetime,
+      balance: {
+        id: transactions.balanceId,
+        name: balances.name,
+      },
+      category: {
+        id: transactions.categoryId,
+        name: categories.name,
+      },
+      budgetCategory: {
+        id: transactions.budgetCategoryId,
+        name: budgetCategories.name,
+      },
+      createdAt: transactions.createdAt,
+    })
+    .from(transactions)
+    .innerJoin(balances, eq(transactions.balanceId, balances.id))
+    .leftJoin(categories, eq(transactions.categoryId, categories.id))
+    .leftJoin(
+      budgetCategories,
+      eq(transactions.budgetCategoryId, budgetCategories.id)
+    )
+    .where(and(eq(balances.userId, userId), eq(transactions.id, transactionId)))
+    .limit(1);
+
+  return data;
 };
