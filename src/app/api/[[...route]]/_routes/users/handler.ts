@@ -1,12 +1,11 @@
 import * as StatusCode from '@/lib/api/http-status-code';
 import * as users from '@/lib/db/services/users';
 
-import type { z } from '@hono/zod-openapi';
-
 import { createNotFoundResponse } from '@/lib/api/openapi-utilities';
 import type { AppRouteHandler } from '@/lib/api/types';
 import { auth } from '@/lib/auth/server';
 import type { SelectUsersType } from '@/validators/db/users';
+import type { z } from '@hono/zod-openapi';
 import type {
   BanUser,
   CreateUser,
@@ -24,6 +23,12 @@ export const listUsers: AppRouteHandler<ListUsers> = async (c) => {
   const query = c.req.valid('query');
 
   const data = await users.listUsers(query);
+  if (!data) {
+    return c.json(
+      createNotFoundResponse({ path: c.req.path }),
+      StatusCode.NOT_FOUND
+    );
+  }
 
   return c.json(data, StatusCode.OK);
 };

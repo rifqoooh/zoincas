@@ -42,6 +42,12 @@ export const listTransactions = createRoute({
       listTransactionsResponse,
       'The list of transactions.'
     ),
+    [StatusCode.NOT_FOUND]: ContentJSON(
+      createNotFoundSchema({
+        path: '/transactions',
+      }),
+      'The list transactions does not exist in our resources.'
+    ),
     [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
       createErrorSchema({
         schema: listTransactionsQuery,

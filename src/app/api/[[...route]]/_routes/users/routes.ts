@@ -43,6 +43,12 @@ export const listUsers = createRoute({
   },
   responses: {
     [StatusCode.OK]: ContentJSON(listUsersResponse, 'The list of users.'),
+    [StatusCode.NOT_FOUND]: ContentJSON(
+      createNotFoundSchema({
+        path: '/users',
+      }),
+      'The list users does not exist in our resources.'
+    ),
     [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
       createErrorSchema({
         schema: listUsersQuery,
