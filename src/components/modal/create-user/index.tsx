@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { CreateUserForm } from "@/components/forms/create-user";
-import { ResponsiveSheet } from "@/components/responsive-sheet";
-import { useCreateUserModal } from "@/hooks/store/create-user";
-import { useIsClient } from "@/hooks/use-is-client";
+import { CreateUserForm } from '@/components/forms/create-user';
+import { ResponsiveSheet } from '@/components/responsive-sheet';
+import { useCreateUserModal } from '@/hooks/store/create-user';
+import { useIsClient } from '@/hooks/use-is-client';
 
-export function CreateNewUserModal() {
+export function CreateUserModal() {
   const store = useCreateUserModal();
 
   const isClient = useIsClient();
@@ -14,8 +14,8 @@ export function CreateNewUserModal() {
   }
 
   const text = {
-    title: "Create a new user",
-    description: "Fill the form to create a new user",
+    title: 'Create a new user',
+    description: 'Fill the form to create a new user',
   };
 
   return (

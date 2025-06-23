@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { useCreateUserModal } from '@/hooks/store/create-user';
 
-export function CreateNewUserButton() {
+export function CreateUserButton() {
   const store = useCreateUserModal();
 
   return (
