@@ -13,6 +13,7 @@ import {
   getTransactionResponse,
   listTransactionsResponse,
 } from '@/validators/api/transactions/response';
+import { selectTransactionsSchema } from '@/validators/db/transactions';
 import { listTransactionsQueryErrors } from './errors';
 
 const tags = ['Transactions'];
@@ -88,5 +89,37 @@ export const getTransaction = createRoute({
   },
 });
 
+export const deleteTransaction = createRoute({
+  method: 'delete',
+  path: '/transactions/{transactionId}',
+  tags,
+  middleware: [protectedMiddleware()],
+  request: {
+    params: transactionIdParamSchema,
+  },
+  responses: {
+    [StatusCode.OK]: ContentJSON(
+      selectTransactionsSchema,
+      'The deleted transaction.'
+    ),
+    [StatusCode.NOT_FOUND]: ContentJSON(
+      createNotFoundSchema({
+        path: '/transactions/{transactionId}',
+      }),
+      'The transaction with the requested ID does not exist in our resources.'
+    ),
+    [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
+      createErrorSchema({
+        schema: transactionIdParamSchema,
+        message: 'The transaction id request params is required.',
+        path: '/transactions/{transactionId}',
+        potentioalInput: {},
+      }),
+      'The validation delete transaction request error(s).'
+    ),
+  },
+});
+
 export type ListTransactions = typeof listTransactions;
 export type GetTransaction = typeof getTransaction;
+export type DeleteTransaction = typeof deleteTransaction;

@@ -170,3 +170,30 @@ export const getTransaction = async (userId: string, transactionId: string) => {
 
   return data;
 };
+
+export const deleteTransaction = async (
+  userId: string,
+  transactionId: string
+) => {
+  const transaction = db.$with('transaction').as(
+    db
+      .select({
+        id: transactions.id,
+      })
+      .from(transactions)
+      .innerJoin(balances, eq(transactions.balanceId, balances.id))
+      .where(
+        and(eq(balances.userId, userId), eq(transactions.id, transactionId))
+      )
+      .limit(1)
+  );
+
+  const [data] = await db
+    .delete(transactions)
+    .where(
+      and(eq(balances.userId, userId), eq(transactions.id, transaction.id))
+    )
+    .returning();
+
+  return data;
+};
