@@ -57,6 +57,9 @@ export const transactionsColumns = (): ColumnDef<TransactionsDataType>[] => {
           </div>
         );
       },
+      meta: {
+        label: 'Datetime',
+      },
     },
     {
       id: 'description',
@@ -70,7 +73,7 @@ export const transactionsColumns = (): ColumnDef<TransactionsDataType>[] => {
         const { description, category } = row.original;
 
         return (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1">
             <Badge
               variant="outline"
               className={cn(
@@ -81,19 +84,20 @@ export const transactionsColumns = (): ColumnDef<TransactionsDataType>[] => {
               {category.name ?? 'Uncategorized'}
             </Badge>
 
-            <p className="flex w-[300px] items-center gap-1 truncate pl-2">
+            <p className="flex w-[300px] items-center gap-1 truncate">
               {description}
             </p>
           </div>
         );
       },
       meta: {
-        label: 'Transaction',
+        label: 'Description',
         placeholder: 'Search transaction...',
         variant: 'text',
         icon: TextIcon,
       },
       enableColumnFilter: true,
+      enableSorting: false,
     },
     {
       id: 'balance',
@@ -120,6 +124,7 @@ export const transactionsColumns = (): ColumnDef<TransactionsDataType>[] => {
         icon: CircleDashedIcon,
       },
       enableColumnFilter: true,
+      enableSorting: false,
     },
     {
       id: 'amount',
@@ -142,7 +147,7 @@ export const transactionsColumns = (): ColumnDef<TransactionsDataType>[] => {
           <div
             className={cn(
               'whitespace-nowrap text-nowrap text-right font-medium tabular-nums',
-              isPositiveNum ? 'text-green-500' : 'text-red-500'
+              isPositiveNum ? 'text-green-600' : 'text-red-600'
             )}
           >
             {formatCurrency(amount)}
@@ -151,16 +156,7 @@ export const transactionsColumns = (): ColumnDef<TransactionsDataType>[] => {
       },
       meta: {
         label: 'Amount',
-        variant: 'select',
-        options: [
-          {
-            label: 'Amount name',
-            value: 'amount id',
-          },
-        ],
-        icon: CircleDashedIcon,
       },
-      enableColumnFilter: true,
     },
     {
       id: 'createdAt',
@@ -171,14 +167,14 @@ export const transactionsColumns = (): ColumnDef<TransactionsDataType>[] => {
         <DataTableColumnHeader
           column={column}
           title="Created at"
-          className="mx-auto"
+          className="ml-auto"
         />
       ),
       cell: ({ row }) => {
         const { createdAt } = row.original;
 
         return (
-          <div className="text-center">{createdAt.toLocaleDateString()}</div>
+          <div className="text-right">{createdAt.toLocaleDateString()}</div>
         );
       },
       meta: {

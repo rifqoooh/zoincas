@@ -1,6 +1,15 @@
+import type { Metadata } from 'next';
+
 import { Container } from '@/components/container';
 import { TransactionsTable } from '@/components/tables/transactions';
 import { Separator } from '@/components/ui/separator';
+import { createMetadata } from '@/lib/seo/metadata';
+
+export const metadata: Metadata = createMetadata({
+  title: 'Transactions',
+  description:
+    'Zoincas is a personal financial management app powered with AI.',
+});
 
 export default function TransactionsPage() {
   return (

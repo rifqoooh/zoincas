@@ -44,7 +44,7 @@ export function formatCurrency(
     style: 'currency',
     currency,
     notation,
-    maximumFractionDigits: 2,
+    maximumFractionDigits: 0,
   }).format(number);
 }
 
