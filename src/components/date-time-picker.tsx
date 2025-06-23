@@ -34,11 +34,12 @@ import {
   toCalendarDate,
   toCalendarDateTime,
 } from '@internationalized/date';
+import { format, setMonth } from 'date-fns';
 import {
   CalendarIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  X,
+  XIcon,
 } from 'lucide-react';
 import React, {
   useCallback,
@@ -218,6 +219,67 @@ function CalendarCell({ state, date }: CalendarCellProps) {
   );
 }
 
+function changeSeparatorSegment(segment: IDateSegment, text?: string) {
+  return {
+    ...segment,
+    text: text || segment.text,
+  };
+}
+
+function formatDateSegments(segments: IDateSegment[]): IDateSegment[] {
+  const daySegment = segments.find((segment) => segment.type === 'day');
+  const monthSegment = segments.find((segment) => segment.type === 'month');
+  const yearSegment = segments.find((segment) => segment.type === 'year');
+
+  const hourSegment = segments.find((segment) => segment.type === 'hour');
+  const minuteSegment = segments.find((segment) => segment.type === 'minute');
+  const dayPeriodSegment = segments.find(
+    (segment) => segment.type === 'dayPeriod'
+  );
+
+  const separatorSegment = segments.find(
+    (segment) => segment.type === 'literal'
+  );
+
+  if (
+    !daySegment ||
+    !monthSegment ||
+    !yearSegment ||
+    !hourSegment ||
+    !minuteSegment ||
+    !dayPeriodSegment ||
+    !separatorSegment
+  ) {
+    throw new Error('Invalid date field segments');
+  }
+
+  const formattedDaySegment = {
+    ...daySegment,
+    text: daySegment.text.padStart(2, '0'),
+  };
+  const formattedMonthSegment = {
+    ...monthSegment,
+    text: format(setMonth(new Date(), Number(monthSegment.text) - 1), 'MMM'),
+  };
+  const formattedHourSegment = {
+    ...hourSegment,
+    text: hourSegment.text.padStart(2, '0'),
+  };
+
+  return [
+    formattedDaySegment,
+    changeSeparatorSegment(separatorSegment, ' '),
+    formattedMonthSegment,
+    changeSeparatorSegment(separatorSegment, ','),
+    yearSegment,
+    formattedHourSegment,
+    changeSeparatorSegment(separatorSegment, ':'),
+    minuteSegment,
+    changeSeparatorSegment(separatorSegment, ' '),
+    dayPeriodSegment,
+  ];
+}
+
 interface DateSegmentProps {
   segment: IDateSegment;
   state: DateFieldState;
@@ -236,8 +298,8 @@ function DateSegment({ segment, state }: DateSegmentProps) {
       ref={ref}
       className={cn(
         'focus:rounded-[2px] focus:bg-accent focus:text-accent-foreground focus:outline-none',
-        segment.type !== 'literal' && 'px-[2px]',
-        segment.type === 'hour' && 'ml-[2px]',
+        segment.type !== 'literal' && 'px-0.5',
+        segment.type === 'hour' && 'ml-1',
         segment.isPlaceholder && 'text-muted-foreground'
       )}
     >
@@ -266,11 +328,11 @@ function DateField(props: AriaDatePickerProps<DateValue>) {
       {...fieldProps}
       ref={ref}
       className={cn(
-        'inline-flex h-10 flex-1 items-center rounded-l-md border-input bg-transparent px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+        'inline-flex h-9 flex-1 items-center rounded-l-md border-input bg-transparent px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
         props.isDisabled && 'cursor-not-allowed opacity-50'
       )}
     >
-      {state.segments.map((segment, i) => (
+      {formatDateSegments(state.segments).map((segment, i) => (
         <DateSegment key={i} segment={segment} state={state} />
       ))}
       {state.isInvalid && <span aria-hidden="true">🚫</span>}
@@ -403,7 +465,7 @@ const DateTimePicker = React.forwardRef<
     >
       <DateField {...fieldProps} value={currentValue()} />
       <div className={cn('-ml-2 mr-2 size-4', !showClearButton && 'hidden')}>
-        <X
+        <XIcon
           className={cn(
             'size-4 cursor-pointer text-primary/30',
             !jsDatetime && 'hidden'
@@ -428,7 +490,7 @@ const DateTimePicker = React.forwardRef<
               state.setOpen(true);
             }}
           >
-            <CalendarIcon className="size-4 text-muted-foreground group-hover:text-black" />
+            <CalendarIcon className="size-4 text-muted-foreground group-hover:text-primary" />
           </Button>
         </PopoverTrigger>
         <PopoverContent
