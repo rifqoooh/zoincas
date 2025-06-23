@@ -1,11 +1,8 @@
 import * as StatusCode from '@/lib/api/http-status-code';
 import * as users from '@/lib/db/services/users';
 
-import { createNotFoundResponse } from '@/lib/api/openapi-utilities';
 import type { AppRouteHandler } from '@/lib/api/types';
-import { auth } from '@/lib/auth/server';
 import type { SelectUsersType } from '@/validators/db/users';
-import type { z } from '@hono/zod-openapi';
 import type {
   BanUser,
   CreateUser,
@@ -16,6 +13,11 @@ import type {
   UnbanUser,
   userIdParamSchema,
 } from './routes';
+
+import type { z } from '@hono/zod-openapi';
+
+import { createNotFoundResponse } from '@/lib/api/openapi-utilities';
+import { auth } from '@/lib/auth/server';
 
 export type UserIdParam = z.infer<typeof userIdParamSchema>;
 

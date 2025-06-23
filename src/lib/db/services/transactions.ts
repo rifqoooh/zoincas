@@ -1,4 +1,5 @@
 import type { ListTransactionsQuery } from '@/validators/api/transactions/request';
+import type { InsertTransactionsType } from '@/validators/db/transactions';
 
 import { db } from '@/lib/db';
 import {
@@ -135,6 +136,12 @@ export const listTransactions = async (
   };
 
   return { data, pagination };
+};
+
+export const createTransaction = async (input: InsertTransactionsType) => {
+  const [data] = await db.insert(transactions).values(input).returning();
+
+  return data;
 };
 
 export const getTransaction = async (userId: string, transactionId: string) => {

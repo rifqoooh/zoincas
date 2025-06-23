@@ -4,6 +4,7 @@ import { createRoute, z } from '@hono/zod-openapi';
 
 import {
   ContentJSON,
+  ContentJSONRequired,
   createErrorSchema,
   createNotFoundSchema,
 } from '@/lib/api/openapi-utilities';
@@ -13,8 +14,14 @@ import {
   getTransactionResponse,
   listTransactionsResponse,
 } from '@/validators/api/transactions/response';
-import { selectTransactionsSchema } from '@/validators/db/transactions';
-import { listTransactionsQueryErrors } from './errors';
+import {
+  insertTransactionsSchema,
+  selectTransactionsSchema,
+} from '@/validators/db/transactions';
+import {
+  createTransactionInputErrors,
+  listTransactionsQueryErrors,
+} from './errors';
 
 const tags = ['Transactions'];
 
@@ -57,6 +64,34 @@ export const listTransactions = createRoute({
         potentioalInput: listTransactionsQueryErrors,
       }),
       'The validation transactions request error(s).'
+    ),
+  },
+});
+
+export const createTransaction = createRoute({
+  method: 'post',
+  path: '/transactions',
+  tags,
+  middleware: [protectedMiddleware()],
+  request: {
+    body: ContentJSONRequired(
+      insertTransactionsSchema,
+      'The transaction to create.'
+    ),
+  },
+  responses: {
+    [StatusCode.CREATED]: ContentJSON(
+      selectTransactionsSchema,
+      'The created transaction.'
+    ),
+    [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
+      createErrorSchema({
+        schema: insertTransactionsSchema,
+        message: 'The transaction creation request input is invalid.',
+        path: '/transactions',
+        potentioalInput: createTransactionInputErrors,
+      }),
+      'The validation transaction creation request error(s).'
     ),
   },
 });
@@ -121,5 +156,6 @@ export const deleteTransaction = createRoute({
 });
 
 export type ListTransactions = typeof listTransactions;
+export type CreateTransaction = typeof createTransaction;
 export type GetTransaction = typeof getTransaction;
 export type DeleteTransaction = typeof deleteTransaction;
