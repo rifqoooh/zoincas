@@ -1,6 +1,7 @@
 'use client';
 
-import type { CalendarDate } from '@internationalized/date';
+import * as React from 'react';
+
 import type { DateSegment as IDateSegment } from '@react-stately/datepicker';
 import type {
   AriaDatePickerProps,
@@ -17,12 +18,21 @@ import type {
   TimeFieldStateOptions,
 } from 'react-stately';
 
+import { CalendarDate } from '@internationalized/date';
+
 import { Button } from '@/components/ui/button';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { cn } from '@/lib/utilities';
 import {
   isToday as _isToday,
@@ -41,14 +51,6 @@ import {
   ChevronRightIcon,
   XIcon,
 } from 'lucide-react';
-import React, {
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
 import {
   useButton,
   useCalendar,
@@ -67,13 +69,135 @@ import {
   useTimeFieldState,
 } from 'react-stately';
 
+interface MonthSelectProps {
+  focusedDate: CalendarDate;
+  onChangeMonth: (month: number) => void;
+  className?: string;
+}
+
+function MonthSelect({
+  focusedDate,
+  onChangeMonth,
+  className,
+}: MonthSelectProps) {
+  const months = React.useMemo(
+    () => [
+      { value: 1, label: 'January' },
+      { value: 2, label: 'February' },
+      { value: 3, label: 'March' },
+      { value: 4, label: 'April' },
+      { value: 5, label: 'May' },
+      { value: 6, label: 'June' },
+      { value: 7, label: 'July' },
+      { value: 8, label: 'August' },
+      { value: 9, label: 'September' },
+      { value: 10, label: 'October' },
+      { value: 11, label: 'November' },
+      { value: 12, label: 'December' },
+    ],
+    []
+  );
+
+  const [month, setMonth] = React.useState(focusedDate.month);
+
+  const onSelect = (month: number) => {
+    setMonth(month);
+    onChangeMonth(month);
+  };
+
+  return (
+    <>
+      <Select
+        value={month.toString()}
+        onValueChange={(value) => onSelect(Number(value))}
+      >
+        <SelectTrigger className={cn('data-[size=default]:h-7', className)}>
+          <SelectValue aria-label={months[month - 1].label}>
+            <p className="text-xs">{months[month - 1].label}</p>
+          </SelectValue>
+        </SelectTrigger>
+        <SelectContent>
+          {months.map((month) => (
+            <SelectItem
+              key={month.value}
+              value={month.value.toString()}
+              className="text-xs"
+            >
+              {month.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </>
+  );
+}
+
+interface YearSelectProps {
+  focusedDate: CalendarDate;
+  onChangeYear: (year: number) => void;
+  className?: string;
+}
+
+function YearSelect({ focusedDate, onChangeYear, className }: YearSelectProps) {
+  const years = React.useMemo(
+    () => Array.from({ length: 10 }, (_, i) => i + focusedDate.year - 5),
+    [focusedDate.year]
+  );
+
+  const [year, setYear] = React.useState(focusedDate.year);
+
+  const onSelect = (year: number) => {
+    setYear(year);
+    onChangeYear(year);
+  };
+
+  return (
+    <>
+      <Select
+        value={year.toString()}
+        onValueChange={(value) => onSelect(Number(value))}
+      >
+        <SelectTrigger className={cn('data-[size=default]:h-7', className)}>
+          <SelectValue aria-label={year.toString()}>
+            <p className="text-xs">{year}</p>
+          </SelectValue>
+        </SelectTrigger>
+        <SelectContent>
+          {years.map((year) => (
+            <SelectItem key={year} value={year.toString()} className="text-xs">
+              {year}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </>
+  );
+}
+
 function Calendar(props: CalendarProps<DateValue>) {
   const prevButtonRef = React.useRef<HTMLButtonElement | null>(null);
   const nextButtonRef = React.useRef<HTMLButtonElement | null>(null);
 
+  const { year, month } = React.useMemo(() => {
+    const date = new Date();
+    return { year: date.getFullYear(), month: date.getMonth() + 1 };
+  }, []);
+  const calendarDate = new CalendarDate(year, month, 1);
+  const [focusedDate, setFocusedDate] = React.useState(calendarDate);
+
+  const onChangeMonth = (month: number) => {
+    setFocusedDate(focusedDate.set({ month }));
+  };
+
+  const onChangeYear = (year: number) => {
+    setFocusedDate(focusedDate.set({ year }));
+  };
+
   const { locale } = useLocale();
   const state = useCalendarState({
     ...props,
+    focusedValue: focusedDate,
+    onFocusChange: setFocusedDate,
     locale,
     createCalendar,
   });
@@ -94,27 +218,36 @@ function Calendar(props: CalendarProps<DateValue>) {
 
   return (
     <div {...calendarProps} className="space-y-4">
-      <div className="relative flex items-center justify-center pt-1">
+      <div className="flex items-center justify-between gap-2 pt-1">
         <Button
           {...prevButtonProps}
           ref={prevButtonRef}
           variant="outline"
           className={cn(
-            'absolute left-1 h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100'
+            'size-7 bg-transparent p-0 opacity-50 hover:opacity-100'
           )}
         >
-          <ChevronLeftIcon className="h-4 w-4" />
+          <ChevronLeftIcon className="size-4" />
         </Button>
-        <div className="font-medium text-sm">{title}</div>
+        <MonthSelect
+          focusedDate={focusedDate}
+          onChangeMonth={onChangeMonth}
+          className="grow ps-2.5 pe-1.5"
+        />
+        <YearSelect
+          focusedDate={focusedDate}
+          onChangeYear={onChangeYear}
+          className="w-20 ps-2.5 pe-1.5"
+        />
         <Button
           {...nextButtonProps}
           ref={nextButtonRef}
           variant="outline"
           className={cn(
-            'absolute right-1 h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100'
+            'size-7 bg-transparent p-0 opacity-50 hover:opacity-100'
           )}
         >
-          <ChevronRightIcon className="h-4 w-4" />
+          <ChevronRightIcon className="size-4" />
         </Button>
       </div>
       <CalendarGrid state={state} />
@@ -185,7 +318,7 @@ function CalendarCell({ state, date }: CalendarCellProps) {
     formattedDate,
   } = useCalendarCell({ date }, state, ref);
 
-  const isToday = useMemo(() => {
+  const isToday = React.useMemo(() => {
     const timezone = getLocalTimeZone();
     return _isToday(date, timezone);
   }, [date]);
@@ -208,7 +341,7 @@ function CalendarCell({ state, date }: CalendarCellProps) {
           'size-9',
           isToday && 'bg-accent text-accent-foreground',
           isSelected &&
-            'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground',
+            'bg-primary text-primary-foreground hover:bg-primary hover:text-primary focus:bg-primary-foreground focus:text-primary',
           isOutsideVisibleRange && 'text-muted-foreground opacity-50',
           isDisabled && 'text-muted-foreground opacity-50'
         )}
@@ -286,7 +419,7 @@ interface DateSegmentProps {
 }
 
 function DateSegment({ segment, state }: DateSegmentProps) {
-  const ref = useRef(null);
+  const ref = React.useRef(null);
 
   const {
     segmentProps: { ...segmentProps },
@@ -309,7 +442,7 @@ function DateSegment({ segment, state }: DateSegmentProps) {
 }
 
 function DateField(props: AriaDatePickerProps<DateValue>) {
-  const ref = useRef<HTMLDivElement | null>(null);
+  const ref = React.useRef<HTMLDivElement | null>(null);
 
   const { locale } = useLocale();
   const state = useDateFieldState({
@@ -341,7 +474,7 @@ function DateField(props: AriaDatePickerProps<DateValue>) {
 }
 
 function TimeField(props: AriaTimeFieldProps<TimeValue>) {
-  const ref = useRef<HTMLDivElement | null>(null);
+  const ref = React.useRef<HTMLDivElement | null>(null);
 
   const { locale } = useLocale();
   const state = useTimeFieldState({
@@ -394,14 +527,14 @@ const DateTimePicker = React.forwardRef<
     showClearButton?: boolean;
   }
 >(({ jsDate, onJsDateChange, showClearButton = true, ...props }, ref) => {
-  const divRef = useRef<HTMLDivElement | null>(null);
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const contentRef = useRef<HTMLDivElement | null>(null);
-  const [jsDatetime, setJsDatetime] = useState(jsDate || null);
+  const divRef = React.useRef<HTMLDivElement | null>(null);
+  const buttonRef = React.useRef<HTMLButtonElement | null>(null);
+  const contentRef = React.useRef<HTMLDivElement | null>(null);
+  const [jsDatetime, setJsDatetime] = React.useState(jsDate || null);
 
   const state = useDatePickerState(props);
 
-  useImperativeHandle(ref, () => ({
+  React.useImperativeHandle(ref, () => ({
     divRef: divRef.current,
     buttonRef: buttonRef.current,
     contentRef: contentRef.current,
@@ -417,7 +550,7 @@ const DateTimePicker = React.forwardRef<
   } = useDatePicker({ ...props, 'aria-label': 'date-picker' }, state, divRef);
   const { buttonProps } = useButton(_buttonProps, buttonRef);
 
-  const currentValue = useCallback(() => {
+  const currentValue = React.useCallback(() => {
     if (!jsDatetime) {
       return null;
     }
@@ -432,7 +565,7 @@ const DateTimePicker = React.forwardRef<
   }, [jsDatetime, state.hasTime]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  useEffect(() => {
+  React.useEffect(() => {
     /**
      * If user types datetime, it will be a null value until we get the correct datetime.
      * This is controlled by react-aria.
