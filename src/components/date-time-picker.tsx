@@ -205,7 +205,6 @@ function Calendar(props: CalendarProps<DateValue>) {
     calendarProps,
     prevButtonProps: _prevButtonProps,
     nextButtonProps: _nextButtonProps,
-    title,
   } = useCalendar(props, state);
   const { buttonProps: prevButtonProps } = useButton(
     _prevButtonProps,
