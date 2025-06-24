@@ -1,7 +1,10 @@
 import type { ErrorResponseAPI } from '@/lib/api/types';
-import type { SelectTransactionsType } from '@/validators/db/transactions';
+import type {
+  InsertTransactionsType,
+  SelectTransactionsType,
+} from '@/validators/db/transactions';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   parseAsArrayOf,
   parseAsInteger,
@@ -13,6 +16,7 @@ import { z } from 'zod';
 import { api } from '@/lib/api/rpc';
 import { getSortingStateParser } from '@/lib/parsers';
 import { listTransactionsResponse } from '@/validators/api/transactions/response';
+import { selectTransactionsSchema } from '@/validators/db/transactions';
 import { transactionsKeys } from './keys';
 
 export const useGetTransactionsQuery = () => {
@@ -55,4 +59,35 @@ export const useGetTransactionsQuery = () => {
   });
 
   return query;
+};
+
+export const useCreateTransactionMutation = () => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: async (input: InsertTransactionsType) => {
+      const response = await api.transactions.$post({
+        json: input,
+      });
+      if (!response.ok) {
+        const err = (await response.json()) as unknown as ErrorResponseAPI;
+        throw new Error(err.error.message);
+      }
+
+      const data = await response.json();
+      const parsedData = selectTransactionsSchema.safeParse(data);
+      if (!parsedData.success) {
+        throw new Error('There is an error when parsing response data.');
+      }
+
+      return parsedData.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: transactionsKeys.all(),
+      });
+    },
+  });
+
+  return mutation;
 };

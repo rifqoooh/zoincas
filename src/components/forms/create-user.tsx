@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import * as React from "react";
+import * as React from 'react';
 
-import { AutoComplete } from "@/components/auto-complete";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { AutoComplete } from '@/components/auto-complete';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
@@ -13,9 +13,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useCreateUser } from "@/hooks/actions/use-create-user";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { useCreateUser } from '@/hooks/actions/use-create-user';
 
 export function CreateUserForm() {
   const { form, onSubmit, mutation } = useCreateUser();
@@ -24,10 +24,10 @@ export function CreateUserForm() {
 
   const roleOptions = React.useMemo(
     () => [
-      { value: "user", label: "User" },
-      { value: "admin", label: "Admin" },
+      { value: 'user', label: 'User' },
+      { value: 'admin', label: 'Admin' },
     ],
-    [],
+    []
   );
 
   return (

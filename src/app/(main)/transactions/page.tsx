@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { Container } from '@/components/container';
+import { CreateTransactionButton } from '@/components/modal/create-transaction/button';
 import { TransactionsTable } from '@/components/tables/transactions';
 import { Separator } from '@/components/ui/separator';
 import { createMetadata } from '@/lib/seo/metadata';
@@ -22,6 +23,8 @@ export default function TransactionsPage() {
               Powerful transactions table for tracking your transactions
             </p>
           </div>
+
+          <CreateTransactionButton />
         </div>
 
         <Separator />
