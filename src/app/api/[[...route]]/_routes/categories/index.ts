@@ -3,9 +3,8 @@ import { createRouter } from '@/lib/api/create-router';
 import * as handlers from './handler';
 import * as routes from './routes';
 
-const router = createRouter().openapi(
-  routes.listCategoriesSummary,
-  handlers.listCategoriesSummary
-);
+const router = createRouter()
+  .openapi(routes.listCategoriesSummary, handlers.listCategoriesSummary)
+  .openapi(routes.createCategory, handlers.createCategory);
 
 export default router;

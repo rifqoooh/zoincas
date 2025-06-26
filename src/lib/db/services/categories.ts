@@ -1,3 +1,4 @@
+import type { InsertCategoriesType } from '@/validators/db/categories';
 import { count, eq, sum } from 'drizzle-orm';
 
 import { db } from '@/lib/db';
@@ -31,6 +32,18 @@ export const listCategoriesSummary = async (userId: string) => {
     .from(categories)
     .leftJoin(summary, eq(categories.id, summary.id))
     .where(eq(categories.userId, userId));
+
+  return data;
+};
+
+export const createCategory = async (
+  userId: string,
+  input: InsertCategoriesType
+) => {
+  const [data] = await db
+    .insert(categories)
+    .values({ ...input, userId })
+    .returning();
 
   return data;
 };

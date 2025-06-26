@@ -3,7 +3,7 @@ import * as categories from '@/lib/db/services/categories';
 
 import type { AppRouteHandler } from '@/lib/api/types';
 import type { SelectUsersType as User } from '@/validators/db/users';
-import type { ListCategoriesSummary } from './routes';
+import type { CreateCategory, ListCategoriesSummary } from './routes';
 
 import { createNotFoundResponse } from '@/lib/api/openapi-utilities';
 
@@ -21,4 +21,13 @@ export const listCategoriesSummary: AppRouteHandler<
   }
 
   return c.json(data, StatusCode.OK);
+};
+
+export const createCategory: AppRouteHandler<CreateCategory> = async (c) => {
+  const input = c.req.valid('json');
+  const user = c.get('user') as User;
+
+  const data = await categories.createCategory(user.id, input);
+
+  return c.json(data, StatusCode.CREATED);
 };
