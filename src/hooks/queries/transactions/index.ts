@@ -19,7 +19,7 @@ import { listTransactionsResponse } from '@/validators/api/transactions/response
 import { selectTransactionsSchema } from '@/validators/db/transactions';
 import { transactionsKeys } from './keys';
 
-export const useGetTransactionsQuery = () => {
+export const useListTransactionsQuery = () => {
   const [search] = useQueryStates({
     page: parseAsInteger.withDefault(1),
     perPage: parseAsInteger.withDefault(10),
