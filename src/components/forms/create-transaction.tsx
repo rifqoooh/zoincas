@@ -1,3 +1,4 @@
+import { AutoComplete } from '@/components/auto-complete';
 import { DateTimePicker } from '@/components/date-time-picker';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,15 +13,28 @@ import { Input } from '@/components/ui/input';
 import { useCreateTransaction } from '@/hooks/actions/use-create-transaction';
 
 export const CreateTransactionForm = () => {
-  const { form, onSubmit, mutation } = useCreateTransaction();
+  const { form, onSubmit, mutation, balancesQuery, categoriesQuery } =
+    useCreateTransaction();
+
+  const balancesData = balancesQuery.data || [];
+  const balancesOptions = balancesData.map((balance) => ({
+    label: balance.name,
+    value: balance.id,
+  }));
+
+  const categoriesData = categoriesQuery.data || [];
+  const categoriesOptions = categoriesData.map((category) => ({
+    label: category.name,
+    value: category.id,
+  }));
 
   const isPending = mutation.isPending;
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="grid gap-10">
-          <div className="grid gap-2">
+        <div className="grid gap-8">
+          <div className="grid gap-3">
             <FormField
               name="datetime"
               control={form.control}
@@ -52,6 +66,48 @@ export const CreateTransactionForm = () => {
                       {...field}
                       placeholder="Monthly shopping"
                       disabled={isPending}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="balanceId"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Balance</FormLabel>
+                  <FormControl>
+                    <AutoComplete
+                      {...field}
+                      creatable
+                      options={balancesOptions}
+                      placeholder="Select balance"
+                      isLoading={balancesQuery.isLoading}
+                      isDisabled={isPending}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="categoryId"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Category</FormLabel>
+                  <FormControl>
+                    <AutoComplete
+                      {...field}
+                      creatable
+                      options={categoriesOptions}
+                      placeholder="Select category"
+                      isLoading={categoriesQuery.isLoading}
+                      isDisabled={isPending}
                     />
                   </FormControl>
                   <FormMessage />
