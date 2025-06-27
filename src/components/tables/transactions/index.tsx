@@ -7,7 +7,7 @@ import type { TransactionsDataType } from '@/validators/api/transactions/respons
 import { DataTable } from '@/components/data-table/data-table';
 import { DataTableSkeleton } from '@/components/data-table/data-table-skeleton';
 import { DataTableToolbar } from '@/components/data-table/data-table-toolbar';
-import { useGetTransactionsQuery } from '@/hooks/queries/transactions';
+import { useListTransactionsQuery } from '@/hooks/queries/transactions';
 import { useDataTable } from '@/hooks/use-data-table';
 import { transactionsColumns } from './columns';
 
@@ -19,7 +19,7 @@ const paginationDefault = {
 };
 
 export function TransactionsTable() {
-  const transactionsQuery = useGetTransactionsQuery();
+  const transactionsQuery = useListTransactionsQuery();
   const { data: transactions, pagination } = transactionsQuery.data || {
     data: [],
     pagination: paginationDefault,

@@ -5,7 +5,6 @@ import { createRoute } from '@hono/zod-openapi';
 import {
   ContentJSON,
   ContentJSONRequired,
-  createErrorSchema,
   createNotFoundSchema,
 } from '@/lib/api/openapi-utilities';
 
@@ -53,15 +52,16 @@ export const createCategory = createRoute({
       selectCategoriesSchema,
       'The created category.'
     ),
-    [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
-      createErrorSchema({
-        schema: insertCategoriesSchema,
-        message: 'The category creation request input is invalid.',
-        path: '/categories',
-        potentioalInput: {},
-      }),
-      'The validation category creation request error(s).'
-    ),
+    // TODO : fix this potentialInput to proper failed input
+    // [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
+    //   createErrorSchema({
+    //     schema: insertCategoriesSchema,
+    //     message: 'The category creation request input is invalid.',
+    //     path: '/categories',
+    //     potentioalInput: {},
+    //   }),
+    //   'The validation category creation request error(s).'
+    // ),
   },
 });
 
