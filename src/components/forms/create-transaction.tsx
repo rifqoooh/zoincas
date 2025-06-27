@@ -1,4 +1,5 @@
 import { AutoComplete } from '@/components/auto-complete';
+import { CurrencyInput } from '@/components/currency-input';
 import { DateTimePicker } from '@/components/date-time-picker';
 import { Button } from '@/components/ui/button';
 import {
@@ -74,6 +75,24 @@ export const CreateTransactionForm = () => {
             />
 
             <FormField
+              name="amount"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Amount</FormLabel>
+                  <FormControl>
+                    <CurrencyInput
+                      {...field}
+                      placeholder="0"
+                      disabled={isPending}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
               name="balanceId"
               control={form.control}
               render={({ field }) => (
@@ -82,7 +101,6 @@ export const CreateTransactionForm = () => {
                   <FormControl>
                     <AutoComplete
                       {...field}
-                      creatable
                       options={balancesOptions}
                       placeholder="Select balance"
                       isLoading={balancesQuery.isLoading}

@@ -9,7 +9,7 @@ import { cn, mergeRefs } from '@/lib/utilities';
 
 interface CurrencyInputProps {
   placeholder?: string;
-  value: string;
+  value: string | number;
   onChange?: (value: string | undefined) => void;
   disabled?: boolean;
   ref: React.Ref<HTMLInputElement>;
@@ -24,7 +24,7 @@ export function CurrencyInput({
 }: CurrencyInputProps) {
   const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const isPositiveNum = Number.parseFloat(value) >= 0;
+  const isPositiveNum = Number.parseFloat(value.toString()) >= 0;
 
   const [isArrowDownPressed, setIsArrowDownPressed] = React.useState(false);
   const [isArrowUpPressed, setIsArrowUpPressed] = React.useState(false);
@@ -51,7 +51,7 @@ export function CurrencyInput({
     }
 
     if (!isPositiveNum) {
-      const reversedValue = Number.parseFloat(value) * -1;
+      const reversedValue = Number.parseFloat(value.toString()) * -1;
       onChange?.(reversedValue.toString());
     }
   }, [value, isPositiveNum, onChange]);
@@ -88,7 +88,7 @@ export function CurrencyInput({
       return;
     }
 
-    const reversedValue = Number.parseFloat(value) - 1000;
+    const reversedValue = Number.parseFloat(value.toString()) - 1000;
     onChange?.(reversedValue.toString());
 
     inputRef.current?.dispatchEvent(new Event('input', { bubbles: true }));
@@ -105,7 +105,7 @@ export function CurrencyInput({
       return;
     }
 
-    const reversedValue = Number.parseFloat(value) + 1000;
+    const reversedValue = Number.parseFloat(value.toString()) + 1000;
     onChange?.(reversedValue.toString());
 
     inputRef.current?.dispatchEvent(new Event('input', { bubbles: true }));
@@ -121,8 +121,8 @@ export function CurrencyInput({
         )}
         placeholder={placeholder}
         value={value}
-        decimalsLimit={2}
-        decimalScale={2}
+        decimalsLimit={0}
+        decimalScale={0}
         disabled={disabled}
         step={1000}
         onValueChange={onChange}

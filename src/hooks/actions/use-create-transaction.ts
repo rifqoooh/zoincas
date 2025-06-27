@@ -7,6 +7,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
+import { useListBalancesQuery } from '@/hooks/queries/balances';
+import { useListCategoriesQuery } from '@/hooks/queries/categories';
 import { useCreateTransactionMutation } from '@/hooks/queries/transactions';
 import { useCreateTransactionModal } from '@/hooks/store/create-transaction';
 import { insertTransactionsSchema } from '@/validators/db/transactions';
@@ -14,6 +16,9 @@ import { insertTransactionsSchema } from '@/validators/db/transactions';
 export const useCreateTransaction = () => {
   const store = useCreateTransactionModal();
   const mutation = useCreateTransactionMutation();
+
+  const balancesQuery = useListBalancesQuery();
+  const categoriesQuery = useListCategoriesQuery();
 
   const form = useForm<InsertTransactionsType>({
     resolver: zodResolver(insertTransactionsSchema),
@@ -54,5 +59,7 @@ export const useCreateTransaction = () => {
     form,
     onSubmit,
     mutation,
+    balancesQuery,
+    categoriesQuery,
   };
 };
