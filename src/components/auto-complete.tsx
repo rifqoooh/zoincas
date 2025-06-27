@@ -186,7 +186,7 @@ export function AutoComplete({
         >
           <div className="rounded-md bg-popover">
             <CommandList className="rounded-md border">
-              <div className=" max-h-56 overflow-y-scroll">
+              <div className=" max-h-56 overflow-y-auto">
                 {isLoading ? (
                   <CommandPrimitive.Loading>
                     <div className="p-1">
