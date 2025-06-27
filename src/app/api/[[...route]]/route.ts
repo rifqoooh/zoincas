@@ -4,6 +4,7 @@ import configureOpenAPI from '@/lib/api/configure-open-api';
 import { createApp } from '@/lib/api/create-app';
 
 import balances from './_routes/balances';
+import budgetPlans from './_routes/budget-plans';
 import categories from './_routes/categories';
 import sessions from './_routes/sessions';
 import transactions from './_routes/transactions';
@@ -18,7 +19,8 @@ const routes = app
   .route('/', users)
   .route('/', transactions)
   .route('/', balances)
-  .route('/', categories);
+  .route('/', categories)
+  .route('/', budgetPlans);
 
 export const GET = handle(app);
 export const POST = handle(app);
