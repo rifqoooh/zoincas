@@ -162,7 +162,7 @@ export function AutoComplete({
 
   return (
     <CommandPrimitive onKeyDown={onKeyDown}>
-      <div className="group rounded-md border border-input px-1 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+      <div className="group rounded-md border border-input px-1 py-2 text-sm ring-offset-background focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50">
         <div className="flex items-center gap-1">
           <CommandPrimitive.Input
             ref={mergeRefs([inputRef, ref])}
@@ -177,10 +177,10 @@ export function AutoComplete({
           <ChevronDownIcon className="size-4 text-muted-foreground" />
         </div>
       </div>
-      <div className="relative mt-1.5">
+      <div className="relative">
         <div
           className={cn(
-            'fade-in-0 zoom-in-95 absolute top-0 z-10 w-full animate-in rounded-xl pb-4 outline-none',
+            'fade-in-0 zoom-in-95 absolute top-2 z-10 w-full animate-in rounded-xl pb-4 outline-none',
             isOpen ? 'block' : 'hidden'
           )}
         >

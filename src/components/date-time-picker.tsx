@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 
+import { CalendarDate } from '@internationalized/date';
 import type { DateSegment as IDateSegment } from '@react-stately/datepicker';
 import type {
   AriaDatePickerProps,
@@ -17,8 +18,6 @@ import type {
   DatePickerStateOptions,
   TimeFieldStateOptions,
 } from 'react-stately';
-
-import { CalendarDate } from '@internationalized/date';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -69,17 +68,17 @@ import {
   useTimeFieldState,
 } from 'react-stately';
 
-interface MonthSelectProps {
+interface SelectMonthProps {
   focusedDate: CalendarDate;
   onChangeMonth: (month: number) => void;
   className?: string;
 }
 
-function MonthSelect({
+function SelectMonth({
   focusedDate,
   onChangeMonth,
   className,
-}: MonthSelectProps) {
+}: SelectMonthProps) {
   const months = React.useMemo(
     () => [
       { value: 1, label: 'January' },
@@ -132,13 +131,13 @@ function MonthSelect({
   );
 }
 
-interface YearSelectProps {
+interface SelectYearProps {
   focusedDate: CalendarDate;
   onChangeYear: (year: number) => void;
   className?: string;
 }
 
-function YearSelect({ focusedDate, onChangeYear, className }: YearSelectProps) {
+function SelectYear({ focusedDate, onChangeYear, className }: SelectYearProps) {
   const years = React.useMemo(
     () => Array.from({ length: 10 }, (_, i) => i + focusedDate.year - 5),
     [focusedDate.year]
@@ -228,12 +227,12 @@ function Calendar(props: CalendarProps<DateValue>) {
         >
           <ChevronLeftIcon className="size-4" />
         </Button>
-        <MonthSelect
+        <SelectMonth
           focusedDate={focusedDate}
           onChangeMonth={onChangeMonth}
           className="grow ps-2.5 pe-1.5"
         />
-        <YearSelect
+        <SelectYear
           focusedDate={focusedDate}
           onChangeYear={onChangeYear}
           className="w-20 ps-2.5 pe-1.5"
@@ -340,7 +339,7 @@ function CalendarCell({ state, date }: CalendarCellProps) {
           'size-9',
           isToday && 'bg-accent text-accent-foreground',
           isSelected &&
-            'bg-primary text-primary-foreground hover:bg-primary hover:text-primary focus:bg-primary-foreground focus:text-primary',
+            'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground dark:hover:bg-primary dark:hover:text-primary-foreground',
           isOutsideVisibleRange && 'text-muted-foreground opacity-50',
           isDisabled && 'text-muted-foreground opacity-50'
         )}
@@ -460,7 +459,7 @@ function DateField(props: AriaDatePickerProps<DateValue>) {
       {...fieldProps}
       ref={ref}
       className={cn(
-        'inline-flex h-9 flex-1 items-center rounded-l-md border-input bg-transparent px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+        'inline-flex h-9 flex-1 items-center rounded-l-md border-input bg-transparent px-3 py-2 text-sm ring-offset-background focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50',
         props.isDisabled && 'cursor-not-allowed opacity-50'
       )}
     >
@@ -490,7 +489,7 @@ function TimeField(props: AriaTimeFieldProps<TimeValue>) {
       {...fieldProps}
       ref={ref}
       className={cn(
-        'inline-flex h-10 w-full flex-1 rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+        'inline-flex h-10 w-full flex-1 rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50',
         props.isDisabled && 'cursor-not-allowed opacity-50'
       )}
     >
@@ -592,7 +591,7 @@ const DateTimePicker = React.forwardRef<
       ref={divRef}
       className={cn(
         groupProps.className,
-        'flex items-center rounded-md border ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2'
+        'flex items-center rounded-md border ring-offset-background focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50'
       )}
     >
       <DateField {...fieldProps} value={currentValue()} />
@@ -616,7 +615,7 @@ const DateTimePicker = React.forwardRef<
             tabIndex={-1}
             variant="ghost"
             size="icon"
-            className="group rounded-l-none border-l focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="group rounded-l-none border-l"
             disabled={props.isDisabled}
             onClick={() => {
               state.setOpen(true);
