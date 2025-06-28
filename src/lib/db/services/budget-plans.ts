@@ -8,7 +8,7 @@ export const listBudgetPlansSummary = async (userId: string) => {
   const summary = db.$with('budget_plan_categories_summary').as(
     db
       .select({
-        id: budgetPlans.id,
+        id: budgetCategories.budgetPlanId,
         categoryId: budgetCategories.id,
         name: budgetCategories.name,
         amount: budgetCategories.amount,
