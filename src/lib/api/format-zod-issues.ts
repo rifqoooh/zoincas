@@ -1,4 +1,4 @@
-import * as r from 'remeda';
+import * as remeda from 'remeda';
 
 import { z } from 'zod';
 
@@ -50,7 +50,7 @@ export const combineIssues = (objects: ErrorIssuesMap[]): ErrorIssuesMap => {
         combined[key] = [];
       }
       combined[key].push(...value);
-      combined[key] = r.uniqueWith(combined[key], r.isDeepEqual);
+      combined[key] = remeda.uniqueWith(combined[key], remeda.isDeepEqual);
     }
   }
 

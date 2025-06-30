@@ -1,5 +1,6 @@
 import type * as React from 'react';
 
+
 import { type ClassValue, clsx } from 'clsx';
 
 import { twMerge } from 'tailwind-merge';
@@ -8,6 +9,9 @@ export type Prettify<T> = {
   [K in keyof T]: T[K] extends object ? Prettify<T[K]> : T[K];
 } & unknown;
 
+export type PrettifyDeep<T> = {
+  [K in keyof T]: T[K] extends (...args: any[]) => any ? T[K] : T[K] extends object ? T[K] extends Array<any> ? T[K] : T[K] extends Date ? T[K] : PrettifyDeep<T[K]> : T[K];
+} & {};
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
@@ -47,4 +51,3 @@ export function formatCurrency(
     maximumFractionDigits: 0,
   }).format(number);
 }
-
