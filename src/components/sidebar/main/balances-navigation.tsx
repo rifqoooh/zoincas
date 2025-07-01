@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/sidebar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useListBalancesQuery } from '@/hooks/queries/balances';
+import { formatCurrency } from '@/lib/utilities';
 
 export function BalancesNavigation() {
   const balancesQuery = useListBalancesQuery();
@@ -19,6 +20,8 @@ export function BalancesNavigation() {
   const balances = React.useMemo(() => {
     return data.map((balance) => ({
       name: balance.name,
+      count: balance.transactions.count,
+      description: formatCurrency(balance.transactions.sum),
       url: `/balances/${balance.id}`,
     }));
   }, [data]);
@@ -38,9 +41,17 @@ export function BalancesNavigation() {
         ) : (
           balances.map((item) => (
             <SidebarMenuItem key={item.name}>
-              <SidebarMenuButton asChild>
+              <SidebarMenuButton className="h-auto px-4" asChild>
                 <a href={item.url}>
-                  <span>{item.name}</span>
+                  <div className="flex w-full flex-row items-center justify-between">
+                    <div className="flex flex-col">
+                      <span>{item.name}</span>
+                      <span className="text-muted-foreground text-xs">
+                        {item.description}
+                      </span>
+                    </div>
+                    <span className="font-mono text-xs">{item.count}</span>
+                  </div>
                 </a>
               </SidebarMenuButton>
             </SidebarMenuItem>
