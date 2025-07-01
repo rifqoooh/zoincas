@@ -1,5 +1,7 @@
 'use client';
 
+import * as React from 'react';
+
 import { ChevronRightIcon } from 'lucide-react';
 import Link from 'next/link';
 
@@ -18,9 +20,27 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
+import { useListCategoriesQuery } from '@/hooks/queries/categories';
 import { menus } from './constants';
 
 export function MainNavigation() {
+  const categoriesQuery = useListCategoriesQuery();
+  const data = categoriesQuery.data || [];
+
+  const categories = React.useMemo(
+    () =>
+      data.map((category) => ({
+        title: category.name,
+        url: `/categories/${category.id}`,
+      })),
+    [data]
+  );
+
+  const indexCategories = menus.findIndex(
+    (menu) => menu.title === 'Categories'
+  );
+  menus[indexCategories].items = categories;
+
   return (
     <SidebarGroup>
       <SidebarMenu>
@@ -44,15 +64,17 @@ export function MainNavigation() {
                   </CollapsibleTrigger>
                   <CollapsibleContent>
                     <SidebarMenuSub>
-                      {menu.items?.map((subItem) => (
-                        <SidebarMenuSubItem key={subItem.title}>
-                          <SidebarMenuSubButton asChild>
-                            <Link href={subItem.url}>
-                              <span>{subItem.title}</span>
-                            </Link>
-                          </SidebarMenuSubButton>
-                        </SidebarMenuSubItem>
-                      ))}
+                      {menu.items?.map(
+                        (subItem: { title: string; url: string }) => (
+                          <SidebarMenuSubItem key={subItem.title}>
+                            <SidebarMenuSubButton asChild>
+                              <Link href={subItem.url}>
+                                <span>{subItem.title}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        )
+                      )}
                     </SidebarMenuSub>
                   </CollapsibleContent>
                 </>

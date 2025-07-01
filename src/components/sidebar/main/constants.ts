@@ -1,14 +1,19 @@
 import {
   BookOpenIcon,
   BotIcon,
-  FrameIcon,
-  MapIcon,
-  PieChartIcon,
+  type LucideIcon,
   Settings2Icon,
   SquareTerminalIcon,
 } from 'lucide-react';
 
-export const menus = [
+export interface Menu {
+  title: string;
+  url: string;
+  icon: LucideIcon;
+  items?: { title: string; url: string }[];
+}
+
+export const menus: Menu[] = [
   {
     title: 'Dashboard',
     url: '#',
@@ -24,22 +29,22 @@ export const menus = [
     url: '#',
     icon: BookOpenIcon,
     items: [
-      {
-        title: 'Salary',
-        url: '#',
-      },
-      {
-        title: 'Lunch or Dinner',
-        url: '#',
-      },
-      {
-        title: 'Food',
-        url: '#',
-      },
-      {
-        title: 'Service Fee',
-        url: '#',
-      },
+      // {
+      //   title: 'Salary',
+      //   url: '#',
+      // },
+      // {
+      //   title: 'Lunch or Dinner',
+      //   url: '#',
+      // },
+      // {
+      //   title: 'Food',
+      //   url: '#',
+      // },
+      // {
+      //   title: 'Service Fee',
+      //   url: '#',
+      // },
     ],
   },
   {
@@ -51,23 +56,5 @@ export const menus = [
     title: 'Budget Plans',
     url: '#',
     icon: Settings2Icon,
-  },
-];
-
-export const balances = [
-  {
-    name: 'Design Engineering',
-    url: '#',
-    icon: FrameIcon,
-  },
-  {
-    name: 'Sales & Marketing',
-    url: '#',
-    icon: PieChartIcon,
-  },
-  {
-    name: 'Travel',
-    url: '#',
-    icon: MapIcon,
   },
 ];
