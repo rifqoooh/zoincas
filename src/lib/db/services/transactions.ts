@@ -20,6 +20,7 @@ import {
   inArray,
   lte,
 } from 'drizzle-orm';
+import { z } from 'zod';
 
 export const listTransactions = async (
   userId: string,
@@ -139,7 +140,38 @@ export const listTransactions = async (
 };
 
 export const createTransaction = async (input: InsertTransactionsType) => {
-  const [data] = await db.insert(transactions).values(input).returning();
+  const data = await db.transaction(async (tx) => {
+    // If input category id is not UUID we know it is a new category to create
+    const parsedCategoryId = z.string().uuid().safeParse(input.categoryId);
+    if (!parsedCategoryId.success) {
+      // Get user id from input balance id
+      const [{ userId }] = await tx
+        .select({
+          userId: balances.userId,
+        })
+        .from(balances)
+        .where(eq(balances.id, input.balanceId))
+        .limit(1);
+
+      // Create a new category
+      const [{ id }] = await tx
+        .insert(categories)
+        .values({
+          name: input.categoryId ?? 'Untitled',
+          userId: userId,
+        })
+        .returning({
+          id: categories.id,
+        });
+
+      // Assign new category id to input
+      input.categoryId = id;
+    }
+
+    const [data] = await tx.insert(transactions).values(input).returning();
+
+    return data;
+  });
 
   return data;
 };
