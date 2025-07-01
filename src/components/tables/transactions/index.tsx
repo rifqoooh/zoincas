@@ -8,6 +8,7 @@ import { DataTable } from '@/components/data-table/data-table';
 import { DataTableSkeleton } from '@/components/data-table/data-table-skeleton';
 import { DataTableToolbar } from '@/components/data-table/data-table-toolbar';
 import { useListBalancesQuery } from '@/hooks/queries/balances';
+import { useListCategoriesQuery } from '@/hooks/queries/categories';
 import { useListTransactionsQuery } from '@/hooks/queries/transactions';
 import { useDataTable } from '@/hooks/use-data-table';
 import { transactionsColumns } from './columns';
@@ -28,7 +29,6 @@ export function TransactionsTable() {
 
   const balancesQuery = useListBalancesQuery();
   const balances = balancesQuery.data || [];
-
   const balanceOptions = React.useMemo(() => {
     return balances.map((balance) => ({
       label: balance.name,
@@ -36,9 +36,18 @@ export function TransactionsTable() {
     }));
   }, [balances]);
 
+  const categoriesQuery = useListCategoriesQuery();
+  const categories = categoriesQuery.data || [];
+  const categoryOptions = React.useMemo(() => {
+    return categories.map((category) => ({
+      label: category.name,
+      value: category.id,
+    }));
+  }, [categories]);
+
   const columns = React.useMemo(
-    () => transactionsColumns({ balanceOptions }),
-    [balanceOptions]
+    () => transactionsColumns({ balanceOptions, categoryOptions }),
+    [balanceOptions, categoryOptions]
   );
 
   const { table } = useDataTable({
@@ -46,6 +55,7 @@ export function TransactionsTable() {
     columns,
     pageCount: pagination.pageCount,
     initialState: {
+      columnVisibility: { category: false },
       sorting: [{ id: 'datetime', desc: true }],
       columnPinning: { right: ['actions'] },
     },
@@ -72,7 +82,7 @@ export function TransactionsTable() {
     >
       <DataTableToolbar
         table={table}
-        sortFilter={['description', 'balance', 'datetime']}
+        sortFilter={['description', 'category', 'balance', 'datetime']}
       />
     </DataTable>
   );

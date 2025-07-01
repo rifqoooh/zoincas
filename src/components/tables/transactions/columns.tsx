@@ -12,10 +12,12 @@ import { RowActions } from './row-actions';
 
 interface TransactionsColumnsProps {
   balanceOptions: { label: string; value: string }[];
+  categoryOptions: { label: string; value: string }[];
 }
 
 export const transactionsColumns = ({
   balanceOptions,
+  categoryOptions,
 }: TransactionsColumnsProps): ColumnDef<TransactionsDataType>[] => {
   return [
     {
@@ -167,6 +169,29 @@ export const transactionsColumns = ({
       id: 'actions',
       cell: ({ row }) => <RowActions row={row} />,
       size: 32,
+    },
+    {
+      id: 'category',
+      accessorKey: 'category',
+      header: ({
+        column,
+      }: { column: Column<TransactionsDataType, unknown> }) => (
+        <DataTableColumnHeader column={column} title="Category" />
+      ),
+      cell: ({ row }) => {
+        const { category } = row.original;
+
+        return <p>{category.name}</p>;
+      },
+      meta: {
+        label: 'Category',
+        variant: 'select',
+        options: categoryOptions,
+        icon: CircleDashedIcon,
+      },
+      enableColumnFilter: true,
+      enableSorting: false,
+      enableHiding: false,
     },
   ];
 };
