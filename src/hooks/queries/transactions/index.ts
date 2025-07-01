@@ -13,7 +13,7 @@ import {
 } from 'nuqs';
 import { z } from 'zod';
 
-import { api } from '@/lib/api/rpc';
+import { transactions } from '@/lib/api/rpc';
 import { getSortingStateParser } from '@/lib/parsers';
 import { listTransactionsResponse } from '@/validators/api/transactions/response';
 import { selectTransactionsSchema } from '@/validators/db/transactions';
@@ -40,7 +40,7 @@ export const useListTransactionsQuery = () => {
   const query = useQuery({
     queryKey: transactionsKeys.transactions(search),
     queryFn: async () => {
-      const response = await api.transactions.$get({
+      const response = await transactions.$get({
         query: parsedQuery,
       });
       if (!response.ok) {
@@ -66,7 +66,7 @@ export const useCreateTransactionMutation = () => {
 
   const mutation = useMutation({
     mutationFn: async (input: InsertTransactionsType) => {
-      const response = await api.transactions.$post({
+      const response = await transactions.$post({
         json: input,
       });
       if (!response.ok) {

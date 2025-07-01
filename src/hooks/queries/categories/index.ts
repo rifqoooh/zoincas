@@ -1,6 +1,6 @@
 import type { ErrorResponseAPI } from '@/lib/api/types';
 
-import { api } from '@/lib/api/rpc';
+import { categories } from '@/lib/api/rpc';
 import { listCategoriesSummaryResponse } from '@/validators/api/categories/response';
 import { useQuery } from '@tanstack/react-query';
 import { categoriesKeys } from './keys';
@@ -9,7 +9,7 @@ export const useListCategoriesQuery = () => {
   const query = useQuery({
     queryKey: categoriesKeys.all(),
     queryFn: async () => {
-      const response = await api.categories.$get();
+      const response = await categories.$get();
       if (!response.ok) {
         const err = (await response.json()) as unknown as ErrorResponseAPI;
         throw new Error(err.error.message);

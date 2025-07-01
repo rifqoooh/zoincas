@@ -15,7 +15,7 @@ import {
 } from 'nuqs';
 import { z } from 'zod';
 
-import { api } from '@/lib/api/rpc';
+import { admin } from '@/lib/api/rpc';
 import { getSortingStateParser } from '@/lib/parsers';
 import { listUsersResponse } from '@/validators/api/users/response';
 import { selectUsersSchema } from '@/validators/db/users';
@@ -45,7 +45,7 @@ export const useGetUsersQuery = () => {
   const query = useQuery({
     queryKey: usersKeys.users(search),
     queryFn: async () => {
-      const response = await api.users.$get({
+      const response = await admin.users.$get({
         query: parsedQuery,
       });
       if (!response.ok) {
@@ -71,7 +71,7 @@ export const useCreateUserMutation = () => {
 
   const mutation = useMutation({
     mutationFn: async (input: CreateUserType) => {
-      const response = await api.users.$post({
+      const response = await admin.users.$post({
         json: input,
       });
       if (!response.ok) {
@@ -106,7 +106,7 @@ export const useDeleteUserMutation = (userId?: string) => {
         throw new Error('The user ID is required.');
       }
 
-      const response = await api.users[':userId'].$delete({
+      const response = await admin.users[':userId'].$delete({
         param: { userId },
       });
       if (!response.ok) {
@@ -139,7 +139,7 @@ export const useResetPasswordMutation = (userId?: string) => {
         throw new Error('The user ID is required.');
       }
 
-      const response = await api.users[':userId']['reset-password'].$patch({
+      const response = await admin.users[':userId']['reset-password'].$patch({
         param: { userId },
         json: input,
       });
@@ -168,7 +168,7 @@ export const useRevokeSessionsMutation = (userId?: string) => {
         throw new Error('The user ID is required.');
       }
 
-      const response = await api.users[':userId']['revoke-sessions'].$delete({
+      const response = await admin.users[':userId']['revoke-sessions'].$delete({
         param: { userId },
       });
       if (!response.ok) {
@@ -198,7 +198,7 @@ export const useBanUserMutation = (userId?: string) => {
         throw new Error('The user ID is required.');
       }
 
-      const response = await api.users[':userId'].ban.$patch({
+      const response = await admin.users[':userId'].ban.$patch({
         param: { userId },
         json: input,
       });
@@ -234,7 +234,7 @@ export const useUnbanUserMutation = (userId?: string) => {
         throw new Error('The user ID is required.');
       }
 
-      const response = await api.users[':userId'].unban.$patch({
+      const response = await admin.users[':userId'].unban.$patch({
         param: { userId },
       });
       if (!response.ok) {

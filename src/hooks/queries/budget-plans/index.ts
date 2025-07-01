@@ -1,25 +1,24 @@
 import type { ErrorResponseAPI } from '@/lib/api/types';
 
+import { budgetPlans } from '@/lib/api/rpc';
+import { listBudgetPlansSummaryResponse } from '@/validators/api/budget-plans/response';
 import { useQuery } from '@tanstack/react-query';
+import { budgetPlansKeys } from './keys';
 
-import { admin } from '@/lib/api/rpc';
-import { getSessionsResponse } from '@/validators/api/sessions/response';
-import { sessionsKeys } from './keys';
-
-export const useGetSessionsQuery = () => {
+export const useListBudgetPlansQuery = () => {
   const query = useQuery({
-    queryKey: sessionsKeys.all(),
+    queryKey: budgetPlansKeys.all(),
     queryFn: async () => {
-      const response = await admin.sessions.$get();
+      const response = await budgetPlans.$get();
       if (!response.ok) {
         const err = (await response.json()) as unknown as ErrorResponseAPI;
         throw new Error(err.error.message);
       }
 
       const data = await response.json();
-      const parsedData = getSessionsResponse.safeParse(data);
+      const parsedData = listBudgetPlansSummaryResponse.safeParse(data);
       if (!parsedData.success) {
-        throw new Error('OUTPUT_VALIDATION_ERROR');
+        throw new Error('There is an error when parsing response data.');
       }
 
       return parsedData.data;
