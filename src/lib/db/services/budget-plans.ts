@@ -24,6 +24,7 @@ export const listBudgetPlansSummary = async (userId: string) => {
       )
       .where(eq(budgetPlans.userId, userId))
       .groupBy(budgetCategories.id)
+      .orderBy(desc(budgetCategories.createdAt))
   );
 
   const data = await db

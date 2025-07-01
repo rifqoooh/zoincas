@@ -1,4 +1,5 @@
 import { AutoComplete } from '@/components/auto-complete';
+import { AutoCompleteGroup } from '@/components/auto-complete-group';
 import { CurrencyInput } from '@/components/currency-input';
 import { DateTimePicker } from '@/components/date-time-picker';
 import { Button } from '@/components/ui/button';
@@ -12,10 +13,17 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useCreateTransaction } from '@/hooks/actions/use-create-transaction';
+import { formatCurrency } from '@/lib/utilities';
 
 export const CreateTransactionForm = () => {
-  const { form, onSubmit, mutation, balancesQuery, categoriesQuery } =
-    useCreateTransaction();
+  const {
+    form,
+    onSubmit,
+    mutation,
+    balancesQuery,
+    categoriesQuery,
+    budgetCategoriesQuery,
+  } = useCreateTransaction();
 
   const balancesData = balancesQuery.data || [];
   const balancesOptions = balancesData.map((balance) => ({
@@ -28,6 +36,19 @@ export const CreateTransactionForm = () => {
     label: category.name,
     value: category.id,
   }));
+
+  const budgetCategoriesData = budgetCategoriesQuery.data || [];
+  const budgetCategoriesOptions = budgetCategoriesData.map((plan) => {
+    const categories = plan.categories.map((category) => ({
+      label: category.name,
+      value: category.id,
+      description: formatCurrency(category.amount - category.spend),
+    }));
+    return {
+      group: plan.title,
+      options: categories,
+    };
+  });
 
   const isPending = mutation.isPending;
 
@@ -121,10 +142,31 @@ export const CreateTransactionForm = () => {
                   <FormControl>
                     <AutoComplete
                       {...field}
-                      creatable
+                      isCreatable
                       options={categoriesOptions}
                       placeholder="Select category"
                       isLoading={categoriesQuery.isLoading}
+                      isDisabled={isPending}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="budgetCategoryId"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Budget category</FormLabel>
+                  <FormControl>
+                    <AutoCompleteGroup
+                      {...field}
+                      options={budgetCategoriesOptions}
+                      placeholder="Select budget category"
+                      preDescription="Remaining : "
+                      isLoading={budgetCategoriesQuery.isLoading}
                       isDisabled={isPending}
                     />
                   </FormControl>

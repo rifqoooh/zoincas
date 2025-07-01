@@ -115,7 +115,7 @@ export function CurrencyInput({
     <div className="relative w-full">
       <CurrencyInputPrimitive
         className={cn(
-          'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 pr-9 text-sm caret-black ring-offset-background file:border-0 file:bg-transparent placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+          'flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 pr-9 text-sm caret-black ring-offset-background file:border-0 file:bg-transparent placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
           { 'text-green-500': isPositiveNum },
           { 'text-red-500': !isPositiveNum }
         )}

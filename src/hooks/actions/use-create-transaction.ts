@@ -12,6 +12,7 @@ import { useListCategoriesQuery } from '@/hooks/queries/categories';
 import { useCreateTransactionMutation } from '@/hooks/queries/transactions';
 import { useCreateTransactionModal } from '@/hooks/store/create-transaction';
 import { insertTransactionsSchema } from '@/validators/db/transactions';
+import { useListBudgetPlansQuery } from '../queries/budget-plans';
 
 export const useCreateTransaction = () => {
   const store = useCreateTransactionModal();
@@ -19,6 +20,7 @@ export const useCreateTransaction = () => {
 
   const balancesQuery = useListBalancesQuery();
   const categoriesQuery = useListCategoriesQuery();
+  const budgetCategoriesQuery = useListBudgetPlansQuery();
 
   const form = useForm<InsertTransactionsType>({
     resolver: zodResolver(insertTransactionsSchema),
@@ -61,5 +63,6 @@ export const useCreateTransaction = () => {
     mutation,
     balancesQuery,
     categoriesQuery,
+    budgetCategoriesQuery,
   };
 };

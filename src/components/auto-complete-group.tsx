@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 
-import { Command as CommandPrimitive, defaultFilter } from 'cmdk';
-import { CheckIcon, ChevronDownIcon, PlusCircleIcon } from 'lucide-react';
+import { Command as CommandPrimitive } from 'cmdk';
+import { CheckIcon, ChevronDownIcon } from 'lucide-react';
 
 import {
   CommandEmpty,
@@ -14,37 +14,51 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn, mergeRefs } from '@/lib/utilities';
 
-type Option = Record<'value' | 'label', string> & Record<string, string>;
+interface Option {
+  value: string;
+  label: string;
+  description?: string;
+}
 
-interface AutoCompleteProps {
+interface GroupOption {
+  group: string;
+  options: Option[];
+}
+
+interface AutoCompleteGroupProps {
   value?: string | string[] | null;
   placeholder?: string;
-  options: Option[];
+  options: GroupOption[];
   emptyMessage?: string;
+  preDescription?: string;
   onChange: (value?: string) => void;
-  isCreatable?: boolean;
   isLoading?: boolean;
   isDisabled?: boolean;
   ref: React.Ref<HTMLInputElement>;
 }
 
-export function AutoComplete({
+export function AutoCompleteGroup({
   value,
   placeholder,
   options,
   emptyMessage = 'No results found.',
+  preDescription,
   onChange,
-  isCreatable = false,
   isLoading = false,
   isDisabled,
   ref,
-}: AutoCompleteProps) {
+}: AutoCompleteGroupProps) {
   const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const formattedValue = React.useMemo(
-    () => options.find((option) => option.value === value),
-    [options, value]
-  );
+  const formattedValue = React.useMemo(() => {
+    for (const group of options) {
+      const option = group.options.find((option) => option.value === value);
+      if (option) {
+        return option;
+      }
+    }
+    return undefined;
+  }, [options, value]);
 
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const [selected, setSelected] = React.useState<Option>(
@@ -55,7 +69,6 @@ export function AutoComplete({
   );
 
   const onKeyDown = React.useCallback(
-    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <explanation>
     (event: React.KeyboardEvent<HTMLDivElement>) => {
       const input = inputRef.current;
       if (!input) {
@@ -84,41 +97,13 @@ export function AutoComplete({
         return;
       }
 
-      // This is not a default behaviour of the <input /> field
-      if (event.key === 'Enter' && input.value !== '' && isCreatable) {
-        // Only run this if the user has enabled the isCreatable props
-        // filtered options using cmdk default filter function
-        const filtered = options.filter((option) => {
-          const score = defaultFilter(option.label, input.value, []);
-          return score !== 0;
-        });
-
-        // guard clause if the filtered options is not empty
-        if (filtered.length > 0) {
-          return;
-        }
-
-        // If the input value is not found on the options, create a new option
-        const option = { label: input.value, value: input.value } as Option;
-        options.push(option);
-
-        setSelected(() => option);
-        setInputValue(option.label);
-        onChange(option.value);
-
-        // This is a hack to prevent the input from being focused after the user selects an option
-        setTimeout(() => {
-          inputRef?.current?.blur();
-        }, 0);
-      }
-
       if (event.key === 'Escape') {
         event.preventDefault();
         event.stopPropagation();
         input.blur();
       }
     },
-    [options, isCreatable, isOpen, selected, isDisabled, onChange]
+    [isOpen, selected, isDisabled]
   );
 
   const onBlur = React.useCallback(() => {
@@ -143,21 +128,6 @@ export function AutoComplete({
       }, 0);
     },
     [onChange]
-  );
-
-  const onCreateOption = React.useCallback(
-    (value: string | undefined) => {
-      if (!value) {
-        return;
-      }
-
-      const option = { label: value, value } as Option;
-
-      options.push(option);
-
-      onSelectOption(option);
-    },
-    [options, onSelectOption]
   );
 
   return (
@@ -194,53 +164,55 @@ export function AutoComplete({
                     </div>
                   </CommandPrimitive.Loading>
                 ) : null}
-                {options.length > 0 && !isLoading && (
-                  <CommandGroup>
-                    {options.map((option) => {
-                      const isSelected = selected?.value === option.value;
-                      return (
-                        <CommandItem
-                          key={option.value}
-                          value={option.label}
-                          onMouseDown={(event) => {
-                            event.preventDefault();
-                            event.stopPropagation();
-                          }}
-                          onSelect={() => onSelectOption(option)}
-                          className={cn(
-                            'flex w-full items-center gap-2',
-                            !isSelected && 'pl-8'
-                          )}
-                        >
-                          {isSelected ? <CheckIcon className="size-4" /> : null}
-                          {option.label}
-                        </CommandItem>
-                      );
-                    })}
-                  </CommandGroup>
-                )}
-                {!isLoading && !isCreatable && (
+                {options.length > 0 &&
+                  !isLoading &&
+                  options.map((group) => {
+                    return (
+                      <CommandGroup heading={group.group} key={group.group}>
+                        {group.options.map((option) => {
+                          const isSelected = selected?.value === option.value;
+                          return (
+                            <CommandItem
+                              keywords={[group.group, option.label]}
+                              key={option.value}
+                              value={`${option.label}-${option.value}`}
+                              onMouseDown={(event) => {
+                                event.preventDefault();
+                                event.stopPropagation();
+                              }}
+                              onSelect={() => onSelectOption(option)}
+                              className={cn(
+                                'flex flex-col gap-1',
+                                !isSelected && 'pl-8'
+                              )}
+                            >
+                              <div className="flex w-full items-center gap-2">
+                                {isSelected ? (
+                                  <CheckIcon className="size-4" />
+                                ) : null}
+                                {option.label}
+                              </div>
+
+                              <div
+                                className={cn(
+                                  'flex w-full items-center text-muted-foreground text-xs',
+                                  isSelected && 'pl-6'
+                                )}
+                              >
+                                {preDescription}
+                                {option.description}
+                              </div>
+                            </CommandItem>
+                          );
+                        })}
+                      </CommandGroup>
+                    );
+                  })}
+                {!isLoading && (
                   <CommandEmpty className="p-1">
                     <p className="cursor-default select-none rounded-sm bg-accent px-2 py-1.5 text-center text-muted-foreground text-sm">
                       {emptyMessage}
                     </p>
-                  </CommandEmpty>
-                )}
-                {!isLoading && isCreatable && (
-                  <CommandEmpty className="p-1">
-                    {/* biome-ignore lint/a11y/useFocusableInteractive: <explanation> */}
-                    <div
-                      role="button"
-                      onMouseDown={(event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        onCreateOption(inputRef.current?.value);
-                      }}
-                      className="flex w-full cursor-pointer select-none items-center gap-2 rounded-sm bg-accent px-2 py-1.5 text-sm"
-                    >
-                      <PlusCircleIcon className="size-4 shrink-0" />
-                      <p className="truncate">{`Create "${inputRef.current?.value}"`}</p>
-                    </div>
                   </CommandEmpty>
                 )}
               </div>
