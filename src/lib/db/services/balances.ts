@@ -1,4 +1,4 @@
-import { count, eq, sum } from 'drizzle-orm';
+import { asc, count, eq, sum } from 'drizzle-orm';
 
 import { db } from '@/lib/db';
 import { balances, transactions } from '@/lib/db/schema';
@@ -31,7 +31,8 @@ export const listBalancesSummary = async (userId: string) => {
     })
     .from(balances)
     .leftJoin(summary, eq(balances.id, summary.id))
-    .where(eq(balances.userId, userId));
+    .where(eq(balances.userId, userId))
+    .orderBy(asc(balances.name));
 
   return data;
 };
