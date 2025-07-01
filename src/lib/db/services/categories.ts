@@ -1,5 +1,5 @@
 import type { InsertCategoriesType } from '@/validators/db/categories';
-import { count, eq, sum } from 'drizzle-orm';
+import { asc, count, eq, sum } from 'drizzle-orm';
 
 import { db } from '@/lib/db';
 import { categories, transactions } from '@/lib/db/schema';
@@ -31,7 +31,8 @@ export const listCategoriesSummary = async (userId: string) => {
     })
     .from(categories)
     .leftJoin(summary, eq(categories.id, summary.id))
-    .where(eq(categories.userId, userId));
+    .where(eq(categories.userId, userId))
+    .orderBy(asc(categories.name));
 
   return data;
 };
