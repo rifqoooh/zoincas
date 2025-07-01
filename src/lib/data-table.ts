@@ -80,3 +80,30 @@ export function getValidFilters<TData>(
           filter.value !== undefined)
   );
 }
+
+type Item = {
+  id: string;
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  [key: string]: any;
+};
+
+export const sortColumns = (columns: Item[], sorting: string[]) => {
+  if (sorting.length === 0) {
+    return columns;
+  }
+
+  const sortingMap = new Map(sorting.map((id, index) => [id, index]));
+
+  return columns.slice().sort((a, b) => {
+    const indexOne = sortingMap.has(a.id)
+      ? // biome-ignore lint/style/noNonNullAssertion: <explanation>
+        sortingMap.get(a.id)!
+      : Number.POSITIVE_INFINITY;
+    const indexTwo = sortingMap.has(b.id)
+      ? // biome-ignore lint/style/noNonNullAssertion: <explanation>
+        sortingMap.get(b.id)!
+      : Number.POSITIVE_INFINITY;
+
+    return indexOne - indexTwo;
+  });
+};

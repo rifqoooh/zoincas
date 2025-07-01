@@ -26,7 +26,7 @@ export const listTransactions = async (
   userId: string,
   query: ListTransactionsQuery
 ) => {
-  const [startCreatedAt, endCreatedAt] = query.createdAt;
+  const [startDatetime, endDatetime] = query.datetime;
 
   const offset = (query.page - 1) * query.perPage;
 
@@ -40,23 +40,23 @@ export const listTransactions = async (
     query.category.length > 0
       ? inArray(transactions.categoryId, query.category)
       : undefined,
-    query.createdAt.length > 0
+    query.datetime.length > 0
       ? and(
-          startCreatedAt
+          startDatetime
             ? gte(
-                transactions.createdAt,
+                transactions.datetime,
                 (() => {
-                  const date = new Date(query.createdAt[0]);
+                  const date = new Date(query.datetime[0]);
                   date.setHours(0, 0, 0, 0);
                   return date;
                 })()
               )
             : undefined,
-          endCreatedAt
+          endDatetime
             ? lte(
-                transactions.createdAt,
+                transactions.datetime,
                 (() => {
-                  const date = new Date(query.createdAt[1]);
+                  const date = new Date(query.datetime[1]);
                   date.setHours(23, 59, 59, 999);
                   return date;
                 })()
@@ -72,7 +72,7 @@ export const listTransactions = async (
       ? query.sort.map((item) =>
           item.desc ? desc(transactions[item.id]) : asc(transactions[item.id])
         )
-      : [asc(transactions.createdAt)];
+      : [asc(transactions.datetime)];
 
   const { data, total } = await db.transaction(async (tx) => {
     const data = await tx

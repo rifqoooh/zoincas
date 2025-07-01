@@ -8,30 +8,38 @@ import { DataTableSliderFilter } from '@/components/data-table/data-table-slider
 import { DataTableViewOptions } from '@/components/data-table/data-table-view-options';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { sortColumns } from '@/lib/data-table';
 import { cn } from '@/lib/utilities';
 import type { Column, Table } from '@tanstack/react-table';
 import { X } from 'lucide-react';
 
 interface DataTableToolbarProps<TData> extends React.ComponentProps<'div'> {
   table: Table<TData>;
+  sortFilter: string[];
   isLoading?: boolean;
   fallback?: React.ReactNode;
 }
 
 export function DataTableToolbar<TData>({
   table,
-  children,
+  sortFilter = [],
   isLoading,
   fallback,
+  children,
   className,
   ...props
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
 
-  const columns = React.useMemo(
-    () => table.getAllColumns().filter((column) => column.getCanFilter()),
-    [table]
-  );
+  const columns = React.useMemo(() => {
+    const filterColumns = table
+      .getAllColumns()
+      .filter((column) => column.getCanFilter());
+
+    // return filterColumns as Column<TData, unknown>[];
+
+    return sortColumns(filterColumns, sortFilter) as Column<TData, unknown>[];
+  }, [table, sortFilter]);
 
   const onReset = React.useCallback(() => {
     table.resetColumnFilters();
@@ -75,10 +83,6 @@ export function DataTableToolbar<TData>({
           <DataTableViewOptions table={table} />
         </div>
       </div>
-      {/* <div className="">
-        {children}
-        <DataTableViewOptions table={table} />
-      </div> */}
     </div>
   );
 }

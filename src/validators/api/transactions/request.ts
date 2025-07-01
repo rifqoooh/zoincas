@@ -9,11 +9,11 @@ const sortSchema = z
     desc: z.boolean(),
   })
   .array()
-  .default([{ id: 'createdAt', desc: true }]);
+  .default([{ id: 'datetime', desc: true }]);
 
 const balanceSchema = z.string().array().default([]);
 const categorySchema = z.string().array().default([]);
-const createdAtSchema = z.coerce.number().array().max(2).default([]);
+const datetimeSchema = z.coerce.number().array().max(2).default([]);
 
 export const listTransactionsQuery = z.object({
   page: z.coerce.number().int().positive().default(1),
@@ -56,7 +56,7 @@ export const listTransactionsQuery = z.object({
     }
     return value;
   }, categorySchema),
-  createdAt: z.preprocess((value) => {
+  datetime: z.preprocess((value) => {
     if (Array.isArray(value)) {
       // biome-ignore lint/nursery/useCollapsedIf: <explanation>
       if (value[1] === 'undefined') {
@@ -64,7 +64,7 @@ export const listTransactionsQuery = z.object({
       }
     }
     return value;
-  }, createdAtSchema),
+  }, datetimeSchema),
 });
 
 export type ListTransactionsQuery = z.infer<typeof listTransactionsQuery>;

@@ -24,12 +24,12 @@ export const useListTransactionsQuery = () => {
     page: parseAsInteger.withDefault(1),
     perPage: parseAsInteger.withDefault(10),
     sort: getSortingStateParser<SelectTransactionsType>().withDefault([
-      { id: 'createdAt', desc: true },
+      { id: 'datetime', desc: true },
     ]),
     description: parseAsString.withDefault(''),
     balance: parseAsArrayOf(z.string().uuid()).withDefault([]),
     category: parseAsArrayOf(z.string().uuid()).withDefault([]),
-    createdAt: parseAsArrayOf(z.coerce.number()).withDefault([]),
+    datetime: parseAsArrayOf(z.coerce.number()).withDefault([]),
   });
 
   const parsedQuery = {

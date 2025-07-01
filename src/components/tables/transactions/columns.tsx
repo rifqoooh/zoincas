@@ -60,7 +60,10 @@ export const transactionsColumns = (): ColumnDef<TransactionsDataType>[] => {
       },
       meta: {
         label: 'Datetime',
+        variant: 'dateRange',
+        icon: CalendarIcon,
       },
+      enableColumnFilter: true,
     },
     {
       id: 'description',
@@ -158,32 +161,6 @@ export const transactionsColumns = (): ColumnDef<TransactionsDataType>[] => {
       meta: {
         label: 'Amount',
       },
-    },
-    {
-      id: 'createdAt',
-      accessorKey: 'createdAt',
-      header: ({
-        column,
-      }: { column: Column<TransactionsDataType, unknown> }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Created at"
-          className="ml-auto"
-        />
-      ),
-      cell: ({ row }) => {
-        const { createdAt } = row.original;
-
-        return (
-          <div className="text-right">{createdAt.toLocaleDateString()}</div>
-        );
-      },
-      meta: {
-        label: 'Created at',
-        variant: 'dateRange',
-        icon: CalendarIcon,
-      },
-      enableColumnFilter: true,
     },
     {
       id: 'actions',

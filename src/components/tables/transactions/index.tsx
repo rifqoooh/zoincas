@@ -32,10 +32,11 @@ export function TransactionsTable() {
     columns,
     pageCount: pagination.pageCount,
     initialState: {
-      sorting: [{ id: 'createdAt', desc: true }],
+      sorting: [{ id: 'datetime', desc: true }],
       columnPinning: { right: ['actions'] },
     },
     getRowId: (originalRow: TransactionsDataType) => originalRow.id,
+
     clearOnDefault: true,
   });
 
@@ -55,7 +56,10 @@ export function TransactionsTable() {
         />
       }
     >
-      <DataTableToolbar table={table} />
+      <DataTableToolbar
+        table={table}
+        sortFilter={['description', 'balance', 'datetime']}
+      />
     </DataTable>
   );
 }

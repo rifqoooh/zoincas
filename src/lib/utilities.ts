@@ -1,6 +1,5 @@
 import type * as React from 'react';
 
-
 import { type ClassValue, clsx } from 'clsx';
 
 import { twMerge } from 'tailwind-merge';
@@ -30,7 +29,6 @@ export const mergeRefs = <T = any>(
     });
   };
 };
-
 
 export function formatCurrency(
   value: number | string,
