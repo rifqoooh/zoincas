@@ -8,6 +8,7 @@ import { DataTableColumnHeader } from '@/components/data-table/data-table-column
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn, formatCurrency } from '@/lib/utilities';
+import { RowActions } from './row-actions';
 
 export const transactionsColumns = (): ColumnDef<TransactionsDataType>[] => {
   return [
@@ -184,10 +185,10 @@ export const transactionsColumns = (): ColumnDef<TransactionsDataType>[] => {
       },
       enableColumnFilter: true,
     },
-    // {
-    //   id: 'actions',
-    //   cell: ({ row }) => <RowActions row={row} />,
-    //   size: 32,
-    // },
+    {
+      id: 'actions',
+      cell: ({ row }) => <RowActions row={row} />,
+      size: 32,
+    },
   ];
 };

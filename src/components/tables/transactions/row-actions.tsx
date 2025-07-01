@@ -11,12 +11,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useDeleteTransactionModal } from '@/hooks/store/delete-transaction';
 
 interface RowActionsProps {
   row: Row<TransactionsDataType>;
 }
 
 export function RowActions({ row }: RowActionsProps) {
+  const { id: transactionId } = row.original;
+
+  const deleteTransactionStore = useDeleteTransactionModal();
+
+  const onDeleteTransaction = () => {
+    deleteTransactionStore.onOpen({ id: transactionId });
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -31,6 +40,7 @@ export function RowActions({ row }: RowActionsProps) {
         <DropdownMenuItem
           variant="destructive"
           className="dark:text-red-500 dark:focus:text-red-500"
+          onClick={onDeleteTransaction}
         >
           Delete transaction
         </DropdownMenuItem>
