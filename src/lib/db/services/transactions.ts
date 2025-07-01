@@ -228,10 +228,9 @@ export const deleteTransaction = async (
   );
 
   const [data] = await db
+    .with(transaction)
     .delete(transactions)
-    .where(
-      and(eq(balances.userId, userId), eq(transactions.id, transaction.id))
-    )
+    .where(eq(transactions.id, db.select().from(transaction)))
     .returning();
 
   return data;
