@@ -10,7 +10,13 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { cn, formatCurrency } from '@/lib/utilities';
 import { RowActions } from './row-actions';
 
-export const transactionsColumns = (): ColumnDef<TransactionsDataType>[] => {
+interface TransactionsColumnsProps {
+  balanceOptions: { label: string; value: string }[];
+}
+
+export const transactionsColumns = ({
+  balanceOptions,
+}: TransactionsColumnsProps): ColumnDef<TransactionsDataType>[] => {
   return [
     {
       id: 'select',
@@ -119,12 +125,7 @@ export const transactionsColumns = (): ColumnDef<TransactionsDataType>[] => {
       meta: {
         label: 'Balance',
         variant: 'select',
-        options: [
-          {
-            label: 'Balance name',
-            value: 'balance id',
-          },
-        ],
+        options: balanceOptions,
         icon: CircleDashedIcon,
       },
       enableColumnFilter: true,

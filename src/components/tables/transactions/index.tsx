@@ -7,6 +7,7 @@ import type { TransactionsDataType } from '@/validators/api/transactions/respons
 import { DataTable } from '@/components/data-table/data-table';
 import { DataTableSkeleton } from '@/components/data-table/data-table-skeleton';
 import { DataTableToolbar } from '@/components/data-table/data-table-toolbar';
+import { useListBalancesQuery } from '@/hooks/queries/balances';
 import { useListTransactionsQuery } from '@/hooks/queries/transactions';
 import { useDataTable } from '@/hooks/use-data-table';
 import { transactionsColumns } from './columns';
@@ -25,7 +26,20 @@ export function TransactionsTable() {
     pagination: paginationDefault,
   };
 
-  const columns = React.useMemo(() => transactionsColumns(), []);
+  const balancesQuery = useListBalancesQuery();
+  const balances = balancesQuery.data || [];
+
+  const balanceOptions = React.useMemo(() => {
+    return balances.map((balance) => ({
+      label: balance.name,
+      value: balance.id,
+    }));
+  }, [balances]);
+
+  const columns = React.useMemo(
+    () => transactionsColumns({ balanceOptions }),
+    [balanceOptions]
+  );
 
   const { table } = useDataTable({
     data: transactions,
