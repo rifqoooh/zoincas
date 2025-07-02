@@ -106,9 +106,7 @@ export const transactionsColumns = ({
               {category.name ?? 'Uncategorized'}
             </Badge>
 
-            <p className="flex w-[300px] items-center gap-1 truncate">
-              {description}
-            </p>
+            <p className="flex items-center gap-1 truncate">{description}</p>
           </div>
         );
       },
