@@ -95,7 +95,7 @@ export const transactionsColumns = ({
         const { description, category } = row.original;
 
         return (
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-2">
             <Badge
               variant="outline"
               className={cn(
@@ -106,7 +106,9 @@ export const transactionsColumns = ({
               {category.name ?? 'Uncategorized'}
             </Badge>
 
-            <p className="flex items-center gap-1 truncate">{description}</p>
+            <p className="flex items-center gap-1 truncate ps-1">
+              {description}
+            </p>
           </div>
         );
       },
