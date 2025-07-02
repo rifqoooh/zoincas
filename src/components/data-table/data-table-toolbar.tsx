@@ -12,6 +12,7 @@ import { sortColumns } from '@/lib/data-table';
 import { cn } from '@/lib/utilities';
 import type { Column, Table } from '@tanstack/react-table';
 import { X } from 'lucide-react';
+import { DataTableGroupFacetedFilter } from './data-table-group-faceted-filter';
 
 interface DataTableToolbarProps<TData> extends React.ComponentProps<'div'> {
   table: Table<TData>;
@@ -96,6 +97,7 @@ function DataTableToolbarFilter<TData>({
   {
     const columnMeta = column.columnDef.meta;
 
+    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <explanation>
     const onFilterRender = React.useCallback(() => {
       if (!columnMeta?.variant) {
         return null;
@@ -157,6 +159,17 @@ function DataTableToolbarFilter<TData>({
               title={columnMeta.label ?? column.id}
               options={columnMeta.options ?? []}
               multiple={columnMeta.variant === 'multiSelect'}
+            />
+          );
+
+        case 'groupSelect':
+        case 'groupMultiSelect':
+          return (
+            <DataTableGroupFacetedFilter
+              column={column}
+              title={columnMeta.label ?? column.id}
+              groupOptions={columnMeta.groupOptions ?? []}
+              multiple={columnMeta.variant === 'groupMultiSelect'}
             />
           );
 

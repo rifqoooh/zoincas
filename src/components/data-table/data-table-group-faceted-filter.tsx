@@ -2,6 +2,8 @@
 
 import * as React from 'react';
 
+import { CheckIcon, PlusCircleIcon, XCircleIcon } from 'lucide-react';
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -20,24 +22,32 @@ import {
 } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utilities';
-import type { Option } from '@/types/data-table';
+import type { GroupOption, Option } from '@/types/data-table';
 import type { Column } from '@tanstack/react-table';
-import { Check, PlusCircle, XCircle } from 'lucide-react';
 
-interface DataTableFacetedFilterProps<TData, TValue> {
+interface DataTableGroupFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
   title?: string;
-  options: Option[];
+  groupOptions: GroupOption[];
   multiple?: boolean;
 }
 
-export function DataTableFacetedFilter<TData, TValue>({
+export function DataTableGroupFacetedFilter<TData, TValue>({
   column,
   title,
-  options,
+  groupOptions,
   multiple,
-}: DataTableFacetedFilterProps<TData, TValue>) {
+}: DataTableGroupFacetedFilterProps<TData, TValue>) {
   const [open, setOpen] = React.useState(false);
+
+  const flattenOptions = React.useMemo(() => {
+    return groupOptions.flatMap(({ group, options }) =>
+      options.map((option) => ({
+        ...option,
+        group,
+      }))
+    );
+  }, [groupOptions]);
 
   const columnFilterValue = column?.getFilterValue();
   const selectedValues = new Set(
@@ -88,10 +98,10 @@ export function DataTableFacetedFilter<TData, TValue>({
               onClick={onReset}
               className="rounded-sm opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
             >
-              <XCircle />
+              <XCircleIcon />
             </div>
           ) : (
-            <PlusCircle />
+            <PlusCircleIcon />
           )}
           {title}
           {selectedValues?.size > 0 && (
@@ -106,6 +116,7 @@ export function DataTableFacetedFilter<TData, TValue>({
               >
                 {selectedValues.size}
               </Badge>
+
               <div className="hidden items-center gap-1 lg:flex">
                 {selectedValues.size > 2 ? (
                   <Badge
@@ -115,7 +126,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                     {selectedValues.size} selected
                   </Badge>
                 ) : (
-                  options
+                  flattenOptions
                     .filter((option) => selectedValues.has(option.value))
                     .map((option) => (
                       <Badge
@@ -135,38 +146,46 @@ export function DataTableFacetedFilter<TData, TValue>({
       <PopoverContent className="w-[14.5rem] p-0" align="start">
         <Command>
           <CommandInput placeholder={title} />
-          <CommandList className="max-h-full">
+          <CommandList className="max-h-[18.75rem] overflow-y-auto overflow-x-hidden">
             <CommandEmpty>No results found.</CommandEmpty>
-            <CommandGroup className="max-h-[18.75rem] overflow-y-auto overflow-x-hidden">
-              {options.map((option) => {
-                const isSelected = selectedValues.has(option.value);
-
+            {groupOptions.length > 0 &&
+              groupOptions.map((group) => {
                 return (
-                  <CommandItem
-                    key={option.value}
-                    onSelect={() => onItemSelect(option, isSelected)}
-                  >
-                    <div
-                      className={cn(
-                        'flex size-4 items-center justify-center rounded-sm border border-primary',
-                        isSelected
-                          ? 'bg-primary'
-                          : 'opacity-50 [&_svg]:invisible'
-                      )}
-                    >
-                      <Check />
-                    </div>
-                    {option.icon && <option.icon />}
-                    <span className="truncate">{option.label}</span>
-                    {option.count && (
-                      <span className="ml-auto font-mono text-xs">
-                        {option.count}
-                      </span>
-                    )}
-                  </CommandItem>
+                  <CommandGroup heading={group.group} key={group.group}>
+                    {group.options.map((option) => {
+                      const isSelected = selectedValues.has(option.value);
+
+                      return (
+                        <CommandItem
+                          keywords={[group.group, option.label]}
+                          key={option.value}
+                          value={`${option.label}-${option.value}`}
+                          onSelect={() => onItemSelect(option, isSelected)}
+                        >
+                          <div
+                            className={cn(
+                              'flex size-4 items-center justify-center rounded-sm border border-primary',
+                              isSelected
+                                ? 'bg-primary'
+                                : 'opacity-50 [&_svg]:invisible'
+                            )}
+                          >
+                            <CheckIcon />
+                          </div>
+                          {option.icon && <option.icon />}
+                          <span className="truncate">{option.label}</span>
+                          {option.count && (
+                            <span className="ml-auto font-mono text-xs">
+                              {option.count}
+                            </span>
+                          )}
+                        </CommandItem>
+                      );
+                    })}
+                  </CommandGroup>
                 );
               })}
-            </CommandGroup>
+
             {selectedValues.size > 0 && (
               <>
                 <CommandSeparator />

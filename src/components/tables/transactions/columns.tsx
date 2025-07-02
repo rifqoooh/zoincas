@@ -10,14 +10,24 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { cn, formatCurrency } from '@/lib/utilities';
 import { RowActions } from './row-actions';
 
+interface Option {
+  label: string;
+  value: string;
+}
+
 interface TransactionsColumnsProps {
-  balanceOptions: { label: string; value: string }[];
-  categoryOptions: { label: string; value: string }[];
+  balanceOptions: Option[];
+  categoryOptions: Option[];
+  budgetOptions: {
+    group: string;
+    options: Option[];
+  }[];
 }
 
 export const transactionsColumns = ({
   balanceOptions,
   categoryOptions,
+  budgetOptions,
 }: TransactionsColumnsProps): ColumnDef<TransactionsDataType>[] => {
   return [
     {
@@ -107,6 +117,33 @@ export const transactionsColumns = ({
         placeholder: 'Search transaction...',
         variant: 'text',
         icon: TextIcon,
+      },
+      enableColumnFilter: true,
+      enableSorting: false,
+    },
+    {
+      id: 'budget',
+      accessorKey: 'budget',
+      header: ({
+        column,
+      }: { column: Column<TransactionsDataType, unknown> }) => (
+        <DataTableColumnHeader column={column} title="Budget" />
+      ),
+      cell: ({ row }) => {
+        const { budget } = row.original;
+
+        return (
+          <div className="flex flex-col gap-0.5">
+            <p>{budget.category.name}</p>
+            <p className="text-muted-foreground text-xs">{budget.plan.title}</p>
+          </div>
+        );
+      },
+      meta: {
+        label: 'Budget',
+        variant: 'groupSelect',
+        groupOptions: budgetOptions,
+        icon: CircleDashedIcon,
       },
       enableColumnFilter: true,
       enableSorting: false,

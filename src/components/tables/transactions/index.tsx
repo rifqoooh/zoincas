@@ -8,6 +8,7 @@ import { DataTable } from '@/components/data-table/data-table';
 import { DataTableSkeleton } from '@/components/data-table/data-table-skeleton';
 import { DataTableToolbar } from '@/components/data-table/data-table-toolbar';
 import { useListBalancesQuery } from '@/hooks/queries/balances';
+import { useListBudgetPlansQuery } from '@/hooks/queries/budget-plans';
 import { useListCategoriesQuery } from '@/hooks/queries/categories';
 import { useListTransactionsQuery } from '@/hooks/queries/transactions';
 import { useDataTable } from '@/hooks/use-data-table';
@@ -29,25 +30,47 @@ export function TransactionsTable() {
 
   const balancesQuery = useListBalancesQuery();
   const balances = balancesQuery.data || [];
-  const balanceOptions = React.useMemo(() => {
-    return balances.map((balance) => ({
-      label: balance.name,
-      value: balance.id,
-    }));
-  }, [balances]);
+  const balanceOptions = React.useMemo(
+    () =>
+      balances.map((balance) => ({
+        label: balance.name,
+        value: balance.id,
+      })),
+    [balances]
+  );
 
   const categoriesQuery = useListCategoriesQuery();
   const categories = categoriesQuery.data || [];
-  const categoryOptions = React.useMemo(() => {
-    return categories.map((category) => ({
-      label: category.name,
-      value: category.id,
-    }));
-  }, [categories]);
+  const categoryOptions = React.useMemo(
+    () =>
+      categories.map((category) => ({
+        label: category.name,
+        value: category.id,
+      })),
+    [categories]
+  );
+
+  const budgetQuery = useListBudgetPlansQuery();
+  const budgetData = budgetQuery.data || [];
+  const budgetOptions = React.useMemo(
+    () =>
+      budgetData.map((plan) => {
+        const categories = plan.categories.map((category) => ({
+          label: category.name,
+          value: category.id,
+        }));
+        return {
+          group: plan.title,
+          options: categories,
+        };
+      }),
+    [budgetData]
+  );
 
   const columns = React.useMemo(
-    () => transactionsColumns({ balanceOptions, categoryOptions }),
-    [balanceOptions, categoryOptions]
+    () =>
+      transactionsColumns({ balanceOptions, categoryOptions, budgetOptions }),
+    [balanceOptions, categoryOptions, budgetOptions]
   );
 
   const { table } = useDataTable({
@@ -82,7 +105,13 @@ export function TransactionsTable() {
     >
       <DataTableToolbar
         table={table}
-        sortFilter={['description', 'category', 'balance', 'datetime']}
+        sortFilter={[
+          'description',
+          'category',
+          'balance',
+          'budget',
+          'datetime',
+        ]}
       />
     </DataTable>
   );
