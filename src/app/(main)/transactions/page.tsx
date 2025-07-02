@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import { Container } from '@/components/container';
-import { CreateTransactionButton } from '@/components/modal/create-transaction/button';
+import { CreateTransactionButton } from '@/components/modal/create-edit-transaction/button';
 import { TransactionsTable } from '@/components/tables/transactions';
 import { Separator } from '@/components/ui/separator';
 import { createMetadata } from '@/lib/seo/metadata';

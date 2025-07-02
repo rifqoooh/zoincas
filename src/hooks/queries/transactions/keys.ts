@@ -3,4 +3,8 @@ import type { ListTransactionsQuery } from '@/validators/api/transactions/reques
 export const transactionsKeys = {
   all: () => ['transactions'],
   transactions: (search: ListTransactionsQuery) => ['transactions', search],
+  transaction: ({ transactionId }: { transactionId?: string }) => [
+    'transaction',
+    { transactionId },
+  ],
 };

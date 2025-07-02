@@ -9,14 +9,19 @@ import { toast } from 'sonner';
 
 import { useListBalancesQuery } from '@/hooks/queries/balances';
 import { useListCategoriesQuery } from '@/hooks/queries/categories';
-import { useCreateTransactionMutation } from '@/hooks/queries/transactions';
-import { useCreateTransactionModal } from '@/hooks/store/create-transaction';
+import {
+  useCreateTransactionMutation,
+  useGetTransactionQuery,
+} from '@/hooks/queries/transactions';
+import { useCreateEditTransactionModal } from '@/hooks/store/create-edit-transaction';
 import { insertTransactionsSchema } from '@/validators/db/transactions';
 import { useListBudgetPlansQuery } from '../queries/budget-plans';
 
 export const useCreateTransaction = () => {
-  const store = useCreateTransactionModal();
+  const store = useCreateEditTransactionModal();
   const mutation = useCreateTransactionMutation();
+
+  const transactionQuery = useGetTransactionQuery(store.id);
 
   const balancesQuery = useListBalancesQuery();
   const categoriesQuery = useListCategoriesQuery();
@@ -61,6 +66,7 @@ export const useCreateTransaction = () => {
     form,
     onSubmit,
     mutation,
+    transactionQuery,
     balancesQuery,
     categoriesQuery,
     budgetCategoriesQuery,

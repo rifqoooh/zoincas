@@ -1,10 +1,10 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { useCreateTransactionModal } from '@/hooks/store/create-transaction';
+import { useCreateEditTransactionModal } from '@/hooks/store/create-edit-transaction';
 
 export function CreateTransactionButton() {
-  const store = useCreateTransactionModal();
+  const store = useCreateEditTransactionModal();
 
   const onClick = () => {
     store.onOpen();

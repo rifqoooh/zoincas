@@ -11,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useCreateEditTransactionModal } from '@/hooks/store/create-edit-transaction';
 import { useDeleteTransactionModal } from '@/hooks/store/delete-transaction';
 
 interface RowActionsProps {
@@ -20,7 +21,12 @@ interface RowActionsProps {
 export function RowActions({ row }: RowActionsProps) {
   const { id: transactionId } = row.original;
 
+  const createEditTransactionStore = useCreateEditTransactionModal();
   const deleteTransactionStore = useDeleteTransactionModal();
+
+  const onEditTransaction = () => {
+    createEditTransactionStore.onOpen({ id: transactionId });
+  };
 
   const onDeleteTransaction = () => {
     deleteTransactionStore.onOpen({ id: transactionId });
@@ -35,7 +41,9 @@ export function RowActions({ row }: RowActionsProps) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem>Edit transaction</DropdownMenuItem>
+        <DropdownMenuItem onClick={onEditTransaction}>
+          Edit transaction
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           variant="destructive"

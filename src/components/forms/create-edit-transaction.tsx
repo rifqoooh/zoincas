@@ -15,11 +15,12 @@ import { Input } from '@/components/ui/input';
 import { useCreateTransaction } from '@/hooks/actions/use-create-transaction';
 import { formatCurrency } from '@/lib/utilities';
 
-export const CreateTransactionForm = () => {
+export const CreateEditTransactionForm = () => {
   const {
     form,
     onSubmit,
     mutation,
+    transactionQuery,
     balancesQuery,
     categoriesQuery,
     budgetCategoriesQuery,

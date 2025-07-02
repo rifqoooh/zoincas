@@ -62,6 +62,36 @@ export const useListTransactionsQuery = () => {
   return query;
 };
 
+export const useGetTransactionQuery = (transactionId?: string) => {
+  const query = useQuery({
+    enabled: !!transactionId,
+    queryKey: transactionsKeys.transaction({ transactionId }),
+    queryFn: async () => {
+      if (!transactionId) {
+        throw new Error('The transaction ID is required.');
+      }
+
+      const response = await transactions[':transactionId'].$get({
+        param: { transactionId },
+      });
+      if (!response.ok) {
+        const err = (await response.json()) as unknown as ErrorResponseAPI;
+        throw new Error(err.error.message);
+      }
+
+      const data = await response.json();
+      const parsedData = selectTransactionsSchema.safeParse(data);
+      if (!parsedData.success) {
+        throw new Error('There is an error when parsing response data.');
+      }
+
+      return parsedData.data;
+    },
+  });
+
+  return query;
+};
+
 export const useCreateTransactionMutation = () => {
   const queryClient = useQueryClient();
 

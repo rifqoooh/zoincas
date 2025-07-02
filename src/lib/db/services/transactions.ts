@@ -203,9 +203,15 @@ export const getTransaction = async (userId: string, transactionId: string) => {
         id: transactions.categoryId,
         name: categories.name,
       },
-      budgetCategory: {
-        id: transactions.budgetCategoryId,
-        name: budgetCategories.name,
+      budget: {
+        plan: jsonBuildObject({
+          id: budgetPlans.id,
+          title: budgetPlans.title,
+        }),
+        category: jsonBuildObject({
+          id: transactions.budgetCategoryId,
+          name: budgetCategories.name,
+        }),
       },
       createdAt: transactions.createdAt,
     })
@@ -216,6 +222,7 @@ export const getTransaction = async (userId: string, transactionId: string) => {
       budgetCategories,
       eq(transactions.budgetCategoryId, budgetCategories.id)
     )
+    .leftJoin(budgetPlans, eq(budgetCategories.budgetPlanId, budgetPlans.id))
     .where(and(eq(balances.userId, userId), eq(transactions.id, transactionId)))
     .limit(1);
 
