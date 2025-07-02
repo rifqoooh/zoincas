@@ -2,6 +2,7 @@
 
 import { CreateEditTransactionForm } from '@/components/forms/create-edit-transaction';
 import { ResponsiveSheet } from '@/components/responsive-sheet';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useGetTransactionQuery } from '@/hooks/queries/transactions';
 import { useCreateEditTransactionModal } from '@/hooks/store/create-edit-transaction';
 import { useIsClient } from '@/hooks/use-is-client';
@@ -17,6 +18,8 @@ export function CreateTransactionModal() {
     return null;
   }
 
+  const isPending = transactionQuery.isPending;
+
   const text = isCreating
     ? {
         title: 'Create a new transaction',
@@ -29,7 +32,22 @@ export function CreateTransactionModal() {
 
   return (
     <ResponsiveSheet {...text} isOpen={store.isOpen} onClose={store.onClose}>
-      <CreateEditTransactionForm />
+      {isPending ? <SkeletonForm /> : <CreateEditTransactionForm />}
     </ResponsiveSheet>
+  );
+}
+
+export function SkeletonForm() {
+  return (
+    <div className="grid gap-3">
+      <div>
+        <Skeleton className="h-9 w-28 bg-slate-200" />
+        <Skeleton className="h-9 w-full bg-slate-200" />
+      </div>
+      <div>
+        <Skeleton className="h-9 w-28 bg-slate-200" />
+        <Skeleton className="h-9 w-full bg-slate-200" />
+      </div>
+    </div>
   );
 }

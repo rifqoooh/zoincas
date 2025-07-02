@@ -17,9 +17,11 @@ import { useCreateEditTransactionModal } from '@/hooks/store/create-edit-transac
 import { insertTransactionsSchema } from '@/validators/db/transactions';
 import { useListBudgetPlansQuery } from '../queries/budget-plans';
 
-export const useCreateTransaction = () => {
+export const useCreateEditTransaction = () => {
   const store = useCreateEditTransactionModal();
-  const mutation = useCreateTransactionMutation();
+  const isCreating = store.id === undefined;
+
+  const createMutation = useCreateTransactionMutation();
 
   const transactionQuery = useGetTransactionQuery(store.id);
 
@@ -27,23 +29,24 @@ export const useCreateTransaction = () => {
   const categoriesQuery = useListCategoriesQuery();
   const budgetCategoriesQuery = useListBudgetPlansQuery();
 
+  // fallback to default values transactions data is undefined
+  const transactionData = transactionQuery.data ?? {
+    datetime: new Date(),
+    description: '',
+    amount: 0,
+    balanceId: '',
+    categoryId: null,
+    budgetCategoryId: null,
+  };
+
   const form = useForm<InsertTransactionsType>({
     resolver: zodResolver(insertTransactionsSchema),
-    defaultValues: {
-      datetime: new Date(),
-      description: '',
-      amount: 0,
-      balanceId: '',
-      categoryId: null,
-      budgetCategoryId: null,
-    },
+    defaultValues: transactionData,
   });
 
-  const onSubmit: SubmitHandler<InsertTransactionsType> = (values) => {
-    const parsedData = insertTransactionsSchema.parse(values);
-
-    toast.promise(
-      mutation.mutateAsync(parsedData, {
+  const onCreateSubmit = (values: InsertTransactionsType) => {
+    return toast.promise(
+      createMutation.mutateAsync(values, {
         onSuccess: () => {
           store.onClose();
         },
@@ -62,10 +65,17 @@ export const useCreateTransaction = () => {
     );
   };
 
+  const onSubmit: SubmitHandler<InsertTransactionsType> = (values) => {
+    if (isCreating) {
+      const parsedData = insertTransactionsSchema.parse(values);
+      onCreateSubmit(parsedData);
+    }
+  };
+
   return {
     form,
     onSubmit,
-    mutation,
+    createMutation,
     transactionQuery,
     balancesQuery,
     categoriesQuery,

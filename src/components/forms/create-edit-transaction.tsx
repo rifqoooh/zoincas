@@ -12,19 +12,19 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useCreateTransaction } from '@/hooks/actions/use-create-transaction';
+import { useCreateEditTransaction } from '@/hooks/actions/use-create-edit-transaction';
 import { formatCurrency } from '@/lib/utilities';
 
 export const CreateEditTransactionForm = () => {
   const {
     form,
     onSubmit,
-    mutation,
+    createMutation,
     transactionQuery,
     balancesQuery,
     categoriesQuery,
     budgetCategoriesQuery,
-  } = useCreateTransaction();
+  } = useCreateEditTransaction();
 
   const balancesData = balancesQuery.data || [];
   const balancesOptions = balancesData.map((balance) => ({
@@ -51,7 +51,7 @@ export const CreateEditTransactionForm = () => {
     };
   });
 
-  const isPending = mutation.isPending;
+  const isPending = createMutation.isPending;
 
   return (
     <Form {...form}>
