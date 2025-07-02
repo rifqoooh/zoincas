@@ -5,10 +5,11 @@ import { db } from '@/lib/db';
 import {
   balances,
   budgetCategories,
+  budgetPlans,
   categories,
   transactions,
 } from '@/lib/db/schema';
-import { coalesce } from '@/lib/db/utilities';
+import { coalesce, jsonBuildObject } from '@/lib/db/utilities';
 import {
   and,
   asc,
@@ -89,9 +90,15 @@ export const listTransactions = async (
           id: transactions.categoryId,
           name: categories.name,
         },
-        budgetCategory: {
-          id: transactions.budgetCategoryId,
-          name: budgetCategories.name,
+        budget: {
+          plan: jsonBuildObject({
+            id: budgetPlans.id,
+            title: budgetPlans.title,
+          }),
+          category: jsonBuildObject({
+            id: transactions.budgetCategoryId,
+            name: budgetCategories.name,
+          }),
         },
         createdAt: transactions.createdAt,
       })
@@ -102,6 +109,7 @@ export const listTransactions = async (
         budgetCategories,
         eq(transactions.budgetCategoryId, budgetCategories.id)
       )
+      .leftJoin(budgetPlans, eq(budgetCategories.budgetPlanId, budgetPlans.id))
       .where(where)
       .orderBy(...orderBy)
       .limit(query.perPage)
@@ -118,6 +126,7 @@ export const listTransactions = async (
         budgetCategories,
         eq(transactions.budgetCategoryId, budgetCategories.id)
       )
+      .leftJoin(budgetPlans, eq(budgetCategories.budgetPlanId, budgetPlans.id))
       .where(where)
       .limit(1);
 

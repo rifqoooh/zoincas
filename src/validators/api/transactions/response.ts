@@ -12,9 +12,15 @@ export const transactionsDataSchema = selectTransactionsSchema
       id: z.string().uuid().nullable(),
       name: z.string().nullable(),
     }),
-    budgetCategory: z.object({
-      id: z.string().uuid().nullable(),
-      name: z.string().nullable(),
+    budget: z.object({
+      plan: z.object({
+        id: z.string().uuid().nullable(),
+        title: z.string().nullable(),
+      }),
+      category: z.object({
+        id: z.string().uuid().nullable(),
+        name: z.string().nullable(),
+      }),
     }),
   })
   .omit({
