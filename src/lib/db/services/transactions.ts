@@ -41,6 +41,9 @@ export const listTransactions = async (
     query.category.length > 0
       ? inArray(transactions.categoryId, query.category)
       : undefined,
+    query.budget.length > 0
+      ? inArray(transactions.budgetCategoryId, query.budget)
+      : undefined,
     query.datetime.length > 0
       ? and(
           startDatetime

@@ -29,6 +29,7 @@ export const useListTransactionsQuery = () => {
     description: parseAsString.withDefault(''),
     balance: parseAsArrayOf(z.string().uuid()).withDefault([]),
     category: parseAsArrayOf(z.string().uuid()).withDefault([]),
+    budget: parseAsArrayOf(z.string().uuid()).withDefault([]),
     datetime: parseAsArrayOf(z.coerce.number()).withDefault([]),
   });
 

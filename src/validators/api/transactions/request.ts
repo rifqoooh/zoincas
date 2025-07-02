@@ -13,6 +13,7 @@ const sortSchema = z
 
 const balanceSchema = z.string().array().default([]);
 const categorySchema = z.string().array().default([]);
+const budgetSchema = z.string().array().default([]);
 const datetimeSchema = z.coerce.number().array().max(2).default([]);
 
 export const listTransactionsQuery = z.object({
@@ -56,6 +57,16 @@ export const listTransactionsQuery = z.object({
     }
     return value;
   }, categorySchema),
+  budget: z.preprocess((value) => {
+    if (typeof value === 'string') {
+      const parsed = [value];
+      if (Array.isArray(parsed)) {
+        return parsed;
+      }
+      return value;
+    }
+    return value;
+  }, budgetSchema),
   datetime: z.preprocess((value) => {
     if (Array.isArray(value)) {
       // biome-ignore lint/nursery/useCollapsedIf: <explanation>
