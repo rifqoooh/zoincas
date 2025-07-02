@@ -2,6 +2,12 @@
 
 import * as React from 'react';
 
+import type { Option } from '@/types/data-table';
+import type { Column } from '@tanstack/react-table';
+import type { LucideIcon } from 'lucide-react';
+
+import { CheckIcon, PlusCircleIcon, XCircleIcon } from 'lucide-react';
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -20,14 +26,12 @@ import {
 } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utilities';
-import type { Option } from '@/types/data-table';
-import type { Column } from '@tanstack/react-table';
-import { CheckIcon, PlusCircleIcon, XCircleIcon } from 'lucide-react';
 
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
   title?: string;
   options: Option[];
+  icon?: LucideIcon;
   multiple?: boolean;
 }
 
@@ -35,6 +39,7 @@ export function DataTableFacetedFilter<TData, TValue>({
   column,
   title,
   options,
+  icon: Icon,
   multiple,
 }: DataTableFacetedFilterProps<TData, TValue>) {
   const [open, setOpen] = React.useState(false);
@@ -90,6 +95,9 @@ export function DataTableFacetedFilter<TData, TValue>({
             >
               <XCircleIcon />
             </div>
+            // biome-ignore lint/nursery/noNestedTernary: <explanation>
+          ) : Icon ? (
+            <Icon />
           ) : (
             <PlusCircleIcon />
           )}

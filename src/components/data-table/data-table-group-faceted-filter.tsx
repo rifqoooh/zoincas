@@ -2,6 +2,10 @@
 
 import * as React from 'react';
 
+import type { GroupOption, Option } from '@/types/data-table';
+import type { Column } from '@tanstack/react-table';
+import type { LucideIcon } from 'lucide-react';
+
 import { CheckIcon, PlusCircleIcon, XCircleIcon } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
@@ -22,13 +26,12 @@ import {
 } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utilities';
-import type { GroupOption, Option } from '@/types/data-table';
-import type { Column } from '@tanstack/react-table';
 
 interface DataTableGroupFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
   title?: string;
   groupOptions: GroupOption[];
+  icon?: LucideIcon;
   multiple?: boolean;
 }
 
@@ -36,6 +39,7 @@ export function DataTableGroupFacetedFilter<TData, TValue>({
   column,
   title,
   groupOptions,
+  icon: Icon,
   multiple,
 }: DataTableGroupFacetedFilterProps<TData, TValue>) {
   const [open, setOpen] = React.useState(false);
@@ -100,6 +104,9 @@ export function DataTableGroupFacetedFilter<TData, TValue>({
             >
               <XCircleIcon />
             </div>
+            // biome-ignore lint/nursery/noNestedTernary: <explanation>
+          ) : Icon ? (
+            <Icon />
           ) : (
             <PlusCircleIcon />
           )}

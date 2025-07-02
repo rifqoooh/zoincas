@@ -2,6 +2,9 @@
 
 import * as React from 'react';
 
+import type { Column, Table } from '@tanstack/react-table';
+import type { LucideIcon } from 'lucide-react';
+
 import { DataTableDateFilter } from '@/components/data-table/data-table-date-filter';
 import { DataTableFacetedFilter } from '@/components/data-table/data-table-faceted-filter';
 import { DataTableSliderFilter } from '@/components/data-table/data-table-slider-filter';
@@ -10,8 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { sortColumns } from '@/lib/data-table';
 import { cn } from '@/lib/utilities';
-import type { Column, Table } from '@tanstack/react-table';
-import { X } from 'lucide-react';
+import { XIcon } from 'lucide-react';
 import { DataTableGroupFacetedFilter } from './data-table-group-faceted-filter';
 
 interface DataTableToolbarProps<TData> extends React.ComponentProps<'div'> {
@@ -74,7 +76,7 @@ export function DataTableToolbar<TData>({
             className="border-dashed"
             onClick={onReset}
           >
-            <X />
+            <XIcon />
             Reset
           </Button>
         )}
@@ -158,6 +160,7 @@ function DataTableToolbarFilter<TData>({
               column={column}
               title={columnMeta.label ?? column.id}
               options={columnMeta.options ?? []}
+              icon={columnMeta.icon as LucideIcon}
               multiple={columnMeta.variant === 'multiSelect'}
             />
           );
@@ -169,6 +172,7 @@ function DataTableToolbarFilter<TData>({
               column={column}
               title={columnMeta.label ?? column.id}
               groupOptions={columnMeta.groupOptions ?? []}
+              icon={columnMeta.icon as LucideIcon}
               multiple={columnMeta.variant === 'groupMultiSelect'}
             />
           );

@@ -2,7 +2,13 @@ import type { TransactionsDataType } from '@/validators/api/transactions/respons
 import type { Column, ColumnDef } from '@tanstack/react-table';
 
 import { format } from 'date-fns';
-import { CalendarIcon, CircleDashedIcon, TextIcon } from 'lucide-react';
+import {
+  CalendarIcon,
+  CreditCardIcon,
+  Layers2Icon,
+  PiggyBankIcon,
+  TextIcon,
+} from 'lucide-react';
 
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
 import { Badge } from '@/components/ui/badge';
@@ -33,23 +39,29 @@ export const transactionsColumns = ({
     {
       id: 'select',
       header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && 'indeterminate')
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-          className="translate-y-0.5"
-        />
+        <div className="ps-4 pe-2">
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && 'indeterminate')
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label="Select all"
+            className="size-5 translate-y-0.5"
+          />
+        </div>
       ),
       cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-          className="translate-y-0.5"
-        />
+        <div className="ps-4 pe-2">
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+            className="size-5 translate-y-0.5"
+          />
+        </div>
       ),
       enableSorting: false,
       enableHiding: false,
@@ -143,7 +155,7 @@ export const transactionsColumns = ({
         label: 'Budget',
         variant: 'groupSelect',
         groupOptions: budgetOptions,
-        icon: CircleDashedIcon,
+        icon: CreditCardIcon,
       },
       enableColumnFilter: true,
       enableSorting: false,
@@ -165,7 +177,7 @@ export const transactionsColumns = ({
         label: 'Balance',
         variant: 'select',
         options: balanceOptions,
-        icon: CircleDashedIcon,
+        icon: PiggyBankIcon,
       },
       enableColumnFilter: true,
       enableSorting: false,
@@ -224,7 +236,7 @@ export const transactionsColumns = ({
         label: 'Category',
         variant: 'select',
         options: categoryOptions,
-        icon: CircleDashedIcon,
+        icon: Layers2Icon,
       },
       enableColumnFilter: true,
       enableSorting: false,

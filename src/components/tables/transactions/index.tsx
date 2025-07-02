@@ -107,8 +107,8 @@ export function TransactionsTable() {
         table={table}
         sortFilter={[
           'description',
-          'category',
           'balance',
+          'category',
           'budget',
           'datetime',
         ]}

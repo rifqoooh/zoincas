@@ -1,9 +1,11 @@
+import type { LucideIcon } from 'lucide-react';
+
 import {
-  BookOpenIcon,
-  BotIcon,
-  type LucideIcon,
-  Settings2Icon,
-  SquareTerminalIcon,
+  ArrowLeftRightIcon,
+  CreditCardIcon,
+  Layers2Icon,
+  LayoutDashboardIcon,
+  PiggyBankIcon,
 } from 'lucide-react';
 
 export interface Menu {
@@ -16,45 +18,28 @@ export interface Menu {
 export const menus: Menu[] = [
   {
     title: 'Dashboard',
-    url: '#',
-    icon: SquareTerminalIcon,
+    url: '/dashboard',
+    icon: LayoutDashboardIcon,
   },
   {
     title: 'Balances',
-    url: '#',
-    icon: BotIcon,
+    url: '/balances',
+    icon: CreditCardIcon,
   },
   {
     title: 'Categories',
-    url: '#',
-    icon: BookOpenIcon,
-    items: [
-      // {
-      //   title: 'Salary',
-      //   url: '#',
-      // },
-      // {
-      //   title: 'Lunch or Dinner',
-      //   url: '#',
-      // },
-      // {
-      //   title: 'Food',
-      //   url: '#',
-      // },
-      // {
-      //   title: 'Service Fee',
-      //   url: '#',
-      // },
-    ],
+    url: '/categories',
+    icon: Layers2Icon,
+    items: [],
   },
   {
     title: 'Transactions',
     url: '/transactions',
-    icon: Settings2Icon,
+    icon: ArrowLeftRightIcon,
   },
   {
     title: 'Budget Plans',
-    url: '#',
-    icon: Settings2Icon,
+    url: '/budget-plans',
+    icon: PiggyBankIcon,
   },
 ];
