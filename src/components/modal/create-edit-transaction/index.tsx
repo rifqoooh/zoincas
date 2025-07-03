@@ -39,14 +39,14 @@ export function CreateTransactionModal() {
 
 export function SkeletonForm() {
   return (
-    <div className="grid gap-3">
-      <div>
-        <Skeleton className="h-9 w-28 bg-slate-200" />
-        <Skeleton className="h-9 w-full bg-slate-200" />
+    <div className="grid gap-10">
+      <div className="flex flex-col gap-2">
+        <Skeleton className="h-3.5 w-28 " />
+        <Skeleton className="h-9 w-full " />
       </div>
-      <div>
-        <Skeleton className="h-9 w-28 bg-slate-200" />
-        <Skeleton className="h-9 w-full bg-slate-200" />
+      <div className="flex flex-col gap-2">
+        <Skeleton className="h-3.5 w-28 " />
+        <Skeleton className="h-9 w-full " />
       </div>
     </div>
   );

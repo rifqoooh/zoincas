@@ -32,14 +32,21 @@ export const useCreateEditTransaction = () => {
   const budgetCategoriesQuery = useListBudgetPlansQuery();
 
   // fallback to default values transactions data is undefined
-  const transactionData = transactionQuery.data ?? {
-    datetime: new Date(),
-    description: '',
-    amount: 0,
-    balanceId: '',
-    categoryId: null,
-    budgetCategoryId: null,
-  };
+  const transactionData = transactionQuery.data
+    ? {
+        ...transactionQuery.data,
+        balanceId: transactionQuery.data.balance.id,
+        categoryId: transactionQuery.data.category.id,
+        budgetCategoryId: transactionQuery.data.budget.category.id,
+      }
+    : {
+        datetime: new Date(),
+        description: '',
+        amount: 0,
+        balanceId: '',
+        categoryId: null,
+        budgetCategoryId: null,
+      };
 
   const form = useForm<InsertTransactionsType>({
     resolver: zodResolver(insertTransactionsSchema),

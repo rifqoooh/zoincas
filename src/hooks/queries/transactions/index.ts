@@ -15,7 +15,10 @@ import { z } from 'zod';
 
 import { transactions } from '@/lib/api/rpc';
 import { getSortingStateParser } from '@/lib/parsers';
-import { listTransactionsResponse } from '@/validators/api/transactions/response';
+import {
+  listTransactionsResponse,
+  transactionsDataSchema,
+} from '@/validators/api/transactions/response';
 import { selectTransactionsSchema } from '@/validators/db/transactions';
 import { transactionsKeys } from './keys';
 
@@ -80,7 +83,7 @@ export const useGetTransactionQuery = (transactionId?: string) => {
       }
 
       const data = await response.json();
-      const parsedData = selectTransactionsSchema.safeParse(data);
+      const parsedData = transactionsDataSchema.safeParse(data);
       if (!parsedData.success) {
         throw new Error('There is an error when parsing response data.');
       }
@@ -106,6 +109,7 @@ export const useCreateTransactionMutation = () => {
       }
 
       const data = await response.json();
+      // TODO : investigate if selectTransactionsSchema can be replaced to transactionsDataSchema
       const parsedData = selectTransactionsSchema.safeParse(data);
       if (!parsedData.success) {
         throw new Error('There is an error when parsing response data.');
@@ -142,6 +146,7 @@ export const useUpdateTransactionMutation = (transactionId?: string) => {
       }
 
       const data = await response.json();
+      // TODO : investigate if selectTransactionsSchema can be replaced to transactionsDataSchema
       const parsedData = selectTransactionsSchema.safeParse(data);
       if (!parsedData.success) {
         throw new Error('There is an error when parsing response data.');
@@ -177,6 +182,7 @@ export const useDeleteTransactionMutation = (transactionId?: string) => {
       }
 
       const data = await response.json();
+      // TODO : investigate if selectTransactionsSchema can be replaced to transactionsDataSchema
       const parsedData = selectTransactionsSchema.safeParse(data);
       if (!parsedData.success) {
         throw new Error('There is an error when parsing response data.');
