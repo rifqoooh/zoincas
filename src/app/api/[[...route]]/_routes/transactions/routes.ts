@@ -123,6 +123,40 @@ export const getTransaction = createRoute({
     ),
   },
 });
+export const updateTransaction = createRoute({
+  method: 'patch',
+  path: '/transactions/{transactionId}',
+  tags,
+  middleware: [protectedMiddleware()],
+  request: {
+    params: transactionIdParamSchema,
+    body: ContentJSONRequired(
+      insertTransactionsSchema,
+      'The transaction to update.'
+    ),
+  },
+  responses: {
+    [StatusCode.OK]: ContentJSON(
+      selectTransactionsSchema,
+      'The updated transaction.'
+    ),
+    [StatusCode.NOT_FOUND]: ContentJSON(
+      createNotFoundSchema({
+        path: '/transactions/{transactionId}',
+      }),
+      'The transaction with the requested ID does not exist in our resources.'
+    ),
+    [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
+      createErrorSchema({
+        schema: transactionIdParamSchema,
+        message: 'The transaction id request params is required.',
+        path: '/transactions/{transactionId}',
+        potentioalInput: {},
+      }),
+      'The validation update transaction request error(s).'
+    ),
+  },
+});
 
 export const deleteTransaction = createRoute({
   method: 'delete',
@@ -158,4 +192,5 @@ export const deleteTransaction = createRoute({
 export type ListTransactions = typeof listTransactions;
 export type CreateTransaction = typeof createTransaction;
 export type GetTransaction = typeof getTransaction;
+export type UpdateTransaction = typeof updateTransaction;
 export type DeleteTransaction = typeof deleteTransaction;

@@ -229,6 +229,67 @@ export const getTransaction = async (userId: string, transactionId: string) => {
   return data;
 };
 
+export const updateTransaction = async (
+  userId: string,
+  transactionId: string,
+  input: InsertTransactionsType
+) => {
+  const updatedAt = new Date();
+
+  const data = await db.transaction(async (tx) => {
+    // If input category id is not UUID we know it is a new category to create
+    const parsedCategoryId = z.string().uuid().safeParse(input.categoryId);
+    if (!parsedCategoryId.success) {
+      // Get user id from input balance id
+      const [{ userId }] = await tx
+        .select({
+          userId: balances.userId,
+        })
+        .from(balances)
+        .where(eq(balances.id, input.balanceId))
+        .limit(1);
+
+      // Create a new category
+      const [{ id }] = await tx
+        .insert(categories)
+        .values({
+          name: input.categoryId ?? 'Untitled',
+          userId: userId,
+        })
+        .returning({
+          id: categories.id,
+        });
+
+      // Assign new category id to input
+      input.categoryId = id;
+    }
+
+    const transaction = tx.$with('transaction').as(
+      tx
+        .select({
+          id: transactions.id,
+        })
+        .from(transactions)
+        .innerJoin(balances, eq(transactions.balanceId, balances.id))
+        .where(
+          and(eq(balances.userId, userId), eq(transactions.id, transactionId))
+        )
+        .limit(1)
+    );
+
+    const [data] = await tx
+      .with(transaction)
+      .update({ ...transactions, updatedAt })
+      .set(input)
+      .where(eq(transactions.id, tx.select().from(transaction)))
+      .returning();
+
+    return data;
+  });
+
+  return data;
+};
+
 export const deleteTransaction = async (
   userId: string,
   transactionId: string

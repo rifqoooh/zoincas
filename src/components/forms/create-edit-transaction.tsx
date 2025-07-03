@@ -19,8 +19,9 @@ export const CreateEditTransactionForm = () => {
   const {
     form,
     onSubmit,
+    isCreating,
     createMutation,
-    transactionQuery,
+    updateMutation,
     balancesQuery,
     categoriesQuery,
     budgetCategoriesQuery,
@@ -51,7 +52,7 @@ export const CreateEditTransactionForm = () => {
     };
   });
 
-  const isPending = createMutation.isPending;
+  const isPending = createMutation.isPending || updateMutation.isPending;
 
   return (
     <Form {...form}>
@@ -183,7 +184,14 @@ export const CreateEditTransactionForm = () => {
             className="w-full"
             disabled={isPending}
           >
-            {isPending ? <p>Loading...</p> : <p>Create transaction</p>}
+            {isPending ? (
+              <p>Loading...</p>
+              // biome-ignore lint/nursery/noNestedTernary: <explanation>
+            ) : isCreating ? (
+              <p>Create transaction</p>
+            ) : (
+              <p>Update transaction</p>
+            )}
           </Button>
         </div>
       </form>

@@ -8,6 +8,7 @@ import type {
   DeleteTransaction,
   GetTransaction,
   ListTransactions,
+  UpdateTransaction,
   transactionIdParamSchema,
 } from './routes';
 
@@ -51,6 +52,29 @@ export const getTransaction: AppRouteHandler<GetTransaction> = async (c) => {
   const user = c.get('user') as User;
 
   const data = await transactions.getTransaction(user.id, transactionId);
+  if (!data) {
+    return c.json(
+      createNotFoundResponse({ path: c.req.path }),
+      StatusCode.NOT_FOUND
+    );
+  }
+
+  return c.json(data, StatusCode.OK);
+};
+
+export const updateTransaction: AppRouteHandler<UpdateTransaction> = async (
+  c
+) => {
+  const { transactionId } = c.req.valid('param');
+  const input = c.req.valid('json');
+
+  const user = c.get('user') as User;
+
+  const data = await transactions.updateTransaction(
+    user.id,
+    transactionId,
+    input
+  );
   if (!data) {
     return c.json(
       createNotFoundResponse({ path: c.req.path }),

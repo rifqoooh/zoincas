@@ -12,6 +12,7 @@ import { useListCategoriesQuery } from '@/hooks/queries/categories';
 import {
   useCreateTransactionMutation,
   useGetTransactionQuery,
+  useUpdateTransactionMutation,
 } from '@/hooks/queries/transactions';
 import { useCreateEditTransactionModal } from '@/hooks/store/create-edit-transaction';
 import { insertTransactionsSchema } from '@/validators/db/transactions';
@@ -22,6 +23,7 @@ export const useCreateEditTransaction = () => {
   const isCreating = store.id === undefined;
 
   const createMutation = useCreateTransactionMutation();
+  const updateMutation = useUpdateTransactionMutation(store.id);
 
   const transactionQuery = useGetTransactionQuery(store.id);
 
@@ -65,17 +67,43 @@ export const useCreateEditTransaction = () => {
     );
   };
 
+  const onUpdateSubmit = (values: InsertTransactionsType) => {
+    return toast.promise(
+      updateMutation.mutateAsync(values, {
+        onSuccess: () => {
+          store.onClose();
+        },
+      }),
+      {
+        loading: 'Updating transaction...',
+        success: 'Transaction updated successfully',
+        error: (error: unknown) => {
+          if (error instanceof Error) {
+            return error.message;
+          }
+
+          return 'There is an error in the internal server.';
+        },
+      }
+    );
+  };
+
   const onSubmit: SubmitHandler<InsertTransactionsType> = (values) => {
+    const parsedData = insertTransactionsSchema.parse(values);
+
     if (isCreating) {
-      const parsedData = insertTransactionsSchema.parse(values);
       onCreateSubmit(parsedData);
+    } else {
+      onUpdateSubmit(parsedData);
     }
   };
 
   return {
     form,
     onSubmit,
+    isCreating,
     createMutation,
+    updateMutation,
     transactionQuery,
     balancesQuery,
     categoriesQuery,
