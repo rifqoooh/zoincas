@@ -19,6 +19,7 @@ import { DataTableGroupFacetedFilter } from './data-table-group-faceted-filter';
 interface DataTableToolbarProps<TData> extends React.ComponentProps<'div'> {
   table: Table<TData>;
   sortFilter: string[];
+  showViewOptions?: boolean;
   isLoading?: boolean;
   fallback?: React.ReactNode;
 }
@@ -26,6 +27,7 @@ interface DataTableToolbarProps<TData> extends React.ComponentProps<'div'> {
 export function DataTableToolbar<TData>({
   table,
   sortFilter = [],
+  showViewOptions = true,
   isLoading,
   fallback,
   children,
@@ -83,7 +85,7 @@ export function DataTableToolbar<TData>({
 
         <div className="flex items-center gap-2 md:ml-auto">
           {children}
-          <DataTableViewOptions table={table} />
+          {showViewOptions && <DataTableViewOptions table={table} />}
         </div>
       </div>
     </div>

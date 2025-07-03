@@ -105,6 +105,7 @@ export function TransactionsTable() {
     >
       <DataTableToolbar
         table={table}
+        showViewOptions={false}
         sortFilter={[
           'description',
           'balance',

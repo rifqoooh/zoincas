@@ -35,7 +35,11 @@ export function RowActions({ row }: RowActionsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
+        <Button
+          variant="outline"
+          size="icon"
+          className="dark:bg-background dark:hover:bg-accent"
+        >
           <MoreHorizontalIcon className="size-4" />
           <span className="sr-only">Open menu</span>
         </Button>
