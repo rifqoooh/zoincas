@@ -162,7 +162,7 @@ export function AutoComplete({
 
   return (
     <CommandPrimitive onKeyDown={onKeyDown}>
-      <div className="group rounded-md border border-input px-1 py-2 text-sm ring-offset-background focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50">
+      <div className="group rounded-md border border-input px-1 py-2 text-sm ring-offset-background transition-[color,box-shadow] focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50">
         <div className="flex items-center gap-1">
           <CommandPrimitive.Input
             ref={mergeRefs([inputRef, ref])}

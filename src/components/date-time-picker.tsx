@@ -326,7 +326,7 @@ function CalendarCell({ state, date }: CalendarCellProps) {
       {...cellProps}
       className={cn(
         cellProps.className,
-        'relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md'
+        'relative p-0 text-center text-sm transition-[color,box-shadow] focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md'
       )}
     >
       <Button
@@ -459,7 +459,7 @@ function DateField(props: AriaDatePickerProps<DateValue>) {
       {...fieldProps}
       ref={ref}
       className={cn(
-        'inline-flex h-9 flex-1 items-center rounded-l-md border-input bg-transparent px-3 py-2 text-sm ring-offset-background focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50',
+        'inline-flex h-9 flex-1 items-center rounded-l-md border-input bg-transparent px-3 py-2 text-sm ring-offset-background transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50',
         props.isDisabled && 'cursor-not-allowed opacity-50'
       )}
     >
@@ -489,7 +489,7 @@ function TimeField(props: AriaTimeFieldProps<TimeValue>) {
       {...fieldProps}
       ref={ref}
       className={cn(
-        'inline-flex h-10 w-full flex-1 rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50',
+        'inline-flex h-10 w-full flex-1 rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background transition-[color,box-shadow] focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50',
         props.isDisabled && 'cursor-not-allowed opacity-50'
       )}
     >
@@ -591,7 +591,7 @@ const DateTimePicker = React.forwardRef<
       ref={divRef}
       className={cn(
         groupProps.className,
-        'flex items-center rounded-md border ring-offset-background focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50'
+        'flex items-center rounded-md border ring-offset-background transition-[color,box-shadow] focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50'
       )}
     >
       <DateField {...fieldProps} value={currentValue()} />

@@ -112,13 +112,15 @@ export function CurrencyInput({
   }, [disabled, value, onChange]);
 
   return (
-    <div className="relative w-full">
+    <div
+      className={cn(
+        'flex w-full items-center rounded-md border border-input caret-primary ring-offset-background transition-[color,box-shadow] placeholder:text-muted-foreground focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50',
+        { 'text-green-500': isPositiveNum },
+        { 'text-red-500': !isPositiveNum }
+      )}
+    >
       <CurrencyInputPrimitive
-        className={cn(
-          'flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 pr-9 text-sm caret-primary ring-offset-background file:border-0 file:bg-transparent placeholder:text-muted-foreground focus-visible:border-ring focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50',
-          { 'text-green-500': isPositiveNum },
-          { 'text-red-500': !isPositiveNum }
-        )}
+        className="h-9 grow rounded-md px-3 py-2 pr-0 text-sm focus-visible:outline-none"
         placeholder={placeholder}
         value={value}
         decimalsLimit={0}
@@ -131,13 +133,13 @@ export function CurrencyInput({
         ref={mergeRefs([inputRef, ref])}
       />
 
-      <div className="absolute top-0 right-0 flex items-center">
+      <div className="flex items-center">
         <Button
           type="button"
           tabIndex={-1}
-          variant="outline"
+          variant="ghost"
           size="icon"
-          className="group/minus rounded-none border-0 border-input border-l"
+          className="group/minus rounded-[0.45rem] rounded-r-none rounded-l-none border-l"
           disabled={disabled}
           onClick={(e) => {
             e.preventDefault();
@@ -164,9 +166,9 @@ export function CurrencyInput({
         <Button
           type="button"
           tabIndex={-1}
-          variant="outline"
+          variant="ghost"
           size="icon"
-          className="group/plus rounded-none rounded-r-md border-0 border-input border-l"
+          className="group/plus rounded-[0.45rem] rounded-l-none border-l"
           disabled={disabled}
           onClick={(e) => {
             e.preventDefault();
