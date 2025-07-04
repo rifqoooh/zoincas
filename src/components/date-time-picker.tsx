@@ -459,7 +459,7 @@ function DateField(props: AriaDatePickerProps<DateValue>) {
       {...fieldProps}
       ref={ref}
       className={cn(
-        'inline-flex h-9 flex-1 items-center rounded-l-md border-input bg-transparent px-3 py-2 text-sm ring-offset-background transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50',
+        'inline-flex h-9 flex-1 cursor-text items-center rounded-l-md border-input bg-transparent px-3 py-2 text-sm ring-offset-background transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-input/30',
         props.isDisabled && 'cursor-not-allowed opacity-50'
       )}
     >
@@ -489,7 +489,7 @@ function TimeField(props: AriaTimeFieldProps<TimeValue>) {
       {...fieldProps}
       ref={ref}
       className={cn(
-        'inline-flex h-10 w-full flex-1 rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background transition-[color,box-shadow] focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50',
+        'inline-flex h-10 w-full flex-1 cursor-text rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background transition-[color,box-shadow] focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-input/30',
         props.isDisabled && 'cursor-not-allowed opacity-50'
       )}
     >
@@ -591,7 +591,7 @@ const DateTimePicker = React.forwardRef<
       ref={divRef}
       className={cn(
         groupProps.className,
-        'flex items-center rounded-md border ring-offset-background transition-[color,box-shadow] focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50'
+        'flex cursor-text items-center rounded-md border border-input ring-offset-background transition-[color,box-shadow] focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-input/30'
       )}
     >
       <DateField {...fieldProps} value={currentValue()} />
@@ -615,7 +615,7 @@ const DateTimePicker = React.forwardRef<
             tabIndex={-1}
             variant="ghost"
             size="icon"
-            className="group rounded-[0.45rem] rounded-l-none border-l"
+            className="group rounded-[0.45rem] rounded-l-none border-input border-l dark:bg-input/30"
             disabled={props.isDisabled}
             onClick={() => {
               state.setOpen(true);

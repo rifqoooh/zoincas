@@ -114,7 +114,7 @@ export function CurrencyInput({
   return (
     <div
       className={cn(
-        'flex w-full items-center rounded-md border border-input caret-primary ring-offset-background transition-[color,box-shadow] placeholder:text-muted-foreground focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50',
+        'flex w-full items-center rounded-md border border-input caret-primary ring-offset-background transition-[color,box-shadow] placeholder:text-muted-foreground focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-input/30',
         { 'text-green-500': isPositiveNum },
         { 'text-red-500': !isPositiveNum }
       )}
