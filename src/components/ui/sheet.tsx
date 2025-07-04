@@ -99,7 +99,7 @@ function SheetContent({
           side === "right" &&
             "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right w-3/4 border sm:max-w-sm rounded-xl",
           side === "left" &&
-            "data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-leftl w-3/4 border sm:max-w-sm rounded-xl",
+            "data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left w-3/4 border sm:max-w-sm rounded-xl",
           side === "top" &&
             "data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top h-auto border rounded-xl",
           side === "bottom" &&
