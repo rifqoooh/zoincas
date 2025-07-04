@@ -18,7 +18,7 @@ import { DataTableGroupFacetedFilter } from './data-table-group-faceted-filter';
 
 interface DataTableToolbarProps<TData> extends React.ComponentProps<'div'> {
   table: Table<TData>;
-  sortFilter: string[];
+  sortFilter?: string[];
   showViewOptions?: boolean;
   isLoading?: boolean;
   fallback?: React.ReactNode;

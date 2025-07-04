@@ -203,7 +203,7 @@ export const transactionsColumns = ({
           <div
             className={cn(
               'whitespace-nowrap text-nowrap text-right font-medium tabular-nums',
-              isPositiveNum ? 'text-green-600' : 'text-red-600'
+              isPositiveNum ? 'text-green-500' : 'text-red-500'
             )}
           >
             {formatCurrency(amount)}

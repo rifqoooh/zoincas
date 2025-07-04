@@ -33,7 +33,7 @@ export function RowActions({ row }: RowActionsProps) {
   };
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
