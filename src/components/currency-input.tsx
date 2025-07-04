@@ -115,7 +115,7 @@ export function CurrencyInput({
     <div className="relative w-full">
       <CurrencyInputPrimitive
         className={cn(
-          'flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 pr-9 text-sm caret-black ring-offset-background file:border-0 file:bg-transparent placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+          'flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 pr-9 text-sm caret-primary ring-offset-background file:border-0 file:bg-transparent placeholder:text-muted-foreground focus-visible:border-ring focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50',
           { 'text-green-500': isPositiveNum },
           { 'text-red-500': !isPositiveNum }
         )}
@@ -137,7 +137,7 @@ export function CurrencyInput({
           tabIndex={-1}
           variant="outline"
           size="icon"
-          className="group/minus rounded-none border-r-0"
+          className="group/minus rounded-none border-0 border-input border-l"
           disabled={disabled}
           onClick={(e) => {
             e.preventDefault();
@@ -153,7 +153,7 @@ export function CurrencyInput({
         >
           <MinusIcon
             className={cn(
-              'size-4 text-muted-foreground transition-all duration-75 group-hover/minus:text-black group-active/minus:scale-75 group-active/minus:text-black/80',
+              'size-4 text-muted-foreground transition-all duration-75 group-hover/minus:text-primary group-active/minus:scale-75 group-active/minus:text-primary/80',
               {
                 'scale-75 text-black': isArrowDownPressed,
               }
@@ -166,7 +166,7 @@ export function CurrencyInput({
           tabIndex={-1}
           variant="outline"
           size="icon"
-          className="group/plus rounded-none rounded-r-md"
+          className="group/plus rounded-none rounded-r-md border-0 border-input border-l"
           disabled={disabled}
           onClick={(e) => {
             e.preventDefault();
@@ -182,7 +182,7 @@ export function CurrencyInput({
         >
           <PlusIcon
             className={cn(
-              'size-4 text-muted-foreground transition-all duration-75 group-hover/plus:text-black group-active/plus:scale-75 group-active/plus:text-black/80',
+              'size-4 text-muted-foreground transition-all duration-75 group-hover/plus:text-primary group-active/plus:scale-75 group-active/plus:text-primary/80',
               {
                 'scale-75 text-black': isArrowUpPressed,
               }
