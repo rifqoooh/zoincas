@@ -615,7 +615,7 @@ const DateTimePicker = React.forwardRef<
             tabIndex={-1}
             variant="ghost"
             size="icon"
-            className="group rounded-l-none border-l"
+            className="group rounded-[0.45rem] rounded-l-none border-l"
             disabled={props.isDisabled}
             onClick={() => {
               state.setOpen(true);

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import type * as React from "react";
+import type * as React from 'react';
 
 import {
   Sheet,
@@ -8,7 +8,7 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@/components/ui/sheet";
+} from '@/components/ui/sheet';
 
 interface ResponsiveSheetProps {
   title?: string;
@@ -27,12 +27,12 @@ export function ResponsiveSheet({
 }: ResponsiveSheetProps) {
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent className="overflow-y-auto">
+      <SheetContent>
         <SheetHeader>
           {title && <SheetTitle>{title}</SheetTitle>}
           {description && <SheetDescription>{description}</SheetDescription>}
         </SheetHeader>
-        <div className="pt-3">{children}</div>
+        <div className="py-4">{children}</div>
       </SheetContent>
     </Sheet>
   );

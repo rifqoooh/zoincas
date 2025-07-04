@@ -18,7 +18,7 @@ export function CreateTransactionModal() {
     return null;
   }
 
-  const isPending = transactionQuery.isPending;
+  const isLoading = transactionQuery.isLoading;
 
   const text = isCreating
     ? {
@@ -32,7 +32,7 @@ export function CreateTransactionModal() {
 
   return (
     <ResponsiveSheet {...text} isOpen={store.isOpen} onClose={store.onClose}>
-      {isPending ? <SkeletonForm /> : <CreateEditTransactionForm />}
+      {isLoading ? <SkeletonForm /> : <CreateEditTransactionForm />}
     </ResponsiveSheet>
   );
 }

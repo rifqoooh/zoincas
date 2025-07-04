@@ -1,8 +1,9 @@
 "use client";
 
+import  * as React from "react";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
+
 import { XIcon } from "lucide-react";
-import type * as React from "react";
 
 import { cn } from "@/lib/utilities";
 
@@ -36,7 +37,7 @@ function SheetOverlay({
     <SheetPrimitive.Overlay
       data-slot="sheet-overlay"
       className={cn(
-        "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50 data-[state=closed]:animate-out data-[state=open]:animate-in",
+        "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50 backdrop-blur-xs data-[state=closed]:animate-out data-[state=open]:animate-in",
         className,
       )}
       {...props}
@@ -52,30 +53,69 @@ function SheetContent({
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
   side?: "top" | "right" | "bottom" | "left";
 }) {
+  const padding = "0.5rem"
+
+  const style = React.useMemo<React.CSSProperties | undefined>(() => {
+    if(side === "right") {
+      return {
+        top: padding,
+        right: padding,
+        height: `calc(100% - ${padding} * 2)`,
+      }
+    }
+    if(side === "left") {
+      return {
+        top: padding,
+        left: padding,
+        height: `calc(100% - ${padding} * 2)`,
+      }
+    }
+    if(side === "top") {
+      return {
+        top: padding,
+        left: padding,
+        width: `calc(100% - ${padding} * 2)`,
+        maxHeight: `calc(100% - ${padding} * 2)`,
+      }
+    }
+    if(side === "bottom") {
+      return {
+        bottom: padding,
+        left: padding,
+        width: `calc(100% - ${padding} * 2)`,
+        maxHeight: `calc(100% - ${padding} * 2)`,
+      }
+    }
+    return undefined
+  }, [side, padding])
+
   return (
     <SheetPortal>
       <SheetOverlay />
       <SheetPrimitive.Content
         data-slot="sheet-content"
         className={cn(
-          "fixed z-50 flex flex-col gap-4 bg-background p-6 shadow-lg transition ease-in-out data-[state=closed]:animate-out data-[state=open]:animate-in data-[state=closed]:duration-300 data-[state=open]:duration-500",
+          "fixed z-50 flex flex-col gap-4 bg-background overflow-y-hidden shadow-lg transition ease-in-out data-[state=closed]:animate-out data-[state=open]:animate-in data-[state=closed]:duration-300 data-[state=open]:duration-500",
           side === "right" &&
-            "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 h-full w-3/4 border-l sm:max-w-sm",
+            "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right w-3/4 border sm:max-w-sm rounded-xl",
           side === "left" &&
-            "data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left inset-y-0 left-0 h-full w-3/4 border-r sm:max-w-sm",
+            "data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-leftl w-3/4 border sm:max-w-sm rounded-xl",
           side === "top" &&
-            "data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top inset-x-0 top-0 h-auto border-b",
+            "data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top h-auto border rounded-xl",
           side === "bottom" &&
-            "data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom inset-x-0 bottom-0 h-auto border-t",
+            "data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom h-auto border rounded-xl",
           className,
         )}
+        style={style}
         {...props}
       >
-        {children}
-        <SheetPrimitive.Close className="absolute top-4 right-4 rounded-xs opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
-          <XIcon className="size-4" />
-          <span className="sr-only">Close</span>
-        </SheetPrimitive.Close>
+        <div className="relative overflow-y-auto p-6">
+          {children}
+          <SheetPrimitive.Close className="absolute top-4 right-4 rounded-xs opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
+            <XIcon className="size-4" />
+            <span className="sr-only">Close</span>
+          </SheetPrimitive.Close>
+        </div>
       </SheetPrimitive.Content>
     </SheetPortal>
   );
