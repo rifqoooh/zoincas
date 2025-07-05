@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import * as React from "react";
+import * as React from 'react';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -10,16 +10,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { useBanUser } from "@/hooks/actions/use-ban-user";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { useBanUser } from '@/hooks/actions/use-ban-user';
 
 export function BanUserForm() {
   const { form, onSubmit, mutation } = useBanUser();
@@ -28,17 +28,17 @@ export function BanUserForm() {
 
   const options = React.useMemo(
     () => [
-      { value: "9999", label: "Forever ban" },
-      { value: "1", label: "1 Day" },
-      { value: "2", label: "2 Days" },
-      { value: "3", label: "3 Days" },
-      { value: "5", label: "5 Days" },
-      { value: "7", label: "7 Days" },
-      { value: "14", label: "14 Days" },
-      { value: "30", label: "30 Days" },
-      { value: "90", label: "90 Days" },
+      { value: '9999', label: 'Forever ban' },
+      { value: '1', label: '1 Day' },
+      { value: '2', label: '2 Days' },
+      { value: '3', label: '3 Days' },
+      { value: '5', label: '5 Days' },
+      { value: '7', label: '7 Days' },
+      { value: '14', label: '14 Days' },
+      { value: '30', label: '30 Days' },
+      { value: '90', label: '90 Days' },
     ],
-    [],
+    []
   );
 
   return (

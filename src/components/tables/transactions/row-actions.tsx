@@ -28,6 +28,10 @@ export function RowActions({ row }: RowActionsProps) {
     createEditTransactionStore.onOpen({ id: transactionId });
   };
 
+  const onEditTransactionBudget = () => {
+    return null;
+  };
+
   const onDeleteTransaction = () => {
     deleteTransactionStore.onOpen({ id: transactionId });
   };
@@ -47,6 +51,9 @@ export function RowActions({ row }: RowActionsProps) {
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={onEditTransaction}>
           Edit transaction
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={onEditTransactionBudget}>
+          Edit budget
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
