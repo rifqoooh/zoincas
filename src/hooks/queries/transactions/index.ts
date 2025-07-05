@@ -2,6 +2,7 @@ import type { ErrorResponseAPI } from '@/lib/api/types';
 import type {
   InsertTransactionsType,
   SelectTransactionsType,
+  UpdateTransactionsType,
 } from '@/validators/db/transactions';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -131,7 +132,7 @@ export const useUpdateTransactionMutation = (transactionId?: string) => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: async (input: InsertTransactionsType) => {
+    mutationFn: async (input: UpdateTransactionsType) => {
       if (!transactionId) {
         throw new Error('The transaction ID is required.');
       }

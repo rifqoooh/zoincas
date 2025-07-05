@@ -7,7 +7,7 @@ import { useGetTransactionQuery } from '@/hooks/queries/transactions';
 import { useCreateEditTransactionModal } from '@/hooks/store/create-edit-transaction';
 import { useIsClient } from '@/hooks/use-is-client';
 
-export function CreateTransactionModal() {
+export function CreateEditTransactionModal() {
   const store = useCreateEditTransactionModal();
   const isCreating = store.id === undefined;
 

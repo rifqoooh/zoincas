@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import { useListBalancesQuery } from '@/hooks/queries/balances';
+import { useListBudgetPlansQuery } from '@/hooks/queries/budget-plans';
 import { useListCategoriesQuery } from '@/hooks/queries/categories';
 import {
   useCreateTransactionMutation,
@@ -16,7 +17,6 @@ import {
 } from '@/hooks/queries/transactions';
 import { useCreateEditTransactionModal } from '@/hooks/store/create-edit-transaction';
 import { insertTransactionsSchema } from '@/validators/db/transactions';
-import { useListBudgetPlansQuery } from '../queries/budget-plans';
 
 export const useCreateEditTransaction = () => {
   const store = useCreateEditTransactionModal();
@@ -32,7 +32,7 @@ export const useCreateEditTransaction = () => {
   const budgetCategoriesQuery = useListBudgetPlansQuery();
 
   // fallback to default values transactions data is undefined
-  const transactionData = transactionQuery.data
+  const transactionData: InsertTransactionsType = transactionQuery.data
     ? {
         ...transactionQuery.data,
         balanceId: transactionQuery.data.balance.id,

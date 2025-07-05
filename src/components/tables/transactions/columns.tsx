@@ -12,7 +12,9 @@ import {
 
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useAssignBudgetTransactionModal } from '@/hooks/store/assign-budget-transaction';
 import { cn, formatCurrency } from '@/lib/utilities';
 import { RowActions } from './row-actions';
 
@@ -142,7 +144,26 @@ export const transactionsColumns = ({
         <DataTableColumnHeader column={column} title="Budget" />
       ),
       cell: ({ row }) => {
-        const { budget } = row.original;
+        const { id: transactionId, budget } = row.original;
+
+        const store = useAssignBudgetTransactionModal();
+
+        const onClick = () => {
+          store.onOpen({ id: transactionId });
+        };
+
+        if (!budget.plan.id) {
+          return (
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-muted-foreground"
+              onClick={onClick}
+            >
+              Assign budget
+            </Button>
+          );
+        }
 
         return (
           <div className="flex flex-col gap-0.5">
@@ -155,7 +176,7 @@ export const transactionsColumns = ({
         label: 'Budget',
         variant: 'groupSelect',
         groupOptions: budgetOptions,
-        icon: CreditCardIcon,
+        icon: PiggyBankIcon,
       },
       enableColumnFilter: true,
       enableSorting: false,
@@ -177,7 +198,7 @@ export const transactionsColumns = ({
         label: 'Balance',
         variant: 'select',
         options: balanceOptions,
-        icon: PiggyBankIcon,
+        icon: CreditCardIcon,
       },
       enableColumnFilter: true,
       enableSorting: false,
