@@ -12,6 +12,7 @@ import { useListBudgetPlansQuery } from '@/hooks/queries/budget-plans';
 import { useListCategoriesQuery } from '@/hooks/queries/categories';
 import { useListTransactionsQuery } from '@/hooks/queries/transactions';
 import { useDataTable } from '@/hooks/use-data-table';
+import { ActionsBar } from './actions-bar';
 import { transactionsColumns } from './columns';
 
 const paginationDefault = {
@@ -92,6 +93,7 @@ export function TransactionsTable() {
   return (
     <DataTable
       table={table}
+      actionBar={<ActionsBar table={table} />}
       isLoading={isLoading}
       fallback={
         <DataTableSkeleton

@@ -34,9 +34,9 @@ export function BalancesNavigation() {
       <SidebarMenu>
         {isPending ? (
           <div className="flex flex-col gap-1">
-            <Skeleton className="h-8 w-full" />
-            <Skeleton className="h-8 w-full" />
-            <Skeleton className="h-8 w-full" />
+            <Skeleton className="h-13 w-full" />
+            <Skeleton className="h-13 w-full" />
+            <Skeleton className="h-13 w-full" />
           </div>
         ) : (
           balances.map((item) => (
