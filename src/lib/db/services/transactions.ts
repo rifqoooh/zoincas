@@ -1,5 +1,8 @@
 import type { ListTransactionsQuery } from '@/validators/api/transactions/request';
-import type { InsertTransactionsType } from '@/validators/db/transactions';
+import type {
+  InsertTransactionsType,
+  UpdateTransactionsType,
+} from '@/validators/db/transactions';
 
 import { db } from '@/lib/db';
 import {
@@ -170,7 +173,7 @@ export const createTransaction = async (input: InsertTransactionsType) => {
         .insert(categories)
         .values({
           name: input.categoryId ?? 'Untitled',
-          userId: userId,
+          userId,
         })
         .returning({
           id: categories.id,
@@ -232,7 +235,7 @@ export const getTransaction = async (userId: string, transactionId: string) => {
 export const updateTransaction = async (
   userId: string,
   transactionId: string,
-  input: InsertTransactionsType
+  input: UpdateTransactionsType
 ) => {
   const updatedAt = new Date();
 
@@ -240,21 +243,12 @@ export const updateTransaction = async (
     // If input category id is not UUID we know it is a new category to create
     const parsedCategoryId = z.string().uuid().safeParse(input.categoryId);
     if (!parsedCategoryId.success) {
-      // Get user id from input balance id
-      const [{ userId }] = await tx
-        .select({
-          userId: balances.userId,
-        })
-        .from(balances)
-        .where(eq(balances.id, input.balanceId))
-        .limit(1);
-
       // Create a new category
       const [{ id }] = await tx
         .insert(categories)
         .values({
           name: input.categoryId ?? 'Untitled',
-          userId: userId,
+          userId,
         })
         .returning({
           id: categories.id,

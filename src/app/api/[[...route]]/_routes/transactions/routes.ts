@@ -17,6 +17,7 @@ import {
 import {
   insertTransactionsSchema,
   selectTransactionsSchema,
+  updateTransactionsSchema,
 } from '@/validators/db/transactions';
 import {
   createTransactionInputErrors,
@@ -131,7 +132,7 @@ export const updateTransaction = createRoute({
   request: {
     params: transactionIdParamSchema,
     body: ContentJSONRequired(
-      insertTransactionsSchema,
+      updateTransactionsSchema,
       'The transaction to update.'
     ),
   },
