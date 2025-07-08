@@ -2,7 +2,7 @@ import './globals.css';
 
 import type * as React from 'react';
 
-import { poppins } from '@/lib/fonts';
+import { spaceGrotesk } from '@/lib/fonts';
 import { Provider } from '@/providers';
 
 type RootLayoutProps = {
@@ -12,7 +12,7 @@ type RootLayoutProps = {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={poppins}>
+      <body className={spaceGrotesk}>
         <Provider>{children}</Provider>
       </body>
     </html>
