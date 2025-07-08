@@ -14,25 +14,23 @@ export const metadata: Metadata = createMetadata({
 
 export default function TransactionsPage() {
   return (
-    <main>
-      <Container>
-        <div className="flex flex-col gap-4 py-6 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="font-semibold text-2xl">Transactions</h1>
-            <p className=" text-muted-foreground sm:text-sm/6">
-              Powerful transactions table for tracking your transactions
-            </p>
-          </div>
-
-          <CreateTransactionButton />
+    <Container>
+      <div className="flex flex-col gap-4 py-6 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-2xl uppercase">Transactions</h1>
+          <p className=" text-muted-foreground sm:text-sm/6">
+            Powerful transactions table for tracking your transactions
+          </p>
         </div>
 
-        <Separator />
+        <CreateTransactionButton />
+      </div>
 
-        <div className="py-6">
-          <TransactionsTable />
-        </div>
-      </Container>
-    </main>
+      <Separator />
+
+      <div className="py-6">
+        <TransactionsTable />
+      </div>
+    </Container>
   );
 }

@@ -14,7 +14,7 @@ import { DataTableColumnHeader } from '@/components/data-table/data-table-column
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { useAssignBudgetTransactionModal } from '@/hooks/store/assign-budget-transaction';
+import { useCreateEditTransactionModal } from '@/hooks/store/create-edit-transaction';
 import { cn, formatCurrency } from '@/lib/utilities';
 import { RowActions } from './row-actions';
 
@@ -137,7 +137,7 @@ export const transactionsColumns = ({
     },
     {
       id: 'budget',
-      accessorKey: 'budget',
+      accessorFn: (row) => row.budget.plan.title,
       header: ({
         column,
       }: { column: Column<TransactionsDataType, unknown> }) => (
@@ -146,10 +146,10 @@ export const transactionsColumns = ({
       cell: ({ row }) => {
         const { id: transactionId, budget } = row.original;
 
-        const store = useAssignBudgetTransactionModal();
+        const createEditTransactionStore = useCreateEditTransactionModal();
 
         const onClick = () => {
-          store.onOpen({ id: transactionId });
+          createEditTransactionStore.onOpen({ id: transactionId });
         };
 
         if (!budget.plan.id) {
@@ -174,7 +174,7 @@ export const transactionsColumns = ({
       },
       meta: {
         label: 'Budget',
-        variant: 'groupSelect',
+        variant: 'groupMultiSelect',
         groupOptions: budgetOptions,
         icon: PiggyBankIcon,
       },
@@ -183,7 +183,7 @@ export const transactionsColumns = ({
     },
     {
       id: 'balance',
-      accessorKey: 'balance',
+      accessorFn: (row) => row.balance.name,
       header: ({
         column,
       }: { column: Column<TransactionsDataType, unknown> }) => (
@@ -242,7 +242,7 @@ export const transactionsColumns = ({
     },
     {
       id: 'category',
-      accessorKey: 'category',
+      accessorFn: (row) => row.category.name,
       header: ({
         column,
       }: { column: Column<TransactionsDataType, unknown> }) => (

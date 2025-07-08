@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 export const budgetPlansDataSchema = selectBudgetPlansSchema
   .extend({
+    total: z.number(),
     categories: z
       .object({
         id: z.string().uuid(),

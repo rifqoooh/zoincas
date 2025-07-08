@@ -11,8 +11,8 @@ import {
 } from '@/components/ui/sheet';
 
 interface ResponsiveSheetProps {
-  title?: string;
-  description?: string;
+  title: string;
+  description: string;
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
@@ -29,8 +29,8 @@ export function ResponsiveSheet({
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent>
         <SheetHeader>
-          {title && <SheetTitle>{title}</SheetTitle>}
-          {description && <SheetDescription>{description}</SheetDescription>}
+          <SheetTitle className="font-normal uppercase">{title}</SheetTitle>
+          <SheetDescription>{description}</SheetDescription>
         </SheetHeader>
         <div className="py-4">{children}</div>
       </SheetContent>

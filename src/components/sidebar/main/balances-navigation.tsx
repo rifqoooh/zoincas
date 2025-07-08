@@ -2,6 +2,8 @@
 
 import * as React from 'react';
 
+import Link from 'next/link';
+
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -19,10 +21,11 @@ export function BalancesNavigation() {
 
   const balances = React.useMemo(() => {
     return data.map((balance) => ({
+      id: balance.id,
       name: balance.name,
       count: balance.transactions.count,
       description: formatCurrency(balance.transactions.sum),
-      url: `/balances/${balance.id}`,
+      url: `/transactions?balance=${balance.id}`,
     }));
   }, [data]);
 
@@ -42,7 +45,7 @@ export function BalancesNavigation() {
           balances.map((item) => (
             <SidebarMenuItem key={item.name}>
               <SidebarMenuButton className="h-auto px-4" asChild>
-                <a href={item.url}>
+                <Link href={item.url}>
                   <div className="flex w-full flex-row items-center justify-between">
                     <div className="flex flex-col">
                       <span>{item.name}</span>
@@ -52,7 +55,7 @@ export function BalancesNavigation() {
                     </div>
                     <span className="font-mono text-xs">{item.count}</span>
                   </div>
-                </a>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))

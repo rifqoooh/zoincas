@@ -19,8 +19,8 @@ import {
 import { useMediaQuery } from '@/hooks/use-media-query';
 
 interface ResponsiveModalProps {
-  title?: string;
-  description?: string;
+  title: string;
+  description: string;
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
@@ -53,8 +53,8 @@ export function ResponsiveModal({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          {title && <DialogTitle>{title}</DialogTitle>}
-          {description && <DialogDescription>{description}</DialogDescription>}
+          <DialogTitle className="font-normal uppercase">{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         {children}
       </DialogContent>

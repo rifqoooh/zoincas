@@ -7,6 +7,7 @@ import type { Column } from '@tanstack/react-table';
 import type { LucideIcon } from 'lucide-react';
 
 import { CheckIcon, PlusCircleIcon, XCircleIcon } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -42,6 +43,10 @@ export function DataTableGroupFacetedFilter<TData, TValue>({
   icon: Icon,
   multiple,
 }: DataTableGroupFacetedFilterProps<TData, TValue>) {
+  const searchParams = useSearchParams();
+  const search = searchParams.get(column?.id ?? '');
+  const searchArray = search ? search.split(',') : [];
+
   const [open, setOpen] = React.useState(false);
 
   const flattenOptions = React.useMemo(() => {
@@ -55,7 +60,7 @@ export function DataTableGroupFacetedFilter<TData, TValue>({
 
   const columnFilterValue = column?.getFilterValue();
   const selectedValues = new Set(
-    Array.isArray(columnFilterValue) ? columnFilterValue : []
+    Array.isArray(columnFilterValue) ? columnFilterValue : searchArray
   );
 
   const onItemSelect = React.useCallback(

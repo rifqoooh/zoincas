@@ -39,7 +39,7 @@ export const menus: Menu[] = [
   },
   {
     title: 'Budget Plans',
-    url: '/budget-plans',
+    url: '/budgets',
     icon: PiggyBankIcon,
   },
 ];

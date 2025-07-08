@@ -31,7 +31,7 @@ export function MainNavigation() {
     () =>
       data.map((category) => ({
         title: category.name,
-        url: `/categories/${category.id}`,
+        url: `/transactions?category=${category.id}`,
       })),
     [data]
   );

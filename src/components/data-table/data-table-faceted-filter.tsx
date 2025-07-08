@@ -7,6 +7,7 @@ import type { Column } from '@tanstack/react-table';
 import type { LucideIcon } from 'lucide-react';
 
 import { CheckIcon, PlusCircleIcon, XCircleIcon } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -42,11 +43,20 @@ export function DataTableFacetedFilter<TData, TValue>({
   icon: Icon,
   multiple,
 }: DataTableFacetedFilterProps<TData, TValue>) {
+  const searchParams = useSearchParams();
+  const search = searchParams.get(column?.id ?? '');
+  const searchArray = search ? search.split(',') : [];
+
   const [open, setOpen] = React.useState(false);
 
   const columnFilterValue = column?.getFilterValue();
   const selectedValues = new Set(
-    Array.isArray(columnFilterValue) ? columnFilterValue : []
+    Array.isArray(columnFilterValue)
+      ? columnFilterValue
+      : // biome-ignore lint/nursery/noNestedTernary: <explanation>
+        searchArray.length > 0
+        ? searchArray
+        : []
   );
 
   const onItemSelect = React.useCallback(

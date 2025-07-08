@@ -84,7 +84,6 @@ export function TransactionsTable() {
       columnPinning: { right: ['actions'] },
     },
     getRowId: (originalRow: TransactionsDataType) => originalRow.id,
-
     clearOnDefault: true,
   });
 
