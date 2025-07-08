@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { Container } from '@/components/container';
+import { CreateBudgetPlanButton } from '@/components/modal/create-edit-budget-plan/button';
 import { Separator } from '@/components/ui/separator';
 import { createMetadata } from '@/lib/seo/metadata';
 import { BudgetPlanCards } from '../_components/budget-plan-cards';
@@ -21,6 +22,8 @@ export default function BudgetsPage() {
             Budgeting your incomes and expenses for tracking your transactions
           </p>
         </div>
+
+        <CreateBudgetPlanButton />
       </div>
 
       <Separator />

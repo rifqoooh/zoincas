@@ -39,12 +39,17 @@ export function BudgetBar({ data }: BudgetBarProps) {
       <div className="group flex w-full items-center rounded-md bg-secondary">
         <div
           className={cn(
-            'flex h-5 items-center rounded-sm bg-orange-400 group-hover:bg-opacity-80',
-            width <= 35 && 'bg-emerald-400',
-            width >= 75 && 'bg-rose-400',
-            remaining < 0 && 'bg-red-500'
+            'flex h-5 animate-shine items-center rounded-sm group-hover:bg-opacity-80',
+            'bg-gradient-to-r from-40% from-orange-500 via-50% via-orange-400 to-60% to-orange-500',
+            width <= 35 &&
+              'bg-gradient-to-r from-40% from-emerald-500 via-50% via-emerald-400 to-60% to-emerald-500',
+            width >= 75 &&
+              'bg-gradient-to-r from-40% from-rose-500 via-50% via-rose-400 to-60% to-rose-500',
+            remaining < 0 &&
+              'bg-gradient-to-r from-40% from-red-500 via-50% via-red-400 to-60% to-red-500'
           )}
           style={{
+            backgroundSize: '200% 100%',
             width: `${width}%`,
           }}
         />
