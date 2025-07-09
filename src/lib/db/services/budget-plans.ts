@@ -44,7 +44,7 @@ export const listBudgetPlansSummary = async (userId: string) => {
           orderBy: { colName: summary.name, direction: 'ASC' },
           notNullColumn: 'id',
         }
-      ),
+      ).as('categories'),
     })
     .from(budgetPlans)
     .leftJoin(summary, eq(budgetPlans.id, summary.id))
