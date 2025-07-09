@@ -37,7 +37,7 @@ export function CreateEditTransactionModal() {
   );
 }
 
-export function SkeletonForm() {
+function SkeletonForm() {
   return (
     <div className="grid gap-10">
       <div className="flex flex-col gap-2">

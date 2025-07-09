@@ -26,3 +26,7 @@ export const listBudgetPlansSummaryResponse = budgetPlansDataSchema.array();
 export type ListBudgetPlansSummaryResponse = z.infer<
   typeof listBudgetPlansSummaryResponse
 >;
+
+export const getBudgetPlanResponse = budgetPlansDataSchema;
+
+export type GetBudgetPlanResponse = z.infer<typeof getBudgetPlanResponse>;
