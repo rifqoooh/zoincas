@@ -1,11 +1,8 @@
 import * as React from 'react';
 
-import type { BudgetPlansDataType } from '@/validators/api/budget-plans/response';
-
-import { SquarePenIcon } from 'lucide-react';
-
 import { Button } from '@/components/ui/button';
 import { cn, formatCurrency } from '@/lib/utilities';
+import type { BudgetPlansDataType } from '@/validators/api/budget-plans/response';
 
 type CategoryType = BudgetPlansDataType['categories'][0];
 
@@ -28,10 +25,9 @@ export function BudgetBar({ data }: BudgetBarProps) {
     <div className="grid gap-2">
       <div className="flex items-center">
         <div className="flex grow items-center gap-2">
-          <Button className="size-8 gap-2" variant="outline" size="icon">
-            <SquarePenIcon className="size-4" />
+          <Button variant="link" className="h-auto p-0">
+            <p className="truncate font-medium text-lg">{data.name}</p>
           </Button>
-          <h1 className="truncate font-medium text-lg">{data.name}</h1>
         </div>
 
         <p className="font-medium">{formatCurrency(data.amount)}</p>
@@ -40,13 +36,13 @@ export function BudgetBar({ data }: BudgetBarProps) {
         <div
           className={cn(
             'flex h-5 animate-shine items-center rounded-sm group-hover:bg-opacity-80',
-            'bg-gradient-to-r from-40% from-orange-500 via-50% via-orange-400 to-60% to-orange-500',
-            width <= 35 &&
-              'bg-gradient-to-r from-40% from-emerald-500 via-50% via-emerald-400 to-60% to-emerald-500',
+            'bg-gradient-to-r from-40% from-emerald-400 via-50% via-emerald-300 to-60% to-emerald-400 dark:from-emerald-500 dark:via-emerald-400 dark:to-emerald-500',
+            width >= 35 &&
+              'bg-gradient-to-r from-40% from-orange-400 via-50% via-orange-300 to-60% to-orange-400 dark:from-orange-500 dark:via-orange-400 dark:to-orange-500',
             width >= 75 &&
-              'bg-gradient-to-r from-40% from-rose-500 via-50% via-rose-400 to-60% to-rose-500',
+              'bg-gradient-to-r from-40% from-rose-400 via-50% via-rose-300 to-60% to-rose-400 dark:from-rose-500 dark:via-rose-400 dark:to-rose-500',
             remaining < 0 &&
-              'bg-gradient-to-r from-40% from-red-500 via-50% via-red-400 to-60% to-red-500'
+              'bg-gradient-to-r from-40% from-red-400 via-50% via-red-300 to-60% to-red-400 dark:from-red-500 dark:via-red-400 dark:to-red-500'
           )}
           style={{
             backgroundSize: '200% 100%',

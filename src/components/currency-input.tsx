@@ -8,16 +8,20 @@ import { Button } from '@/components/ui/button';
 import { cn, mergeRefs } from '@/lib/utilities';
 
 interface CurrencyInputProps {
+  className?: string;
   placeholder?: string;
   value: string | number;
+  hidePlusButton?: boolean;
   onChange?: (value: string | undefined) => void;
   disabled?: boolean;
   ref: React.Ref<HTMLInputElement>;
 }
 
 export function CurrencyInput({
+  className,
   placeholder,
   value,
+  hidePlusButton,
   onChange,
   disabled,
   ref,
@@ -114,13 +118,14 @@ export function CurrencyInput({
   return (
     <div
       className={cn(
-        'flex w-full items-center rounded-md border border-input caret-primary ring-offset-background transition-[color,box-shadow] placeholder:text-muted-foreground focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-input/30',
+        'items-centerr flex w-full rounded-md border border-input caret-primary ring-offset-background transition-[color,box-shadow] placeholder:text-muted-foreground focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-input/30',
         { 'text-green-500': isPositiveNum },
-        { 'text-red-500': !isPositiveNum }
+        { 'text-red-500': !isPositiveNum },
+        className
       )}
     >
       <CurrencyInputPrimitive
-        className="h-9 grow rounded-md px-3 py-2 pr-0 text-sm focus-visible:outline-none"
+        className="h-8.5 w-full min-w-0 grow px-3 pr-0 text-base focus-visible:outline-none md:text-sm"
         placeholder={placeholder}
         value={value}
         decimalsLimit={0}
@@ -133,7 +138,7 @@ export function CurrencyInput({
         ref={mergeRefs([inputRef, ref])}
       />
 
-      <div className="flex items-center">
+      <div className={cn('flex items-center', hidePlusButton && 'hidden')}>
         <Button
           type="button"
           tabIndex={-1}
