@@ -1,7 +1,10 @@
 import type { ErrorResponseAPI } from '@/lib/api/types';
 
 import { budgetPlans } from '@/lib/api/rpc';
-import { listBudgetPlansSummaryResponse } from '@/validators/api/budget-plans/response';
+import {
+  getBudgetPlanResponse,
+  listBudgetPlansSummaryResponse,
+} from '@/validators/api/budget-plans/response';
 import { useQuery } from '@tanstack/react-query';
 import { budgetPlansKeys } from './keys';
 
@@ -17,6 +20,36 @@ export const useListBudgetPlansQuery = () => {
 
       const data = await response.json();
       const parsedData = listBudgetPlansSummaryResponse.safeParse(data);
+      if (!parsedData.success) {
+        throw new Error('There is an error when parsing response data.');
+      }
+
+      return parsedData.data;
+    },
+  });
+
+  return query;
+};
+
+export const useGetBudgetPlanQuery = (budgetPlanId?: string) => {
+  const query = useQuery({
+    enabled: !!budgetPlanId,
+    queryKey: budgetPlansKeys.budgetPlan({ budgetPlanId }),
+    queryFn: async () => {
+      if (!budgetPlanId) {
+        throw new Error('The budget plan ID is required.');
+      }
+
+      const response = await budgetPlans[':budgetPlanId'].$get({
+        param: { budgetPlanId },
+      });
+      if (!response.ok) {
+        const err = (await response.json()) as unknown as ErrorResponseAPI;
+        throw new Error(err.error.message);
+      }
+
+      const data = await response.json();
+      const parsedData = getBudgetPlanResponse.safeParse(data);
       if (!parsedData.success) {
         throw new Error('There is an error when parsing response data.');
       }
