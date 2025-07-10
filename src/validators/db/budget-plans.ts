@@ -1,5 +1,5 @@
 import { createSchemaFactory } from 'drizzle-zod';
-import type { z } from 'zod';
+import { z } from 'zod';
 
 import { budgetPlans } from '@/lib/db/schema';
 import { insertBudgetCategoriesSchema } from './budget-categories';
@@ -40,3 +40,23 @@ export const updateBudgetPlansSchema = createUpdateSchema(budgetPlans)
   });
 
 export type UpdateBudgetPlansType = z.infer<typeof updateBudgetPlansSchema>;
+
+export const insertBudgetPlansFormSchema = createInsertSchema(budgetPlans)
+  .extend({
+    categories: insertBudgetCategoriesSchema
+      .extend({
+        categoryId: z.string().uuid().optional(),
+      })
+      .omit({ id: true })
+      .array(),
+  })
+  .omit({
+    id: true,
+    userId: true,
+    createdAt: true,
+    updatedAt: true,
+  });
+
+export type InsertBudgetPlansFormType = z.infer<
+  typeof insertBudgetPlansFormSchema
+>;

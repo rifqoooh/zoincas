@@ -4,6 +4,7 @@ import { createRoute, z } from '@hono/zod-openapi';
 
 import {
   ContentJSON,
+  ContentJSONRequired,
   createErrorSchema,
   createNotFoundSchema,
 } from '@/lib/api/openapi-utilities';
@@ -12,6 +13,10 @@ import {
   getBudgetPlanResponse,
   listBudgetPlansSummaryResponse,
 } from '@/validators/api/budget-plans/response';
+import {
+  insertBudgetPlansSchema,
+  selectBudgetPlansSchema,
+} from '@/validators/db/budget-plans';
 
 const tags = ['Budget Plans'];
 
@@ -46,6 +51,28 @@ export const listBudgetPlansSummary = createRoute({
   },
 });
 
+export const createBudgetPlan = createRoute({
+  method: 'post',
+  path: '/budget-plans',
+  tags,
+  middleware: [protectedMiddleware()],
+  request: {
+    body: ContentJSONRequired(
+      insertBudgetPlansSchema,
+      'The budget plan and its categories to create.'
+    ),
+  },
+  responses: {
+    [StatusCode.OK]: ContentJSON(selectBudgetPlansSchema, 'The budget plan.'),
+    [StatusCode.NOT_FOUND]: ContentJSON(
+      createNotFoundSchema({
+        path: '/budget-plans',
+      }),
+      'The budget plan with the requested ID does not exist in our resources.'
+    ),
+  },
+});
+
 export const getBudgetPlan = createRoute({
   method: 'get',
   path: '/budget-plans/{budgetPlanId}',
@@ -75,4 +102,5 @@ export const getBudgetPlan = createRoute({
 });
 
 export type ListBudgetPlansSummary = typeof listBudgetPlansSummary;
+export type CreateBudgetPlan = typeof createBudgetPlan;
 export type GetBudgetPlan = typeof getBudgetPlan;

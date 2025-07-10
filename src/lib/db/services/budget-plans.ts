@@ -3,6 +3,7 @@ import { and, desc, eq, sum } from 'drizzle-orm';
 import { db } from '@/lib/db';
 import { budgetCategories, budgetPlans, transactions } from '@/lib/db/schema';
 import { coalesce, jsonAggBuildObject } from '@/lib/db/utilities';
+import type { InsertBudgetPlansType } from '@/validators/db/budget-plans';
 
 export const listBudgetPlansSummary = async (userId: string) => {
   const summary = db.$with('budget_plan_categories_summary').as(
@@ -51,6 +52,37 @@ export const listBudgetPlansSummary = async (userId: string) => {
     .where(eq(budgetPlans.userId, userId))
     .groupBy(budgetPlans.id)
     .orderBy(desc(budgetPlans.createdAt));
+
+  return data;
+};
+
+export const createBudgetPlan = async (
+  userId: string,
+  budgetPlan: InsertBudgetPlansType
+) => {
+  const data = await db.transaction(async (tx) => {
+    // create budget plan
+    const [plan] = await tx
+      .insert(budgetPlans)
+      .values({
+        title: budgetPlan.title,
+        userId,
+      })
+      .returning();
+
+    // create budget categories
+    if (budgetPlan.categories.length) {
+      for (const category of budgetPlan.categories) {
+        await tx.insert(budgetCategories).values({
+          budgetPlanId: plan.id,
+          name: category.name,
+          amount: category.amount,
+        });
+      }
+    }
+
+    return plan;
+  });
 
   return data;
 };
