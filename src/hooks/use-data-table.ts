@@ -222,10 +222,10 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
             ? value
             : // biome-ignore lint/performance/useTopLevelRegex: <explanation>
               // biome-ignore lint/nursery/noNestedTernary: <explanation>
-              typeof value === 'string' && /[^a-zA-Z0-9]/.test(value)
+              typeof value === 'string' && /[^a-zA-Z0-9-]/.test(value)
               ? value
                   // biome-ignore lint/performance/useTopLevelRegex: <explanation>
-                  .split(/[^a-zA-Z0-9]+/)
+                  .split(/[^a-zA-Z0-9-]+/)
                   .filter(Boolean)
               : [value];
 

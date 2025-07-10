@@ -49,6 +49,19 @@ export function DataTableGroupFacetedFilter<TData, TValue>({
 
   const [open, setOpen] = React.useState(false);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  React.useEffect(() => {
+    const onInitialSelect = () => {
+      if (!column) {
+        return;
+      }
+
+      column.setFilterValue(searchArray.length ? searchArray : undefined);
+    };
+
+    onInitialSelect();
+  }, [search]);
+
   const flattenOptions = React.useMemo(() => {
     return groupOptions.flatMap(({ group, options }) =>
       options.map((option) => ({
@@ -60,7 +73,7 @@ export function DataTableGroupFacetedFilter<TData, TValue>({
 
   const columnFilterValue = column?.getFilterValue();
   const selectedValues = new Set(
-    Array.isArray(columnFilterValue) ? columnFilterValue : searchArray
+    Array.isArray(columnFilterValue) ? columnFilterValue : []
   );
 
   const onItemSelect = React.useCallback(
