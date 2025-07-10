@@ -1,6 +1,7 @@
 import type {
   AuthType,
   BalancesType,
+  BudgetCategoriesType,
   BudgetPlansType,
   CategoriesType,
   TransactionsType,
@@ -20,3 +21,6 @@ export const categories = hc<CategoriesType>(env().NEXT_PUBLIC_APP_URL).api
 export const budgetPlans = hc<BudgetPlansType>(env().NEXT_PUBLIC_APP_URL).api[
   'budget-plans'
 ];
+export const budgetCategories = hc<BudgetCategoriesType>(
+  env().NEXT_PUBLIC_APP_URL
+).api['budget-categories'];

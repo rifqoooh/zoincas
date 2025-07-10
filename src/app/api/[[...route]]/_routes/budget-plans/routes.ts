@@ -16,12 +16,15 @@ import {
 const tags = ['Budget Plans'];
 
 export const budgetPlanIdParamSchema = z.object({
-  budgetPlanId: z.string().openapi({
-    param: {
-      name: 'budgetPlanId',
-      in: 'path',
-    },
-  }),
+  budgetPlanId: z
+    .string()
+    .uuid()
+    .openapi({
+      param: {
+        name: 'budgetPlanId',
+        in: 'path',
+      },
+    }),
 });
 
 export const listBudgetPlansSummary = createRoute({

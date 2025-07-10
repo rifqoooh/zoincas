@@ -4,6 +4,7 @@ import configureOpenAPI from '@/lib/api/configure-open-api';
 import { createApp } from '@/lib/api/create-app';
 
 import balances from './_routes/balances';
+import budgetCategories from './_routes/budget-categories';
 import budgetPlans from './_routes/budget-plans';
 import categories from './_routes/categories';
 import sessions from './_routes/sessions';
@@ -21,6 +22,7 @@ const transactionsRoutes = app.route('/', transactions);
 const balancesRoutes = app.route('/', balances);
 const categoriesRoutes = app.route('/', categories);
 const budgetPlansRoutes = app.route('/', budgetPlans);
+const budgetCategoriesRoutes = app.route('/', budgetCategories);
 
 export const GET = handle(app);
 export const POST = handle(app);
@@ -32,3 +34,4 @@ export type TransactionsType = typeof transactionsRoutes;
 export type BalancesType = typeof balancesRoutes;
 export type CategoriesType = typeof categoriesRoutes;
 export type BudgetPlansType = typeof budgetPlansRoutes;
+export type BudgetCategoriesType = typeof budgetCategoriesRoutes;

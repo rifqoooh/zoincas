@@ -3,11 +3,19 @@ import z from 'zod';
 
 import { budgetCategories } from '@/lib/db/schema';
 
-const { createInsertSchema, createUpdateSchema } = createSchemaFactory({
-  coerce: {
-    date: true,
-  },
-});
+const { createSelectSchema, createInsertSchema, createUpdateSchema } =
+  createSchemaFactory({
+    coerce: {
+      date: true,
+    },
+  });
+
+export const selectBudgetCategoriesSchema =
+  createSelectSchema(budgetCategories);
+
+export type SelectBudgetCategoriesType = z.infer<
+  typeof selectBudgetCategoriesSchema
+>;
 
 export const insertBudgetCategoriesSchema = createInsertSchema(budgetCategories)
   .extend({
