@@ -10,12 +10,29 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useCreateEditBudgetPlan } from '@/hooks/actions/use-create-edit-budget-plan';
+import { cn } from '@/lib/utilities';
 import { Trash2Icon } from 'lucide-react';
 
 export const CreateEditBudgetPlanForm = () => {
-  const { form, fieldArray, onSubmit, isCreating } = useCreateEditBudgetPlan();
+  const { form, fieldArray, onSubmit, isCreating, deleteStore } =
+    useCreateEditBudgetPlan();
 
   const isPending = false;
+
+  const onRemoveField = ({
+    categoryId,
+    index,
+  }: { categoryId?: string; index: number }) => {
+    if (categoryId) {
+      deleteStore.onOpen({
+        id: categoryId,
+        onSuccess: () => fieldArray.remove(index),
+      });
+      return;
+    }
+
+    fieldArray.remove(index);
+  };
 
   return (
     <Form {...form}>
@@ -40,7 +57,7 @@ export const CreateEditBudgetPlanForm = () => {
               )}
             />
 
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-2">
               {fieldArray.fields.map((field, index) => (
                 <div key={field.id} className="flex gap-1.5">
                   <div className="basis-3/5">
@@ -50,7 +67,9 @@ export const CreateEditBudgetPlanForm = () => {
                       control={form.control}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Category name</FormLabel>
+                          <FormLabel className={cn(index !== 0 && 'hidden')}>
+                            Category name
+                          </FormLabel>
                           <FormControl>
                             <Input
                               {...field}
@@ -70,7 +89,9 @@ export const CreateEditBudgetPlanForm = () => {
                       control={form.control}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Amount</FormLabel>
+                          <FormLabel className={cn(index !== 0 && 'hidden')}>
+                            Amount
+                          </FormLabel>
                           <FormControl>
                             <CurrencyInput
                               {...field}
@@ -84,12 +105,17 @@ export const CreateEditBudgetPlanForm = () => {
                     />
                   </div>
 
-                  <div className="pt-[1.4rem]">
+                  <div className={cn(index !== 0 ? 'pt-0' : 'pt-[1.4rem]')}>
                     <Button
                       type="button"
                       variant="outline"
                       size="icon"
-                      onClick={() => fieldArray.remove(index)}
+                      onClick={() =>
+                        onRemoveField({
+                          categoryId: field.categoryId,
+                          index,
+                        })
+                      }
                       disabled={isPending}
                     >
                       <Trash2Icon />
@@ -101,7 +127,6 @@ export const CreateEditBudgetPlanForm = () => {
               <Button
                 type="button"
                 variant="outline"
-                size="sm"
                 className="w-full"
                 onClick={() =>
                   fieldArray.append({
