@@ -1,3 +1,3 @@
-import { createModalStoreId } from './utilities';
+import { createModalStore } from './utilities';
 
-export const useCreateEditBudgetModal = createModalStoreId();
+export const useCreateEditBudgetModal = createModalStore();

@@ -1,3 +1,3 @@
-import { createModalStoreId } from "./utilities";
+import { createModalStore } from './utilities';
 
-export const useResetPasswordModal = createModalStoreId();
+export const useResetPasswordModal = createModalStore();

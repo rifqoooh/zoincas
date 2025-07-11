@@ -1,3 +1,3 @@
-import { createModalStoreId } from "./utilities";
+import { createModalStore } from './utilities';
 
-export const useBanUserModal = createModalStoreId();
+export const useBanUserModal = createModalStore();
