@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 export type ModalStore = {
   isOpen: boolean;
@@ -40,6 +40,46 @@ export const createModalStoreId = () => {
       props.reset
         ? set({ id: undefined, isOpen: false })
         : set({ id: get().id, isOpen: false });
+    },
+  }));
+};
+
+export interface onOpenWithSuccessCallbackProps {
+  id?: string;
+  onSuccess?: () => void;
+}
+
+export interface onCloseWithSuccessCallbackProps {
+  reset: boolean;
+}
+
+export type ModalStoreIdWithSuccessCallback = {
+  id: string | undefined;
+  onSuccessCallback: (() => void) | undefined;
+  isOpen: boolean;
+  onOpen: (props?: onOpenWithSuccessCallbackProps) => void;
+  onClose: (props?: onCloseWithSuccessCallbackProps) => void;
+};
+
+export const createModalStoreIdWithSuccessCallback = () => {
+  return create<ModalStoreIdWithSuccessCallback>((set, get) => ({
+    id: undefined,
+    onSuccessCallback: undefined,
+    isOpen: false,
+    onOpen: (props?: onOpenWithSuccessCallbackProps) => {
+      set({
+        id: props?.id,
+        isOpen: true,
+        onSuccessCallback: props?.onSuccess,
+      });
+    },
+    onClose: (props: onCloseWithSuccessCallbackProps = { reset: false }) => {
+      const id = props.reset ? undefined : get().id;
+      const onSuccessCallback = props.reset
+        ? undefined
+        : get().onSuccessCallback;
+
+      set({ id, isOpen: false, onSuccessCallback });
     },
   }));
 };
