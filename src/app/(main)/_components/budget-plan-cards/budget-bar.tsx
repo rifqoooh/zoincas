@@ -1,16 +1,25 @@
 import * as React from 'react';
 
-import { Button } from '@/components/ui/button';
-import { cn, formatCurrency } from '@/lib/utilities';
 import type { BudgetPlansDataType } from '@/validators/api/budget-plans/response';
+
+import { Button } from '@/components/ui/button';
+import { useCreateEditBudgetModal } from '@/hooks/store/create-edit-budget';
+import { cn, formatCurrency } from '@/lib/utilities';
 
 type CategoryType = BudgetPlansDataType['categories'][0];
 
 interface BudgetBarProps {
+  id: string;
   data: CategoryType;
 }
 
-export function BudgetBar({ data }: BudgetBarProps) {
+export function BudgetBar({ id, data }: BudgetBarProps) {
+  const store = useCreateEditBudgetModal();
+
+  const onClick = () => {
+    store.onOpen({ id });
+  };
+
   const remaining = React.useMemo(() => data.amount + data.spend, [data]);
 
   const width = React.useMemo(
@@ -25,7 +34,7 @@ export function BudgetBar({ data }: BudgetBarProps) {
     <div className="grid gap-2">
       <div className="flex items-center">
         <div className="flex grow items-center gap-2">
-          <Button variant="link" className="h-auto p-0">
+          <Button variant="link" className="h-auto p-0" onClick={onClick}>
             <p className="truncate font-medium text-lg">{data.name}</p>
           </Button>
         </div>

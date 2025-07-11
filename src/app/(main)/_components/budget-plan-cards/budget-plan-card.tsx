@@ -18,15 +18,18 @@ interface BudgetPlanCardProps {
 export function BudgetPlanCard({ data }: BudgetPlanCardProps) {
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
+      <CardHeader className="flex flex-row items-start justify-between ">
         <div className="grid gap-2">
-          <CardDescription>{data.title}</CardDescription>
-          <CardTitle>{formatCurrency(data.total)}</CardTitle>
+          <CardTitle className="truncate tracking-wide">{data.title}</CardTitle>
+          <CardDescription className="flex flex-wrap gap-1">
+            <span className="text-nowrap">Total amount:</span>
+            <span>{formatCurrency(data.total)}</span>
+          </CardDescription>
         </div>
-        <CardActions id={data.id} />
+        <CardActions data={data} />
       </CardHeader>
       <CardContent className="grid gap-2 px-6">
-        <BudgetBarList data={data.categories} />
+        <BudgetBarList data={data} />
       </CardContent>
     </Card>
   );

@@ -1,4 +1,7 @@
+import type { BudgetPlansDataType } from '@/validators/api/budget-plans/response';
+
 import { MoreHorizontalIcon } from 'lucide-react';
+import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -8,31 +11,54 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useCreateEditBudgetModal } from '@/hooks/store/create-edit-budget';
+import { cn } from '@/lib/utilities';
 
 interface CardActionsProps {
-  id: string;
+  data: BudgetPlansDataType;
+  className?: string;
 }
 
-export function CardActions({ id }: CardActionsProps) {
-  const isPending = false;
+export function CardActions({ data, className }: CardActionsProps) {
+  const href = data.categories.map((category) => category.id).join(',');
+
+  const store = useCreateEditBudgetModal();
+
+  const onClick = () => {
+    store.onOpen({ id: data.id });
+  };
 
   return (
-    <>
-      <DropdownMenu>
+    <div className={cn('flex items-center gap-2', className)}>
+      <Button
+        variant="secondary"
+        className="hidden sm:inline-flex"
+        onClick={onClick}
+      >
+        <span>Edit budget</span>
+      </Button>
+
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
-          <Button className="size-8 p-0" variant="ghost" disabled={isPending}>
+          <Button variant="secondary" size="icon">
             <MoreHorizontalIcon className="size-4" />
-            <span className="sr-only">Open row action</span>
+            <span className="sr-only">Open menu</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem>Create new category</DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href={`/transactions?budget=${href}`}>View transactions</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem>Edit plan</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>View transactions</DropdownMenuItem>
-          <DropdownMenuItem>Edit plan title</DropdownMenuItem>
-          <DropdownMenuItem>Delete plan</DropdownMenuItem>
+          <DropdownMenuItem
+            variant="destructive"
+            className="dark:text-red-500 dark:focus:text-red-500"
+          >
+            Delete budget
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </>
+    </div>
   );
 }
