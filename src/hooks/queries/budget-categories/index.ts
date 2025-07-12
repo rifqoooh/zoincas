@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { budgetCategories } from '@/lib/api/rpc';
 import { selectBudgetCategoriesSchema } from '@/validators/db/budget-categories';
+import { budgetPlansKeys } from '../budget-plans/keys';
 import { budgetCategoriesKeys } from './keys';
 
 export const useDeleteBudgetCategoryMutation = (budgetCategoryId?: string) => {
@@ -35,6 +36,9 @@ export const useDeleteBudgetCategoryMutation = (budgetCategoryId?: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: budgetCategoriesKeys.all(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: budgetPlansKeys.all(),
       });
     },
   });
