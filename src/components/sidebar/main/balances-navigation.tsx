@@ -24,7 +24,9 @@ export function BalancesNavigation() {
       id: balance.id,
       name: balance.name,
       count: balance.transactions.count,
-      description: formatCurrency(balance.transactions.sum),
+      description: formatCurrency(
+        balance.initialAmount + balance.transactions.sum
+      ),
       url: `/transactions?balance=${balance.id}`,
     }));
   }, [data]);
