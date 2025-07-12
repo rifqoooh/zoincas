@@ -14,7 +14,7 @@ export function Provider({ children, ...props }: ProviderProps) {
         <NuqsAdapter>
           {/* <ReactScan /> */}
           {children}
-          <Toaster />
+          <Toaster position="top-center" richColors />
         </NuqsAdapter>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryProvider>

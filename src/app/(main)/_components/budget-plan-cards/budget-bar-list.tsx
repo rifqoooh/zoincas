@@ -14,8 +14,8 @@ export function BudgetBarList({ data }: BarListProps) {
 
   if (data.categories.length === 0) {
     return (
-      <div className="flex h-20 items-center justify-center rounded-md bg-secondary">
-        <p className="text-muted-foreground">No categories</p>
+      <div className="flex h-20 items-center justify-center rounded-md bg-muted p-4">
+        <p className="text-center text-muted-foreground">No categories</p>
       </div>
     );
   }

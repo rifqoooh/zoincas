@@ -11,7 +11,31 @@ export function BudgetPlanCards() {
   const isLoading = budgetPlansQuery.isLoading;
 
   if (isLoading) {
-    return <Skeleton className="h-32 w-full" />;
+    return <Skeleton className="h-49 w-full" />;
+  }
+
+  if (budgetPlansData.length === 0 && !budgetPlansQuery.isError) {
+    return (
+      <div className="flex h-49 w-full items-center justify-center rounded-md bg-card/30 p-6">
+        <p className="text-center text-muted-foreground">
+          No budget plans found.
+          <br />
+          Let's create one!
+        </p>
+      </div>
+    );
+  }
+
+  if (budgetPlansQuery.isError) {
+    return (
+      <div className="flex h-49 w-full items-center justify-center rounded-md bg-card/30 p-6">
+        <p className="text-center text-muted-foreground">
+          There is an error when we trying to get your data.
+          <br />
+          Try again later.
+        </p>
+      </div>
+    );
   }
 
   return (
