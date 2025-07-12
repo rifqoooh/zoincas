@@ -2,6 +2,7 @@ import type { BudgetPlansDataType } from '@/validators/api/budget-plans/response
 
 import { MoreHorizontalIcon } from 'lucide-react';
 import Link from 'next/link';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -11,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useCreateBudgetPlanMutation } from '@/hooks/queries/budget-plans';
 import { useCreateEditBudgetModal } from '@/hooks/store/create-edit-budget';
 import { useDeleteBudgetPlanModal } from '@/hooks/store/delete-budget-plan';
 import { cn } from '@/lib/utilities';
@@ -26,8 +28,33 @@ export function CardActions({ data, className }: CardActionsProps) {
   const createEditBudgetStore = useCreateEditBudgetModal();
   const deleteBudgetStore = useDeleteBudgetPlanModal();
 
+  const createMutation = useCreateBudgetPlanMutation();
+
   const onEditBudget = () => {
     createEditBudgetStore.onOpen({ id: data.id });
+  };
+
+  const onDuplicateBudget = () => {
+    return toast.promise(
+      createMutation.mutateAsync({
+        title: `Copy of ${data.title}`,
+        categories: data.categories.map((category) => ({
+          name: category.name,
+          amount: category.amount,
+        })),
+      }),
+      {
+        loading: 'Duplicating budget plan...',
+        success: 'Budget plan duplicated successfully',
+        error: (error: unknown) => {
+          if (error instanceof Error) {
+            return error.message;
+          }
+
+          return 'There is an error in the internal server.';
+        },
+      }
+    );
   };
 
   const onDeleteBudget = () => {
@@ -57,6 +84,9 @@ export function CardActions({ data, className }: CardActionsProps) {
           </DropdownMenuItem>
           <DropdownMenuItem onClick={onEditBudget}>
             Edit budget
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={onDuplicateBudget}>
+            Duplicate budget
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
