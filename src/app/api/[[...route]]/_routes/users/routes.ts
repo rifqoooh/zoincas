@@ -54,7 +54,7 @@ export const listUsers = createRoute({
         schema: listUsersQuery,
         message: 'The user query request input is invalid.',
         path: '/users',
-        potentioalInput: listUsersQueryErrors,
+        potentialInput: listUsersQueryErrors,
       }),
       'The validation users request error(s).'
     ),
@@ -76,7 +76,7 @@ export const createUser = createRoute({
         schema: insertUsersSchema,
         message: 'The user creation request input is invalid.',
         path: '/users',
-        potentioalInput: createUserInputErrors,
+        potentialInput: createUserInputErrors,
       }),
       'The validation user creation request error(s).'
     ),
@@ -104,7 +104,7 @@ export const deleteUser = createRoute({
         schema: userIdParamSchema,
         message: 'The user id request params is required.',
         path: '/users/{userId}',
-        potentioalInput: {},
+        potentialInput: {},
       }),
       'The validation delete user request error(s).'
     ),
@@ -133,13 +133,13 @@ export const resetPassword = createRoute({
         schema: resetPasswordInput,
         message: 'The reset password request input is invalid.',
         path: '/users/{userId}/reset-password',
-        potentioalInput: resetPasswordInputErrors,
+        potentialInput: resetPasswordInputErrors,
       }).or(
         createErrorSchema({
           schema: userIdParamSchema,
           message: 'The user id request params is required.',
           path: '/users/{userId}/reset-password',
-          potentioalInput: {},
+          potentialInput: {},
         })
       ),
       'The validation reset password request error(s).'
@@ -168,7 +168,7 @@ export const revokeSession = createRoute({
         schema: userIdParamSchema,
         message: 'The user id request params is required.',
         path: '/users/{userId}/revoke-sessions',
-        potentioalInput: {},
+        potentialInput: {},
       }),
       'The validation revoke sessions request error(s).'
     ),
@@ -197,7 +197,7 @@ export const banUser = createRoute({
         schema: userIdParamSchema,
         message: 'The user id request params is required.',
         path: '/users/{userId}/ban',
-        potentioalInput: {},
+        potentialInput: {},
       }),
       'The validation ban user request error(s).'
     ),
@@ -225,7 +225,7 @@ export const unbanUser = createRoute({
         schema: userIdParamSchema,
         message: 'The user id request params is required.',
         path: '/users/{userId}/unban',
-        potentioalInput: {},
+        potentialInput: {},
       }),
       'The validation unban user request error(s).'
     ),

@@ -58,7 +58,7 @@ export const createCategory = createRoute({
     //     schema: insertCategoriesSchema,
     //     message: 'The category creation request input is invalid.',
     //     path: '/categories',
-    //     potentioalInput: {},
+    //     potentialInput: {},
     //   }),
     //   'The validation category creation request error(s).'
     // ),

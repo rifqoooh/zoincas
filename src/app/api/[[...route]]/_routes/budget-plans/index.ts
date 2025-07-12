@@ -7,7 +7,7 @@ const router = createRouter()
   .openapi(routes.listBudgetPlansSummary, handlers.listBudgetPlansSummary)
   .openapi(routes.createBudgetPlan, handlers.createBudgetPlan)
   .openapi(routes.getBudgetPlan, handlers.getBudgetPlan)
-  // .openapi(routes.updateBudgetPlan, handlers.updateBudgetPlan)
+  .openapi(routes.updateBudgetPlan, handlers.updateBudgetPlan)
   .openapi(routes.deleteBudgetPlan, handlers.deleteBudgetPlan);
 
 export default router;

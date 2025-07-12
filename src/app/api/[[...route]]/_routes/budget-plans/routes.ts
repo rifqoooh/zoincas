@@ -16,6 +16,7 @@ import {
 import {
   insertBudgetPlansSchema,
   selectBudgetPlansSchema,
+  updateBudgetPlansSchema,
 } from '@/validators/db/budget-plans';
 
 const tags = ['Budget Plans'];
@@ -94,9 +95,41 @@ export const getBudgetPlan = createRoute({
         schema: budgetPlanIdParamSchema,
         message: 'The budget plan id request params is required.',
         path: '/budget-plans/{budgetPlanId}',
-        potentioalInput: {},
+        potentialInput: {},
       }),
       'The validation get budget plan request error(s).'
+    ),
+  },
+});
+
+export const updateBudgetPlan = createRoute({
+  method: 'put',
+  path: '/budget-plans/{budgetPlanId}',
+  tags,
+  middleware: [protectedMiddleware()],
+  request: {
+    params: budgetPlanIdParamSchema,
+    body: ContentJSONRequired(
+      updateBudgetPlansSchema,
+      'The budget plan and its categories to update.'
+    ),
+  },
+  responses: {
+    [StatusCode.OK]: ContentJSON(selectBudgetPlansSchema, 'The budget plan.'),
+    [StatusCode.NOT_FOUND]: ContentJSON(
+      createNotFoundSchema({
+        path: '/budget-plans/{budgetPlanId}',
+      }),
+      'The budget plan with the requested ID does not exist in our resources.'
+    ),
+    [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
+      createErrorSchema({
+        schema: budgetPlanIdParamSchema,
+        message: 'The budget plan id request params is required.',
+        path: '/budget-plans/{budgetPlanId}',
+        potentialInput: {},
+      }),
+      'The validation update budget plan request error(s).'
     ),
   },
 });
@@ -122,7 +155,7 @@ export const deleteBudgetPlan = createRoute({
         schema: budgetPlanIdParamSchema,
         message: 'The budget plan id request params is required.',
         path: '/budget-plans/{budgetPlanId}',
-        potentioalInput: {},
+        potentialInput: {},
       }),
       'The validation delete budget plan request error(s).'
     ),
@@ -132,5 +165,5 @@ export const deleteBudgetPlan = createRoute({
 export type ListBudgetPlansSummary = typeof listBudgetPlansSummary;
 export type CreateBudgetPlan = typeof createBudgetPlan;
 export type GetBudgetPlan = typeof getBudgetPlan;
-// export type UpdateBudgetPlan = typeof updateBudgetPlan;
+export type UpdateBudgetPlan = typeof updateBudgetPlan;
 export type DeleteBudgetPlan = typeof deleteBudgetPlan;

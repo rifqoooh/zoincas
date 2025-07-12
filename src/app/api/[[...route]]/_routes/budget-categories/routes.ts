@@ -48,7 +48,7 @@ export const deleteBudgetCategory = createRoute({
         schema: budgetCategoryIdParamSchema,
         message: 'The budget category id request params is required.',
         path: '/budget-categories/{budgetCategoryId}',
-        potentioalInput: {},
+        potentialInput: {},
       }),
       'The validation delete budget category request error(s).'
     ),

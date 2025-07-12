@@ -62,7 +62,7 @@ export const listTransactions = createRoute({
         schema: listTransactionsQuery,
         message: 'The transaction query request input is invalid.',
         path: '/transactions',
-        potentioalInput: listTransactionsQueryErrors,
+        potentialInput: listTransactionsQueryErrors,
       }),
       'The validation transactions request error(s).'
     ),
@@ -90,7 +90,7 @@ export const createTransaction = createRoute({
         schema: insertTransactionsSchema,
         message: 'The transaction creation request input is invalid.',
         path: '/transactions',
-        potentioalInput: createTransactionInputErrors,
+        potentialInput: createTransactionInputErrors,
       }),
       'The validation transaction creation request error(s).'
     ),
@@ -118,7 +118,7 @@ export const getTransaction = createRoute({
         schema: transactionIdParamSchema,
         message: 'The transaction id request params is required.',
         path: '/transactions/{transactionId}',
-        potentioalInput: {},
+        potentialInput: {},
       }),
       'The validation get transaction request error(s).'
     ),
@@ -152,7 +152,7 @@ export const updateTransaction = createRoute({
         schema: transactionIdParamSchema,
         message: 'The transaction id request params is required.',
         path: '/transactions/{transactionId}',
-        potentioalInput: {},
+        potentialInput: {},
       }),
       'The validation update transaction request error(s).'
     ),
@@ -183,7 +183,7 @@ export const deleteTransaction = createRoute({
         schema: transactionIdParamSchema,
         message: 'The transaction id request params is required.',
         path: '/transactions/{transactionId}',
-        potentioalInput: {},
+        potentialInput: {},
       }),
       'The validation delete transaction request error(s).'
     ),

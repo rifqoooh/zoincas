@@ -37,25 +37,25 @@ interface createErrorSchemaProps<T extends ZodSchema> {
   schema: T;
   path: string;
   message: string;
-  potentioalInput: Record<string, unknown> | Record<string, unknown>[] | null;
+  potentialInput: Record<string, unknown> | Record<string, unknown>[] | null;
 }
 
 export const createErrorSchema = <T extends ZodSchema>({
   schema,
   path,
   message,
-  potentioalInput,
+  potentialInput,
 }: createErrorSchemaProps<T>) => {
   let details: ErrorIssuesMap;
-  if (potentioalInput !== undefined) {
-    if (Array.isArray(potentioalInput)) {
-      const errors = potentioalInput.map((input) => {
+  if (potentialInput !== undefined) {
+    if (Array.isArray(potentialInput)) {
+      const errors = potentialInput.map((input) => {
         const result = schema.safeParse(input);
         return formatZodIssues(result.error.issues);
       });
       details = combineIssues(errors);
     } else {
-      const result = schema.safeParse(potentioalInput);
+      const result = schema.safeParse(potentialInput);
       details = formatZodIssues(result.error.issues);
     }
   } else {
