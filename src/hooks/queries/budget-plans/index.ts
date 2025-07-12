@@ -93,3 +93,38 @@ export const useCreateBudgetPlanMutation = () => {
 
   return mutation;
 };
+
+export const useDeleteBudgetPlanMutation = (budgetPlanId?: string) => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: async () => {
+      if (!budgetPlanId) {
+        throw new Error('The budget plan ID is required.');
+      }
+
+      const response = await budgetPlans[':budgetPlanId'].$delete({
+        param: { budgetPlanId },
+      });
+      if (!response.ok) {
+        const err = (await response.json()) as unknown as ErrorResponseAPI;
+        throw new Error(err.error.message);
+      }
+
+      const data = await response.json();
+      const parsedData = selectBudgetPlansSchema.safeParse(data);
+      if (!parsedData.success) {
+        throw new Error('There is an error when parsing response data.');
+      }
+
+      return parsedData.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: budgetPlansKeys.all(),
+      });
+    },
+  });
+
+  return mutation;
+};

@@ -3,7 +3,6 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { ThemeProviderProps } from 'next-themes';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { QueryProvider } from './query';
-import { ReactScan } from './react-scan';
 import { ThemeProvider } from './theme';
 
 interface ProviderProps extends ThemeProviderProps {}
@@ -13,7 +12,7 @@ export function Provider({ children, ...props }: ProviderProps) {
     <ThemeProvider {...props}>
       <QueryProvider>
         <NuqsAdapter>
-          <ReactScan />
+          {/* <ReactScan /> */}
           {children}
           <Toaster />
         </NuqsAdapter>

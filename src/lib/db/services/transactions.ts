@@ -154,6 +154,7 @@ export const listTransactions = async (
   return { data, pagination };
 };
 
+// TODO:
 export const createTransaction = async (input: InsertTransactionsType) => {
   const data = await db.transaction(async (tx) => {
     // If input category id is not UUID we know it is a new category to create

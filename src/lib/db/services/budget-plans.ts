@@ -142,3 +142,17 @@ export const getBudgetPlan = async (userId: string, budgetPlanId: string) => {
 
   return data;
 };
+
+export const deleteBudgetPlan = async (
+  userId: string,
+  budgetPlanId: string
+) => {
+  const [data] = await db
+    .delete(budgetPlans)
+    .where(
+      and(eq(budgetPlans.userId, userId), eq(budgetPlans.id, budgetPlanId))
+    )
+    .returning();
+
+  return data;
+};

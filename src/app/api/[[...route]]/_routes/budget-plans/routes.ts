@@ -101,6 +101,36 @@ export const getBudgetPlan = createRoute({
   },
 });
 
+export const deleteBudgetPlan = createRoute({
+  method: 'delete',
+  path: '/budget-plans/{budgetPlanId}',
+  tags,
+  middleware: [protectedMiddleware()],
+  request: {
+    params: budgetPlanIdParamSchema,
+  },
+  responses: {
+    [StatusCode.OK]: ContentJSON(selectBudgetPlansSchema, 'The budget plan.'),
+    [StatusCode.NOT_FOUND]: ContentJSON(
+      createNotFoundSchema({
+        path: '/budget-plans/{budgetPlanId}',
+      }),
+      'The budget plan with the requested ID does not exist in our resources.'
+    ),
+    [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
+      createErrorSchema({
+        schema: budgetPlanIdParamSchema,
+        message: 'The budget plan id request params is required.',
+        path: '/budget-plans/{budgetPlanId}',
+        potentioalInput: {},
+      }),
+      'The validation delete budget plan request error(s).'
+    ),
+  },
+});
+
 export type ListBudgetPlansSummary = typeof listBudgetPlansSummary;
 export type CreateBudgetPlan = typeof createBudgetPlan;
 export type GetBudgetPlan = typeof getBudgetPlan;
+// export type UpdateBudgetPlan = typeof updateBudgetPlan;
+export type DeleteBudgetPlan = typeof deleteBudgetPlan;
