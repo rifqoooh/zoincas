@@ -40,6 +40,9 @@ export const useDeleteBudgetCategoryMutation = (budgetCategoryId?: string) => {
       queryClient.invalidateQueries({
         queryKey: budgetPlansKeys.all(),
       });
+      queryClient.removeQueries({
+        queryKey: budgetPlansKeys.budgetPlan(),
+      });
     },
   });
 

@@ -39,7 +39,7 @@ export const useListBudgetPlansQuery = () => {
 export const useGetBudgetPlanQuery = (budgetPlanId?: string) => {
   const query = useQuery({
     enabled: !!budgetPlanId,
-    queryKey: budgetPlansKeys.budgetPlan({ budgetPlanId }),
+    queryKey: budgetPlansKeys.budgetPlanId({ budgetPlanId }),
     queryFn: async () => {
       if (!budgetPlanId) {
         throw new Error('The budget plan ID is required.');
@@ -126,6 +126,9 @@ export const useUpdateBudgetPlanMutation = (budgetPlanId?: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: budgetPlansKeys.all(),
+      });
+      queryClient.removeQueries({
+        queryKey: budgetPlansKeys.budgetPlan(),
       });
     },
   });

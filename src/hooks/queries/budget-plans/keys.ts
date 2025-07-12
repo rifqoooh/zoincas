@@ -1,6 +1,7 @@
 export const budgetPlansKeys = {
   all: () => ['budget-plans'],
-  budgetPlan: ({ budgetPlanId }: { budgetPlanId?: string }) => [
+  budgetPlan: () => ['budget-plan'],
+  budgetPlanId: ({ budgetPlanId }: { budgetPlanId?: string }) => [
     'budget-plan',
     { budgetPlanId },
   ],
