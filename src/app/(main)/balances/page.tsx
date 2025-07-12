@@ -1,38 +1,34 @@
 import type { Metadata } from 'next';
 
 import { Container } from '@/components/container';
-import { CreateBudgetPlanButton } from '@/components/modal/create-edit-budget-plan/button';
 import { Separator } from '@/components/ui/separator';
 import { createMetadata } from '@/lib/seo/metadata';
-import { BudgetPlanCards } from '../_components/budget-plan-cards';
 import { Header } from '../_components/header';
 import { HeaderDescription } from '../_components/header/header-description';
 import { HeaderTitle } from '../_components/header/header-title';
 
 export const metadata: Metadata = createMetadata({
-  title: 'Budgets',
+  title: 'Balances',
   description:
     'Zoincas is a personal financial management app powered with AI.',
 });
 
-export default function BudgetsPage() {
+export default function BalancesPage() {
   return (
     <Container>
       <Header>
         <div>
-          <HeaderTitle>Budget Plans</HeaderTitle>
+          <HeaderTitle>Balances</HeaderTitle>
           <HeaderDescription>
-            Budgeting your incomes and expenses for tracking your transactions
+            Managing your balances for tracking your transactions
           </HeaderDescription>
         </div>
-
-        <CreateBudgetPlanButton />
       </Header>
 
       <Separator />
 
       <div className="grid gap-4 py-6">
-        <BudgetPlanCards />
+        <div>Content</div>
       </div>
     </Container>
   );

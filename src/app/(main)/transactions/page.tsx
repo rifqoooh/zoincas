@@ -5,6 +5,9 @@ import { CreateTransactionButton } from '@/components/modal/create-edit-transact
 import { TransactionsTable } from '@/components/tables/transactions';
 import { Separator } from '@/components/ui/separator';
 import { createMetadata } from '@/lib/seo/metadata';
+import { Header } from '../_components/header';
+import { HeaderDescription } from '../_components/header/header-description';
+import { HeaderTitle } from '../_components/header/header-title';
 
 export const metadata: Metadata = createMetadata({
   title: 'Transactions',
@@ -15,16 +18,16 @@ export const metadata: Metadata = createMetadata({
 export default function TransactionsPage() {
   return (
     <Container>
-      <div className="flex flex-col gap-4 py-6 sm:flex-row sm:items-center sm:justify-between">
+      <Header>
         <div>
-          <h1 className="text-2xl uppercase">Transactions</h1>
-          <p className=" text-muted-foreground sm:text-sm/6">
+          <HeaderTitle>Transactions</HeaderTitle>
+          <HeaderDescription>
             Powerful transactions table for tracking your transactions
-          </p>
+          </HeaderDescription>
         </div>
 
         <CreateTransactionButton />
-      </div>
+      </Header>
 
       <Separator />
 
