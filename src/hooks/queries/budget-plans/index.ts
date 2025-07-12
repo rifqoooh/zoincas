@@ -1,5 +1,8 @@
 import type { ErrorResponseAPI } from '@/lib/api/types';
-import type { InsertBudgetPlansType } from '@/validators/db/budget-plans';
+import type {
+  InsertBudgetPlansType,
+  UpdateBudgetPlansType,
+} from '@/validators/db/budget-plans';
 
 import { budgetPlans } from '@/lib/api/rpc';
 import {
@@ -69,6 +72,42 @@ export const useCreateBudgetPlanMutation = () => {
   const mutation = useMutation({
     mutationFn: async (input: InsertBudgetPlansType) => {
       const response = await budgetPlans.$post({
+        json: input,
+      });
+      if (!response.ok) {
+        const err = (await response.json()) as unknown as ErrorResponseAPI;
+        throw new Error(err.error.message);
+      }
+
+      const data = await response.json();
+      const parsedData = selectBudgetPlansSchema.safeParse(data);
+      if (!parsedData.success) {
+        throw new Error('There is an error when parsing response data.');
+      }
+
+      return parsedData.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: budgetPlansKeys.all(),
+      });
+    },
+  });
+
+  return mutation;
+};
+
+export const useUpdateBudgetPlanMutation = (budgetPlanId?: string) => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: async (input: UpdateBudgetPlansType) => {
+      if (!budgetPlanId) {
+        throw new Error('The budget plan ID is required.');
+      }
+
+      const response = await budgetPlans[':budgetPlanId'].$patch({
+        param: { budgetPlanId },
         json: input,
       });
       if (!response.ok) {

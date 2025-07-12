@@ -103,7 +103,7 @@ export const getBudgetPlan = createRoute({
 });
 
 export const updateBudgetPlan = createRoute({
-  method: 'put',
+  method: 'patch',
   path: '/budget-plans/{budgetPlanId}',
   tags,
   middleware: [protectedMiddleware()],

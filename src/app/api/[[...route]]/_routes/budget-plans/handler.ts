@@ -8,6 +8,7 @@ import type {
   DeleteBudgetPlan,
   GetBudgetPlan,
   ListBudgetPlansSummary,
+  UpdateBudgetPlan,
 } from './routes';
 
 import { createNotFoundResponse } from '@/lib/api/openapi-utilities';
@@ -52,6 +53,25 @@ export const getBudgetPlan: AppRouteHandler<GetBudgetPlan> = async (c) => {
   const user = c.get('user') as User;
 
   const data = await budgetPlans.getBudgetPlan(user.id, budgetPlanId);
+  if (!data) {
+    return c.json(
+      createNotFoundResponse({ path: c.req.path }),
+      StatusCode.NOT_FOUND
+    );
+  }
+
+  return c.json(data, StatusCode.OK);
+};
+
+export const updateBudgetPlan: AppRouteHandler<UpdateBudgetPlan> = async (
+  c
+) => {
+  const { budgetPlanId } = c.req.valid('param');
+  const input = c.req.valid('json');
+
+  const user = c.get('user') as User;
+
+  const data = await budgetPlans.updateBudgetPlan(user.id, budgetPlanId, input);
   if (!data) {
     return c.json(
       createNotFoundResponse({ path: c.req.path }),

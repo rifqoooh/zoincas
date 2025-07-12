@@ -1,9 +1,13 @@
 import { and, desc, eq, sum } from 'drizzle-orm';
+import { z } from 'zod';
 
 import { db } from '@/lib/db';
 import { budgetCategories, budgetPlans, transactions } from '@/lib/db/schema';
 import { coalesce, jsonAggBuildObject } from '@/lib/db/utilities';
-import type { InsertBudgetPlansType } from '@/validators/db/budget-plans';
+import type {
+  InsertBudgetPlansType,
+  UpdateBudgetPlansType,
+} from '@/validators/db/budget-plans';
 
 export const listBudgetPlansSummary = async (userId: string) => {
   const summary = db.$with('budget_plan_categories_summary').as(
@@ -139,6 +143,53 @@ export const getBudgetPlan = async (userId: string, budgetPlanId: string) => {
     .groupBy(budgetPlans.id)
     .orderBy(desc(budgetPlans.createdAt))
     .limit(1);
+
+  return data;
+};
+
+export const updateBudgetPlan = async (
+  userId: string,
+  budgetPlanId: string,
+  input: UpdateBudgetPlansType
+) => {
+  const data = await db.transaction(async (tx) => {
+    const [plan] = await tx
+      .update(budgetPlans)
+      .set({
+        title: input.title,
+      })
+      .where(
+        and(eq(budgetPlans.userId, userId), eq(budgetPlans.id, budgetPlanId))
+      )
+      .returning();
+
+    // update budget categories
+    if (input.categories.length) {
+      for (const category of input.categories) {
+        // if category id is UUID
+        const parsedCategoryId = z.string().uuid().safeParse(category.id);
+        // If it is UUID we know it is an existing category to update
+        if (parsedCategoryId.success) {
+          await tx
+            .update(budgetCategories)
+            .set({
+              name: category.name,
+              amount: category.amount,
+            })
+            .where(eq(budgetCategories.id, parsedCategoryId.data));
+        } else {
+          // If it is not UUID we know it is a new category to create
+          await tx.insert(budgetCategories).values({
+            name: category.name,
+            amount: category.amount,
+            budgetPlanId: plan.id,
+          });
+        }
+      }
+    }
+
+    return plan;
+  });
 
   return data;
 };
