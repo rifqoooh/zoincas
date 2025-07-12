@@ -14,10 +14,17 @@ import { cn } from '@/lib/utilities';
 import { Trash2Icon } from 'lucide-react';
 
 export const CreateEditBudgetPlanForm = () => {
-  const { form, fieldArray, onSubmit, isCreating, deleteStore } =
-    useCreateEditBudgetPlan();
+  const {
+    form,
+    fieldArray,
+    onSubmit,
+    isCreating,
+    deleteStore,
+    createMutation,
+    updateMutation,
+  } = useCreateEditBudgetPlan();
 
-  const isPending = false;
+  const isPending = createMutation.isPending || updateMutation.isPending;
 
   const onRemoveField = ({
     categoryId,

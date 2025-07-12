@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 import {
   useCreateBudgetPlanMutation,
   useGetBudgetPlanQuery,
+  useUpdateBudgetPlanMutation,
 } from '@/hooks/queries/budget-plans';
 import { useCreateEditBudgetModal } from '@/hooks/store/create-edit-budget';
 import { useDeleteBudgetCategoryModal } from '@/hooks/store/delete-budget-category';
@@ -28,7 +29,7 @@ export const useCreateEditBudgetPlan = () => {
   const deleteStore = useDeleteBudgetCategoryModal();
 
   const createMutation = useCreateBudgetPlanMutation();
-  //   const updateMutation = useUpdateBudgetPlanMutation(createEditStore.id);
+  const updateMutation = useUpdateBudgetPlanMutation(createEditStore.id);
 
   const budgetPlanQuery = useGetBudgetPlanQuery(createEditStore.id);
 
@@ -83,6 +84,27 @@ export const useCreateEditBudgetPlan = () => {
     );
   };
 
+  const onUpdateSubmit = (values: InsertBudgetPlansType) => {
+    return toast.promise(
+      updateMutation.mutateAsync(values, {
+        onSuccess: () => {
+          createEditStore.onClose();
+        },
+      }),
+      {
+        loading: 'Updating budget plan...',
+        success: 'Budget plan updated successfully',
+        error: (error: unknown) => {
+          if (error instanceof Error) {
+            return error.message;
+          }
+
+          return 'There is an error in the internal server.';
+        },
+      }
+    );
+  };
+
   const onSubmit: SubmitHandler<InsertBudgetPlansFormType> = (values) => {
     // mapped categories
     values.categories = values.categories.map((category) => ({
@@ -96,7 +118,7 @@ export const useCreateEditBudgetPlan = () => {
     if (isCreating) {
       onCreateSubmit(parsedData);
     } else {
-      console.log(parsedData);
+      onUpdateSubmit(parsedData);
     }
   };
 
@@ -105,6 +127,8 @@ export const useCreateEditBudgetPlan = () => {
     fieldArray,
     onSubmit,
     isCreating,
+    createMutation,
+    updateMutation,
     deleteStore,
   };
 };
