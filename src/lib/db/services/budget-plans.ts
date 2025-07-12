@@ -69,7 +69,7 @@ export const createBudgetPlan = async (
     const [plan] = await tx
       .insert(budgetPlans)
       .values({
-        title: budgetPlan.title,
+        title: budgetPlan.title ? budgetPlan.title : undefined,
         userId,
       })
       .returning();
@@ -79,7 +79,7 @@ export const createBudgetPlan = async (
       for (const category of budgetPlan.categories) {
         await tx.insert(budgetCategories).values({
           budgetPlanId: plan.id,
-          name: category.name,
+          name: category.name ? category.name : undefined,
           amount: category.amount,
         });
       }
@@ -152,11 +152,12 @@ export const updateBudgetPlan = async (
   budgetPlanId: string,
   input: UpdateBudgetPlansType
 ) => {
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <explanation>
   const data = await db.transaction(async (tx) => {
     const [plan] = await tx
       .update(budgetPlans)
       .set({
-        title: input.title,
+        title: input.title ? input.title : 'Untitled',
       })
       .where(
         and(eq(budgetPlans.userId, userId), eq(budgetPlans.id, budgetPlanId))
@@ -173,14 +174,14 @@ export const updateBudgetPlan = async (
           await tx
             .update(budgetCategories)
             .set({
-              name: category.name,
+              name: category.name ? category.name : 'Uncategorized',
               amount: category.amount,
             })
             .where(eq(budgetCategories.id, parsedCategoryId.data));
         } else {
           // If it is not UUID we know it is a new category to create
           await tx.insert(budgetCategories).values({
-            name: category.name,
+            name: category.name ? category.name : undefined,
             amount: category.amount,
             budgetPlanId: plan.id,
           });
