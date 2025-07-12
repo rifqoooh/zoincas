@@ -46,7 +46,13 @@ export const listBudgetPlansSummary = async (userId: string) => {
           spend: summary.spend,
         },
         {
-          orderBy: { colName: summary.name, direction: 'ASC' },
+          orderBy: [
+            { colName: summary.name, direction: 'ASC' },
+            {
+              colName: summary.amount,
+              direction: 'ASC',
+            },
+          ],
           notNullColumn: 'id',
         }
       ).as('categories'),
@@ -130,7 +136,13 @@ export const getBudgetPlan = async (userId: string, budgetPlanId: string) => {
           spend: summary.spend,
         },
         {
-          orderBy: { colName: summary.name, direction: 'ASC' },
+          orderBy: [
+            { colName: summary.name, direction: 'ASC' },
+            {
+              colName: summary.amount,
+              direction: 'ASC',
+            },
+          ],
           notNullColumn: 'id',
         }
       ),

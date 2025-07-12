@@ -44,21 +44,31 @@ export const jsonBuildObject = <T extends SelectedFields>(shape: T) => {
   )}), '{}')`;
 };
 
-export const jsonAggBuildObject = <
-  T extends SelectedFields,
-  Column extends AnyColumn,
->(
+export const jsonAggBuildObject = <T extends SelectedFields>(
   shape: T,
   options?: {
-    orderBy?: { colName: Column; direction: 'ASC' | 'DESC' };
+    orderBy?: { colName: AnyColumn; direction: 'ASC' | 'DESC' }[];
     notNullColumn?: keyof T;
   }
 ) => {
+  const orderChunks: SQL[] = [];
+
+  if (options?.orderBy?.length) {
+    orderChunks.push(sql`order by`);
+
+    options.orderBy.forEach((order, index) => {
+      if (index !== 0) {
+        // biome-ignore lint/style/noUnusedTemplateLiteral: <explanation>
+        orderChunks.push(sql.raw(`,`));
+      }
+
+      orderChunks.push(sql`${order.colName} ${sql.raw(order.direction)}`);
+    });
+  }
+
   return sql<
     SelectResultFields<T>[]
   >`coalesce(jsonb_agg(${jsonBuildObject(shape)}${
-    options?.orderBy
-      ? sql`order by ${options.orderBy.colName} ${sql.raw(options.orderBy.direction)}`
-      : undefined
+    orderChunks.length > 0 ? sql.join(orderChunks, sql.raw(' ')) : undefined
   })${options?.notNullColumn ? sql` filter (where ${shape[options.notNullColumn]} is not null)` : sql.raw('')}, '${sql`[]`}')`;
 };
