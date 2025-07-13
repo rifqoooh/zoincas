@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Container } from '@/components/container';
 import { Separator } from '@/components/ui/separator';
 import { createMetadata } from '@/lib/seo/metadata';
+import { BalanceCards } from '../_components/balance-cards';
 import { Header } from '../_components/header';
 import { HeaderDescription } from '../_components/header/header-description';
 import { HeaderTitle } from '../_components/header/header-title';
@@ -27,8 +28,8 @@ export default function BalancesPage() {
 
       <Separator />
 
-      <div className="grid gap-4 py-6">
-        <div>Content</div>
+      <div className="grid gap-4 py-6 md:grid-cols-2 xl:grid-cols-3">
+        <BalanceCards />
       </div>
     </Container>
   );
