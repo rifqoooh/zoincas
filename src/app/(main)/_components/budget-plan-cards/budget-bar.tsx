@@ -10,24 +10,27 @@ type CategoryType = BudgetPlansDataType['categories'][0];
 
 interface BudgetBarProps {
   id: string;
-  data: CategoryType;
+  category: CategoryType;
 }
 
-export function BudgetBar({ id, data }: BudgetBarProps) {
+export function BudgetBar({ id, category }: BudgetBarProps) {
   const store = useCreateEditBudgetModal();
 
   const onClick = () => {
     store.onOpen({ id });
   };
 
-  const remaining = React.useMemo(() => data.amount + data.spend, [data]);
+  const remaining = React.useMemo(
+    () => category.amount + category.spend,
+    [category]
+  );
 
   const width = React.useMemo(
     () =>
-      data.amount === 0
+      category.amount === 0
         ? 0
-        : 100 - Math.max((remaining / data.amount) * 100, 0),
-    [data, remaining]
+        : 100 - Math.max((remaining / category.amount) * 100, 0),
+    [category, remaining]
   );
 
   return (
@@ -35,11 +38,11 @@ export function BudgetBar({ id, data }: BudgetBarProps) {
       <div className="flex items-center">
         <div className="flex grow items-center gap-2">
           <Button variant="link" className="h-auto p-0" onClick={onClick}>
-            <p className="truncate font-medium text-lg">{data.name}</p>
+            <p className="truncate font-medium text-lg">{category.name}</p>
           </Button>
         </div>
 
-        <p className="font-medium">{formatCurrency(data.amount)}</p>
+        <p className="font-medium">{formatCurrency(category.amount)}</p>
       </div>
       <div className="group flex w-full items-center rounded-md bg-secondary">
         <div
@@ -65,7 +68,7 @@ export function BudgetBar({ id, data }: BudgetBarProps) {
             Usage
           </p>
           <p className="hidden whitespace-nowrap text-muted-foreground text-sm sm:block">
-            {formatCurrency(Math.abs(data.spend))}
+            {formatCurrency(Math.abs(category.spend))}
           </p>
         </div>
 

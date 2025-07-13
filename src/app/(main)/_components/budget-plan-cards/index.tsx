@@ -40,8 +40,8 @@ export function BudgetPlanCards() {
 
   return (
     <>
-      {budgetPlansData.map((data) => (
-        <BudgetPlanCard key={data.id} data={data} />
+      {budgetPlansData.map((budget) => (
+        <BudgetPlanCard key={budget.id} budget={budget} />
       ))}
     </>
   );

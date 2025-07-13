@@ -15,15 +15,13 @@ import {
 import { useCreateBudgetPlanMutation } from '@/hooks/queries/budget-plans';
 import { useCreateEditBudgetModal } from '@/hooks/store/create-edit-budget';
 import { useDeleteBudgetPlanModal } from '@/hooks/store/delete-budget-plan';
-import { cn } from '@/lib/utilities';
 
 interface CardActionsProps {
-  data: BudgetPlansDataType;
-  className?: string;
+  budget: BudgetPlansDataType;
 }
 
-export function CardActions({ data, className }: CardActionsProps) {
-  const href = data.categories.map((category) => category.id).join(',');
+export function CardActions({ budget }: CardActionsProps) {
+  const href = budget.categories.map((category) => category.id).join(',');
 
   const createEditBudgetStore = useCreateEditBudgetModal();
   const deleteBudgetStore = useDeleteBudgetPlanModal();
@@ -31,14 +29,14 @@ export function CardActions({ data, className }: CardActionsProps) {
   const createMutation = useCreateBudgetPlanMutation();
 
   const onEditBudget = () => {
-    createEditBudgetStore.onOpen({ id: data.id });
+    createEditBudgetStore.onOpen({ id: budget.id });
   };
 
   const onDuplicateBudget = () => {
     return toast.promise(
       createMutation.mutateAsync({
-        title: `Copy of ${data.title}`,
-        categories: data.categories.map((category) => ({
+        title: `Copy of ${budget.title}`,
+        categories: budget.categories.map((category) => ({
           name: category.name,
           amount: category.amount,
         })),
@@ -58,11 +56,11 @@ export function CardActions({ data, className }: CardActionsProps) {
   };
 
   const onDeleteBudget = () => {
-    deleteBudgetStore.onOpen({ id: data.id });
+    deleteBudgetStore.onOpen({ id: budget.id });
   };
 
   return (
-    <div className={cn('flex items-center gap-2', className)}>
+    <div className="flex items-center gap-2">
       <Button
         variant="secondary"
         className="hidden sm:inline-flex"
