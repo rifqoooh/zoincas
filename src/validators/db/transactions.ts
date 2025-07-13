@@ -38,12 +38,3 @@ export const updateTransactionsSchema = createUpdateSchema(transactions)
   });
 
 export type UpdateTransactionsType = z.infer<typeof updateTransactionsSchema>;
-
-export const updateBudgetTransactionsSchema = z.object({
-  planId: z.string().uuid({ message: 'Budget plan is required' }),
-  categoryId: z.string().uuid({ message: 'Budget category is required' }),
-});
-
-export type UpdateBudgetTransactionsType = z.infer<
-  typeof updateBudgetTransactionsSchema
->;

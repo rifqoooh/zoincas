@@ -21,3 +21,7 @@ export const listBalancesSummaryResponse = balancesDataSchema.array();
 export type ListBalancesSummaryResponse = z.infer<
   typeof listBalancesSummaryResponse
 >;
+
+export const getBalanceResponse = balancesDataSchema;
+
+export type GetBalanceResponse = z.infer<typeof getBalanceResponse>;
