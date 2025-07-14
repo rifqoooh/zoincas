@@ -1,21 +1,37 @@
 import * as StatusCode from '@/lib/api/http-status-code';
 
-import { createRoute } from '@hono/zod-openapi';
+import { createRoute, z } from '@hono/zod-openapi';
 
 import {
   ContentJSON,
   ContentJSONRequired,
+  createErrorSchema,
   createNotFoundSchema,
 } from '@/lib/api/openapi-utilities';
-
 import { protectedMiddleware } from '@/middleware/api/protected-middleware';
-import { listCategoriesSummaryResponse } from '@/validators/api/categories/response';
+import {
+  getCategoryResponse,
+  listCategoriesSummaryResponse,
+} from '@/validators/api/categories/response';
 import {
   insertCategoriesSchema,
   selectCategoriesSchema,
+  updateCategoriesSchema,
 } from '@/validators/db/categories';
 
 const tags = ['Categories'];
+
+export const categoryIdParamSchema = z.object({
+  categoryId: z
+    .string()
+    .uuid()
+    .openapi({
+      param: {
+        name: 'categoryId',
+        in: 'path',
+      },
+    }),
+});
 
 export const listCategoriesSummary = createRoute({
   method: 'get',
@@ -52,18 +68,105 @@ export const createCategory = createRoute({
       selectCategoriesSchema,
       'The created category.'
     ),
-    // TODO : fix this potentialInput to proper failed input
-    // [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
-    //   createErrorSchema({
-    //     schema: insertCategoriesSchema,
-    //     message: 'The category creation request input is invalid.',
-    //     path: '/categories',
-    //     potentialInput: {},
-    //   }),
-    //   'The validation category creation request error(s).'
-    // ),
+    [StatusCode.NOT_FOUND]: ContentJSON(
+      createNotFoundSchema({
+        path: '/categories',
+      }),
+      'The category with the requested ID does not exist in our resources.'
+    ),
+  },
+});
+
+export const getCategory = createRoute({
+  method: 'get',
+  path: '/categories/{categoryId}',
+  tags,
+  middleware: [protectedMiddleware()],
+  request: {
+    params: categoryIdParamSchema,
+  },
+  responses: {
+    [StatusCode.OK]: ContentJSON(getCategoryResponse, 'The category.'),
+    [StatusCode.NOT_FOUND]: ContentJSON(
+      createNotFoundSchema({
+        path: '/categories/{categoryId}',
+      }),
+      'The category with the requested ID does not exist in our resources.'
+    ),
+    [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
+      createErrorSchema({
+        schema: categoryIdParamSchema,
+        message: 'The category id request params is required.',
+        path: '/categories/{categoryId}',
+        potentialInput: {},
+      }),
+      'The validation category request error(s).'
+    ),
+  },
+});
+
+export const updateCategory = createRoute({
+  method: 'patch',
+  path: '/categories/{categoryId}',
+  tags,
+  middleware: [protectedMiddleware()],
+  request: {
+    params: categoryIdParamSchema,
+    body: ContentJSONRequired(
+      updateCategoriesSchema,
+      'The category to update.'
+    ),
+  },
+  responses: {
+    [StatusCode.OK]: ContentJSON(selectCategoriesSchema, 'The category.'),
+    [StatusCode.NOT_FOUND]: ContentJSON(
+      createNotFoundSchema({
+        path: '/categories/{categoryId}',
+      }),
+      'The category with the requested ID does not exist in our resources.'
+    ),
+    [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
+      createErrorSchema({
+        schema: categoryIdParamSchema,
+        message: 'The category id request params is required.',
+        path: '/categories/{categoryId}',
+        potentialInput: {},
+      }),
+      'The validation category request error(s).'
+    ),
+  },
+});
+
+export const deleteCategory = createRoute({
+  method: 'delete',
+  path: '/categories/{categoryId}',
+  tags,
+  middleware: [protectedMiddleware()],
+  request: {
+    params: categoryIdParamSchema,
+  },
+  responses: {
+    [StatusCode.OK]: ContentJSON(selectCategoriesSchema, 'The category.'),
+    [StatusCode.NOT_FOUND]: ContentJSON(
+      createNotFoundSchema({
+        path: '/categories/{categoryId}',
+      }),
+      'The category with the requested ID does not exist in our resources.'
+    ),
+    [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
+      createErrorSchema({
+        schema: categoryIdParamSchema,
+        message: 'The category id request params is required.',
+        path: '/categories/{categoryId}',
+        potentialInput: {},
+      }),
+      'The validation category request error(s).'
+    ),
   },
 });
 
 export type ListCategoriesSummary = typeof listCategoriesSummary;
 export type CreateCategory = typeof createCategory;
+export type GetCategory = typeof getCategory;
+export type UpdateCategory = typeof updateCategory;
+export type DeleteCategory = typeof deleteCategory;

@@ -21,3 +21,7 @@ export const listCategoriesSummaryResponse = categoriesDataSchema.array();
 export type ListCategoriesSummaryResponse = z.infer<
   typeof listCategoriesSummaryResponse
 >;
+
+export const getCategoryResponse = categoriesDataSchema;
+
+export type GetCategoryResponse = z.infer<typeof getCategoryResponse>;
