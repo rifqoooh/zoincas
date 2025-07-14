@@ -3,13 +3,13 @@
 import { toast } from 'sonner';
 
 import { ConfirmationDialog } from '@/components/confirmation-dialog';
-import { useDeleteBalanceMutation } from '@/hooks/queries/balances';
-import { useDeleteBalanceModal } from '@/hooks/store/delete-balance';
+import { useDeleteCategoryMutation } from '@/hooks/queries/categories';
+import { useDeleteCategoryModal } from '@/hooks/store/delete-category';
 import { useIsClient } from '@/hooks/use-is-client';
 
-export function DeleteBalanceModal() {
-  const store = useDeleteBalanceModal();
-  const mutation = useDeleteBalanceMutation(store.id);
+export function DeleteCategoryModal() {
+  const store = useDeleteCategoryModal();
+  const mutation = useDeleteCategoryMutation(store.id);
 
   const isClient = useIsClient();
   if (!isClient) {
@@ -17,9 +17,9 @@ export function DeleteBalanceModal() {
   }
 
   const text = {
-    title: 'Delete Balance',
+    title: 'Delete Category',
     description:
-      'Just checking - are you sure you want to delete this balance? All the transactions under this balance will be deleted.',
+      'Just checking - are you sure you want to delete this category? This action can not be undone.',
     action: 'Delete',
   };
 
@@ -39,8 +39,8 @@ export function DeleteBalanceModal() {
         },
       }),
       {
-        loading: 'Deleting balance...',
-        success: 'Balance deleted successfully',
+        loading: 'Deleting category...',
+        success: 'Category deleted successfully',
         error: (error: unknown) => {
           if (error instanceof Error) {
             return error.message;
