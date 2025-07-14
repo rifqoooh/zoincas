@@ -41,7 +41,9 @@ export function DataTableToolbar<TData>({
       .getAllColumns()
       .filter((column) => column.getCanFilter());
 
-    // return filterColumns as Column<TData, unknown>[];
+    if (sortFilter.length === 0) {
+      return filterColumns as Column<TData, unknown>[];
+    }
 
     return sortColumns(filterColumns, sortFilter) as Column<TData, unknown>[];
   }, [table, sortFilter]);
