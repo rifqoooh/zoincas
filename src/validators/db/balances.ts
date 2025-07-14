@@ -3,6 +3,7 @@ import { createSchemaFactory } from 'drizzle-zod';
 import { z } from 'zod';
 
 import { balances } from '@/lib/db/schema';
+import { requiredString } from '../utilities';
 
 const { createSelectSchema, createInsertSchema, createUpdateSchema } =
   createSchemaFactory({
@@ -17,6 +18,7 @@ export type SelectBalancesType = z.infer<typeof selectBalancesSchema>;
 
 export const insertBalancesSchema = createInsertSchema(balances)
   .extend({
+    name: requiredString,
     initialAmount: z.coerce.number(),
   })
   .omit({

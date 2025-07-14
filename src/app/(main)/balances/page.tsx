@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { Container } from '@/components/container';
+import { CreateEditBalanceButton } from '@/components/modal/create-edit-balance/button';
 import { Separator } from '@/components/ui/separator';
 import { createMetadata } from '@/lib/seo/metadata';
 import { BalanceCards } from '../_components/balance-cards';
@@ -24,6 +25,8 @@ export default function BalancesPage() {
             Managing your balances for tracking your transactions
           </HeaderDescription>
         </div>
+
+        <CreateEditBalanceButton />
       </Header>
 
       <Separator />

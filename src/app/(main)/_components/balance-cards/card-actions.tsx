@@ -11,12 +11,25 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useCreateEditBalanceModal } from '@/hooks/store/create-edit-balance';
+import { useDeleteBalanceModal } from '@/hooks/store/delete-balance';
 
 interface CardActionsProps {
   balance: BalancesDataType;
 }
 
 export function CardActions({ balance }: CardActionsProps) {
+  const createEditBalanceStore = useCreateEditBalanceModal();
+  const deleteBalanceStore = useDeleteBalanceModal();
+
+  const onEditBalance = () => {
+    createEditBalanceStore.onOpen({ id: balance.id });
+  };
+
+  const onDeleteBalance = () => {
+    deleteBalanceStore.onOpen({ id: balance.id });
+  };
+
   return (
     <>
       <DropdownMenu modal={false}>
@@ -32,11 +45,14 @@ export function CardActions({ balance }: CardActionsProps) {
               View transactions
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => {}}>Edit balances</DropdownMenuItem>
+          <DropdownMenuItem onClick={onEditBalance}>
+            Edit balances
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             variant="destructive"
             className="dark:text-red-500 dark:focus:text-red-500"
+            onClick={onDeleteBalance}
           >
             Delete balance
           </DropdownMenuItem>
