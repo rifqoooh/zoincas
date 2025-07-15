@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utilities';
 import type { Table } from '@tanstack/react-table';
-import { Loader, X } from 'lucide-react';
+import { LoaderIcon, XIcon } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 
 interface DataTableActionBarProps<TData>
@@ -108,7 +108,7 @@ function DataTableActionBarAction({
       disabled={disabled || isPending}
       {...props}
     >
-      {isPending ? <Loader className="animate-spin" /> : children}
+      {isPending ? <LoaderIcon className="animate-spin" /> : children}
     </Button>
   );
 
@@ -121,7 +121,7 @@ function DataTableActionBarAction({
       <TooltipTrigger asChild>{trigger}</TooltipTrigger>
       <TooltipContent
         sideOffset={6}
-        className="border bg-accent font-semibold text-foreground dark:bg-zinc-900 [&>span]:hidden"
+        className="border bg-accent text-foreground dark:bg-zinc-900 [&>span]:hidden"
       >
         <p>{tooltip}</p>
       </TooltipContent>
@@ -157,7 +157,7 @@ function DataTableActionBarSelection<TData>({
             className="size-5"
             onClick={onClearSelection}
           >
-            <X className="size-3.5" />
+            <XIcon className="size-3.5" />
           </Button>
         </TooltipTrigger>
         <TooltipContent

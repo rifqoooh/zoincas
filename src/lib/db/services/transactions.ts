@@ -215,7 +215,7 @@ export const deleteManyTransactions = async (
   const data = await db
     .with(transactionIds)
     .delete(transactions)
-    .where(and(eq(transactions.id, db.select().from(transactionIds))))
+    .where(inArray(transactions.id, db.select().from(transactionIds)))
     .returning();
 
   return data;

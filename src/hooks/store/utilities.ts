@@ -39,3 +39,43 @@ export const createModalStore = () => {
     },
   }));
 };
+
+export interface onOpenManyProps {
+  ids?: string[];
+  onSuccess?: () => void;
+}
+
+export interface onCloseManyProps {
+  reset: boolean;
+}
+
+export interface ModalManyStore {
+  ids: string[] | undefined;
+  isOpen: boolean;
+  onOpen: (props?: onOpenManyProps) => void;
+  onClose: (props?: onCloseManyProps) => void;
+  onSuccessCallback: (() => void) | undefined;
+}
+
+export const createModalManyStore = () => {
+  return create<ModalManyStore>((set, get) => ({
+    ids: undefined,
+    onSuccessCallback: undefined,
+    isOpen: false,
+    onOpen: (props?: onOpenManyProps) => {
+      set({
+        ids: props?.ids,
+        isOpen: true,
+        onSuccessCallback: props?.onSuccess,
+      });
+    },
+    onClose: (props: onCloseManyProps = { reset: false }) => {
+      const ids = props.reset ? undefined : get().ids;
+      const onSuccessCallback = props.reset
+        ? undefined
+        : get().onSuccessCallback;
+
+      set({ ids, isOpen: false, onSuccessCallback });
+    },
+  }));
+};

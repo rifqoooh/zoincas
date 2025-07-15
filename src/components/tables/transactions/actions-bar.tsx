@@ -3,21 +3,23 @@ import * as React from 'react';
 import type { TransactionsDataType } from '@/validators/api/transactions/response';
 import type { Table } from '@tanstack/react-table';
 
+import { DownloadIcon, TrashIcon } from 'lucide-react';
+
 import {
   DataTableActionBar,
   DataTableActionBarAction,
   DataTableActionBarSelection,
 } from '@/components/data-table/data-table-action-bar';
 import { Separator } from '@/components/ui/separator';
+import { useDeleteManyTransactionModal } from '@/hooks/store/delete-many-transaction';
 import { exportTableToCSV } from '@/lib/export';
-import { DownloadIcon } from 'lucide-react';
 
 interface ActionsBarProps {
   table: Table<TransactionsDataType>;
 }
 
 export function ActionsBar({ table }: ActionsBarProps) {
-  const rows = table.getFilteredSelectedRowModel().rows;
+  const store = useDeleteManyTransactionModal();
 
   const [isPending, startTransition] = React.useTransition();
 
@@ -31,6 +33,14 @@ export function ActionsBar({ table }: ActionsBarProps) {
     });
   }, [table]);
 
+  const rows = table.getFilteredSelectedRowModel().rows;
+
+  const selectedIds = rows.map((row) => row.original.id);
+
+  const onDeleteMany = () => {
+    store.onOpen({ ids: selectedIds });
+  };
+
   return (
     <DataTableActionBar table={table} visible={rows.length > 0}>
       <DataTableActionBarSelection table={table} />
@@ -39,6 +49,15 @@ export function ActionsBar({ table }: ActionsBarProps) {
         className="hidden data-[orientation=vertical]:h-5 sm:block"
       />
       <div className="flex items-center gap-1.5">
+        <DataTableActionBarAction
+          size="icon"
+          className="rounded-[0.3rem]"
+          tooltip="Delete selected transaction(s)"
+          isPending={isPending}
+          onClick={onDeleteMany}
+        >
+          <TrashIcon />
+        </DataTableActionBarAction>
         <DataTableActionBarAction
           size="icon"
           className="rounded-[0.3rem]"

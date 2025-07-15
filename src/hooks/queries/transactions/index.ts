@@ -200,3 +200,39 @@ export const useDeleteTransactionMutation = (transactionId?: string) => {
 
   return mutation;
 };
+
+export const useDeleteManyTransactionMutation = (transactionIds?: string[]) => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: async () => {
+      if (!transactionIds) {
+        throw new Error('The transaction IDs are required.');
+      }
+
+      const response = await transactions['delete-many'].$post({
+        json: { transactionIds },
+      });
+      if (!response.ok) {
+        const err = (await response.json()) as unknown as ErrorResponseAPI;
+        throw new Error(err.error.message);
+      }
+
+      const data = await response.json();
+      // TODO : investigate if selectTransactionsSchema can be replaced to transactionsDataSchema
+      const parsedData = selectTransactionsSchema.array().safeParse(data);
+      if (!parsedData.success) {
+        throw new Error('There is an error when parsing response data.');
+      }
+
+      return parsedData.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: transactionsKeys.all(),
+      });
+    },
+  });
+
+  return mutation;
+};
