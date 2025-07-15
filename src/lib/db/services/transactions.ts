@@ -1,5 +1,6 @@
 import type { ListTransactionsQuery } from '@/validators/api/transactions/request';
 import type {
+  DeleteManyTransactionsType,
   InsertTransactionsType,
   UpdateTransactionsType,
 } from '@/validators/db/transactions';
@@ -188,6 +189,34 @@ export const createTransaction = async (input: InsertTransactionsType) => {
 
     return data;
   });
+
+  return data;
+};
+
+export const deleteManyTransactions = async (
+  userId: string,
+  input: DeleteManyTransactionsType
+) => {
+  const transactionIds = db.$with('transaction_ids').as(
+    db
+      .select({
+        id: transactions.id,
+      })
+      .from(transactions)
+      .innerJoin(balances, eq(transactions.balanceId, balances.id))
+      .where(
+        and(
+          eq(balances.userId, userId),
+          inArray(transactions.id, input.transactionIds)
+        )
+      )
+  );
+
+  const data = await db
+    .with(transactionIds)
+    .delete(transactions)
+    .where(and(eq(transactions.id, db.select().from(transactionIds))))
+    .returning();
 
   return data;
 };

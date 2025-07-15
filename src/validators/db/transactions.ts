@@ -38,3 +38,11 @@ export const updateTransactionsSchema = createUpdateSchema(transactions)
   });
 
 export type UpdateTransactionsType = z.infer<typeof updateTransactionsSchema>;
+
+export const deleteManyTransactionsSchema = z.object({
+  transactionIds: z.string().uuid().array(),
+});
+
+export type DeleteManyTransactionsType = z.infer<
+  typeof deleteManyTransactionsSchema
+>;

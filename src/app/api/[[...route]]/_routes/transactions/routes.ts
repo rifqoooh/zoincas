@@ -15,6 +15,7 @@ import {
   listTransactionsResponse,
 } from '@/validators/api/transactions/response';
 import {
+  deleteManyTransactionsSchema,
   insertTransactionsSchema,
   selectTransactionsSchema,
   updateTransactionsSchema,
@@ -93,6 +94,25 @@ export const createTransaction = createRoute({
         potentialInput: createTransactionInputErrors,
       }),
       'The validation transaction creation request error(s).'
+    ),
+  },
+});
+
+export const deleteManyTransactions = createRoute({
+  method: 'post',
+  path: '/transactions/delete-many',
+  tags,
+  middleware: [protectedMiddleware()],
+  request: {
+    body: ContentJSONRequired(
+      deleteManyTransactionsSchema,
+      'The transactions to delete.'
+    ),
+  },
+  responses: {
+    [StatusCode.OK]: ContentJSON(
+      selectTransactionsSchema.array(),
+      'The deleted transactions.'
     ),
   },
 });
@@ -192,6 +212,7 @@ export const deleteTransaction = createRoute({
 
 export type ListTransactions = typeof listTransactions;
 export type CreateTransaction = typeof createTransaction;
+export type DeleteManyTransactions = typeof deleteManyTransactions;
 export type GetTransaction = typeof getTransaction;
 export type UpdateTransaction = typeof updateTransaction;
 export type DeleteTransaction = typeof deleteTransaction;
