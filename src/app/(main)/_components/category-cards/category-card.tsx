@@ -2,8 +2,6 @@
 
 import type { CategoriesDataType } from '@/validators/api/categories/response';
 
-import { useTheme } from 'next-themes';
-
 import {
   Card,
   CardDescription,
@@ -19,17 +17,13 @@ interface CategoryCardProps {
 }
 
 export function CategoryCard({ category }: CategoryCardProps) {
-  const { theme } = useTheme();
-
   return (
-    <Card className="relative overflow-hidden">
+    <Card className="dark relative overflow-hidden">
       <div
         className="absolute inset-0 z-0"
         style={{
           backgroundImage:
-            theme === 'light'
-              ? 'radial-gradient(circle 500px at 50% 200px, #f0f0f0, transparent)'
-              : 'radial-gradient(circle 500px at 50% 200px, #3e3e3e, transparent)',
+            'radial-gradient(circle 500px at 50% 200px, #3e3e3e, transparent)',
         }}
       />
       <CardHeader className="z-10 flex flex-row items-start justify-between">

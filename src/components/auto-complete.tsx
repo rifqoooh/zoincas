@@ -177,7 +177,7 @@ export function AutoComplete({
           <ChevronDownIcon className="size-4 text-muted-foreground" />
         </div>
       </div>
-      <div className="relative">
+      <div className="relative z-50">
         <div
           className={cn(
             'fade-in-0 zoom-in-95 absolute top-2 z-10 w-full animate-in rounded-xl pb-4 outline-none',
@@ -186,7 +186,7 @@ export function AutoComplete({
         >
           <div className="rounded-md bg-popover">
             <CommandList className="rounded-md border">
-              <div className=" max-h-56 overflow-y-auto">
+              <div className="max-h-56 overflow-y-auto">
                 {isLoading ? (
                   <CommandPrimitive.Loading>
                     <div className="p-1">

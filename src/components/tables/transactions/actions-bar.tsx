@@ -3,7 +3,7 @@ import * as React from 'react';
 import type { TransactionsDataType } from '@/validators/api/transactions/response';
 import type { Table } from '@tanstack/react-table';
 
-import { DownloadIcon, TrashIcon } from 'lucide-react';
+import { DownloadIcon, Layers2Icon, TrashIcon } from 'lucide-react';
 
 import {
   DataTableActionBar,
@@ -11,6 +11,7 @@ import {
   DataTableActionBarSelection,
 } from '@/components/data-table/data-table-action-bar';
 import { Separator } from '@/components/ui/separator';
+import { useAssignManyCategoryModal } from '@/hooks/store/assign-many-category';
 import { useDeleteManyTransactionModal } from '@/hooks/store/delete-many-transaction';
 import { exportTableToCSV } from '@/lib/export';
 
@@ -19,7 +20,8 @@ interface ActionsBarProps {
 }
 
 export function ActionsBar({ table }: ActionsBarProps) {
-  const store = useDeleteManyTransactionModal();
+  const assignManyCategoryStore = useAssignManyCategoryModal();
+  const deleteManyStore = useDeleteManyTransactionModal();
 
   const [isPending, startTransition] = React.useTransition();
 
@@ -37,8 +39,12 @@ export function ActionsBar({ table }: ActionsBarProps) {
 
   const selectedIds = rows.map((row) => row.original.id);
 
+  const onAssignManyCategory = () => {
+    assignManyCategoryStore.onOpen({ ids: selectedIds });
+  };
+
   const onDeleteMany = () => {
-    store.onOpen({ ids: selectedIds });
+    deleteManyStore.onOpen({ ids: selectedIds });
   };
 
   return (
@@ -49,6 +55,15 @@ export function ActionsBar({ table }: ActionsBarProps) {
         className="hidden data-[orientation=vertical]:h-5 sm:block"
       />
       <div className="flex items-center gap-1.5">
+        <DataTableActionBarAction
+          size="icon"
+          className="rounded-[0.3rem]"
+          tooltip="Assign category to selected transaction(s)"
+          isPending={isPending}
+          onClick={onAssignManyCategory}
+        >
+          <Layers2Icon />
+        </DataTableActionBarAction>
         <DataTableActionBarAction
           size="icon"
           className="rounded-[0.3rem]"

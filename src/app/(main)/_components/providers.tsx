@@ -6,6 +6,7 @@ import { DeleteBudgetPlanModal } from '@/components/alert/delete-budget-plan';
 import { DeleteCategoryModal } from '@/components/alert/delete-category';
 import { DeleteManyTransactionModal } from '@/components/alert/delete-many-transaction';
 import { DeleteTransactionModal } from '@/components/alert/delete-transaction';
+import { AssignManyCategoryModal } from '@/components/modal/assign-many-category';
 import { CreateEditBalanceModal } from '@/components/modal/create-edit-balance';
 import { CreateEditBudgetModal } from '@/components/modal/create-edit-budget-plan';
 import { CreateEditCategoryModal } from '@/components/modal/create-edit-category';
@@ -27,6 +28,7 @@ export function MainProviders({ children }: { children: React.ReactNode }) {
       <DeleteBudgetCategoryModal />
 
       <DeleteManyTransactionModal />
+      <AssignManyCategoryModal />
 
       {children}
     </>
