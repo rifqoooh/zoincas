@@ -15,6 +15,8 @@ import {
   listTransactionsResponse,
 } from '@/validators/api/transactions/response';
 import {
+  assignManyBudgetTransactionsSchema,
+  assignManyCategoryTransactionsSchema,
   deleteManyTransactionsSchema,
   insertTransactionsSchema,
   selectTransactionsSchema,
@@ -117,6 +119,44 @@ export const deleteManyTransactions = createRoute({
   },
 });
 
+export const assignManyCategoryTransactions = createRoute({
+  method: 'post',
+  path: '/transactions/assign-many-category',
+  tags,
+  middleware: [protectedMiddleware()],
+  request: {
+    body: ContentJSONRequired(
+      assignManyCategoryTransactionsSchema,
+      'The transactions to assign category.'
+    ),
+  },
+  responses: {
+    [StatusCode.OK]: ContentJSON(
+      selectTransactionsSchema.array(),
+      'The assigned transactions.'
+    ),
+  },
+});
+
+export const assignManyBudgetTransactions = createRoute({
+  method: 'post',
+  path: '/transactions/assign-many-budget',
+  tags,
+  middleware: [protectedMiddleware()],
+  request: {
+    body: ContentJSONRequired(
+      assignManyBudgetTransactionsSchema,
+      'The transactions to assign budget.'
+    ),
+  },
+  responses: {
+    [StatusCode.OK]: ContentJSON(
+      selectTransactionsSchema.array(),
+      'The assigned transactions.'
+    ),
+  },
+});
+
 export const getTransaction = createRoute({
   method: 'get',
   path: '/transactions/{transactionId}',
@@ -213,6 +253,9 @@ export const deleteTransaction = createRoute({
 export type ListTransactions = typeof listTransactions;
 export type CreateTransaction = typeof createTransaction;
 export type DeleteManyTransactions = typeof deleteManyTransactions;
+export type AssignManyCategoryTransactions =
+  typeof assignManyCategoryTransactions;
+export type AssignManyBudgetTransactions = typeof assignManyBudgetTransactions;
 export type GetTransaction = typeof getTransaction;
 export type UpdateTransaction = typeof updateTransaction;
 export type DeleteTransaction = typeof deleteTransaction;

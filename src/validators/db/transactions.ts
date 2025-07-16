@@ -39,10 +39,30 @@ export const updateTransactionsSchema = createUpdateSchema(transactions)
 
 export type UpdateTransactionsType = z.infer<typeof updateTransactionsSchema>;
 
-export const deleteManyTransactionsSchema = z.object({
+const transactionIdsSchema = z.object({
   transactionIds: z.string().uuid().array(),
 });
 
+export const deleteManyTransactionsSchema = transactionIdsSchema;
+
 export type DeleteManyTransactionsType = z.infer<
   typeof deleteManyTransactionsSchema
+>;
+
+export const assignManyCategoryTransactionsSchema = transactionIdsSchema.extend(
+  {
+    categoryId: z.string().uuid({ message: 'Category is required' }),
+  }
+);
+
+export type AssignManyCategoryTransactionsType = z.infer<
+  typeof assignManyCategoryTransactionsSchema
+>;
+
+export const assignManyBudgetTransactionsSchema = transactionIdsSchema.extend({
+  budgetId: z.string().uuid(),
+});
+
+export type AssignManyBudgetTransactionsType = z.infer<
+  typeof assignManyBudgetTransactionsSchema
 >;

@@ -4,6 +4,8 @@ import * as transactions from '@/lib/db/services/transactions';
 import type { AppRouteHandler } from '@/lib/api/types';
 import type { SelectUsersType as User } from '@/validators/db/users';
 import type {
+  AssignManyBudgetTransactions,
+  AssignManyCategoryTransactions,
   CreateTransaction,
   DeleteManyTransactions,
   DeleteTransaction,
@@ -55,6 +57,33 @@ export const deleteManyTransactions: AppRouteHandler<
   const user = c.get('user') as User;
 
   const data = await transactions.deleteManyTransactions(user.id, input);
+
+  return c.json(data, StatusCode.OK);
+};
+
+export const assignManyCategoryTransactions: AppRouteHandler<
+  AssignManyCategoryTransactions
+> = async (c) => {
+  const input = c.req.valid('json');
+
+  const user = c.get('user') as User;
+
+  const data = await transactions.assignManyCategoryTransactions(
+    user.id,
+    input
+  );
+
+  return c.json(data, StatusCode.OK);
+};
+
+export const assignManyBudgetTransactions: AppRouteHandler<
+  AssignManyBudgetTransactions
+> = async (c) => {
+  const input = c.req.valid('json');
+
+  const user = c.get('user') as User;
+
+  const data = await transactions.assignManyBudgetTransactions(user.id, input);
 
   return c.json(data, StatusCode.OK);
 };

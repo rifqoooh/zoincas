@@ -1,5 +1,7 @@
 import type { ListTransactionsQuery } from '@/validators/api/transactions/request';
 import type {
+  AssignManyBudgetTransactionsType,
+  AssignManyCategoryTransactionsType,
   DeleteManyTransactionsType,
   InsertTransactionsType,
   UpdateTransactionsType,
@@ -158,9 +160,9 @@ export const listTransactions = async (
 // TODO:
 export const createTransaction = async (input: InsertTransactionsType) => {
   const data = await db.transaction(async (tx) => {
-    // If input category id is not UUID we know it is a new category to create
+    // If input category id is not empty string and not UUID we know it is a new category to create
     const parsedCategoryId = z.string().uuid().safeParse(input.categoryId);
-    if (!parsedCategoryId.success) {
+    if (!parsedCategoryId.success && input.categoryId) {
       // Get user id from input balance id
       const [{ userId }] = await tx
         .select({
@@ -174,7 +176,7 @@ export const createTransaction = async (input: InsertTransactionsType) => {
       const [{ id }] = await tx
         .insert(categories)
         .values({
-          name: input.categoryId ?? 'Untitled',
+          name: parsedCategoryId.data,
           userId,
         })
         .returning({
@@ -215,6 +217,68 @@ export const deleteManyTransactions = async (
   const data = await db
     .with(transactionIds)
     .delete(transactions)
+    .where(inArray(transactions.id, db.select().from(transactionIds)))
+    .returning();
+
+  return data;
+};
+
+export const assignManyCategoryTransactions = async (
+  userId: string,
+  input: AssignManyCategoryTransactionsType
+) => {
+  const transactionIds = db.$with('transaction_ids').as(
+    db
+      .select({
+        id: transactions.id,
+      })
+      .from(transactions)
+      .innerJoin(balances, eq(transactions.balanceId, balances.id))
+      .where(
+        and(
+          eq(balances.userId, userId),
+          inArray(transactions.id, input.transactionIds)
+        )
+      )
+  );
+
+  const data = await db
+    .with(transactionIds)
+    .update(transactions)
+    .set({
+      categoryId: input.categoryId,
+    })
+    .where(inArray(transactions.id, db.select().from(transactionIds)))
+    .returning();
+
+  return data;
+};
+
+export const assignManyBudgetTransactions = async (
+  userId: string,
+  input: AssignManyBudgetTransactionsType
+) => {
+  const transactionIds = db.$with('transaction_ids').as(
+    db
+      .select({
+        id: transactions.id,
+      })
+      .from(transactions)
+      .innerJoin(balances, eq(transactions.balanceId, balances.id))
+      .where(
+        and(
+          eq(balances.userId, userId),
+          inArray(transactions.id, input.transactionIds)
+        )
+      )
+  );
+
+  const data = await db
+    .with(transactionIds)
+    .update(transactions)
+    .set({
+      budgetCategoryId: input.budgetId,
+    })
     .where(inArray(transactions.id, db.select().from(transactionIds)))
     .returning();
 
