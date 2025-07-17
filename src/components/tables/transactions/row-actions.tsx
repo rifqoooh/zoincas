@@ -2,6 +2,7 @@ import type { TransactionsDataType } from '@/validators/api/transactions/respons
 import type { Row } from '@tanstack/react-table';
 
 import { MoreHorizontalIcon } from 'lucide-react';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -11,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useUpdateTransactionMutation } from '@/hooks/queries/transactions';
 import { useCreateEditTransactionModal } from '@/hooks/store/create-edit-transaction';
 import { useDeleteTransactionModal } from '@/hooks/store/delete-transaction';
 
@@ -24,8 +26,38 @@ export function RowActions({ row }: RowActionsProps) {
   const createEditTransactionStore = useCreateEditTransactionModal();
   const deleteTransactionStore = useDeleteTransactionModal();
 
+  const mutation = useUpdateTransactionMutation(transactionId);
+
   const onEditTransaction = () => {
     createEditTransactionStore.onOpen({ id: transactionId });
+  };
+
+  const onRemoveCategory = () => {
+    toast.promise(mutation.mutateAsync({ categoryId: null }), {
+      loading: 'Removing category...',
+      success: 'Category removed successfully',
+      error: (error: unknown) => {
+        if (error instanceof Error) {
+          return error.message;
+        }
+
+        return 'There is an error in the internal server.';
+      },
+    });
+  };
+
+  const onRemoveBudget = () => {
+    toast.promise(mutation.mutateAsync({ budgetCategoryId: null }), {
+      loading: 'Removing budget...',
+      success: 'Budget removed successfully',
+      error: (error: unknown) => {
+        if (error instanceof Error) {
+          return error.message;
+        }
+
+        return 'There is an error in the internal server.';
+      },
+    });
   };
 
   const onDeleteTransaction = () => {
@@ -47,6 +79,12 @@ export function RowActions({ row }: RowActionsProps) {
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={onEditTransaction}>
           Edit transaction
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={onRemoveCategory}>
+          Remove category
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={onRemoveBudget}>
+          Remove budget
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
