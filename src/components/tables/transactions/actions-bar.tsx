@@ -3,7 +3,12 @@ import * as React from 'react';
 import type { TransactionsDataType } from '@/validators/api/transactions/response';
 import type { Table } from '@tanstack/react-table';
 
-import { DownloadIcon, Layers2Icon, TrashIcon } from 'lucide-react';
+import {
+  DownloadIcon,
+  Layers2Icon,
+  PiggyBankIcon,
+  TrashIcon,
+} from 'lucide-react';
 
 import {
   DataTableActionBar,
@@ -11,6 +16,7 @@ import {
   DataTableActionBarSelection,
 } from '@/components/data-table/data-table-action-bar';
 import { Separator } from '@/components/ui/separator';
+import { useAssignManyBudgetModal } from '@/hooks/store/assign-many-budget';
 import { useAssignManyCategoryModal } from '@/hooks/store/assign-many-category';
 import { useDeleteManyTransactionModal } from '@/hooks/store/delete-many-transaction';
 import { exportTableToCSV } from '@/lib/export';
@@ -21,6 +27,7 @@ interface ActionsBarProps {
 
 export function ActionsBar({ table }: ActionsBarProps) {
   const assignManyCategoryStore = useAssignManyCategoryModal();
+  const assignManyBudgetStore = useAssignManyBudgetModal();
   const deleteManyStore = useDeleteManyTransactionModal();
 
   const [isPending, startTransition] = React.useTransition();
@@ -43,6 +50,10 @@ export function ActionsBar({ table }: ActionsBarProps) {
     assignManyCategoryStore.onOpen({ ids: selectedIds });
   };
 
+  const onAssignManyBudget = () => {
+    assignManyBudgetStore.onOpen({ ids: selectedIds });
+  };
+
   const onDeleteMany = () => {
     deleteManyStore.onOpen({ ids: selectedIds });
   };
@@ -63,6 +74,15 @@ export function ActionsBar({ table }: ActionsBarProps) {
           onClick={onAssignManyCategory}
         >
           <Layers2Icon />
+        </DataTableActionBarAction>
+        <DataTableActionBarAction
+          size="icon"
+          className="rounded-[0.3rem]"
+          tooltip="Assign budget to selected transaction(s)"
+          isPending={isPending}
+          onClick={onAssignManyBudget}
+        >
+          <PiggyBankIcon />
         </DataTableActionBarAction>
         <DataTableActionBarAction
           size="icon"

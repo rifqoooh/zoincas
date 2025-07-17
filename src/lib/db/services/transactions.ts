@@ -336,7 +336,7 @@ export const updateTransaction = async (
   const data = await db.transaction(async (tx) => {
     // If input category id is not UUID we know it is a new category to create
     const parsedCategoryId = z.string().uuid().safeParse(input.categoryId);
-    if (!parsedCategoryId.success) {
+    if (!parsedCategoryId.success && input.categoryId) {
       // Create a new category
       const [{ id }] = await tx
         .insert(categories)
