@@ -173,8 +173,8 @@ export function AutoCompleteGroup({
                           const isSelected = selected?.value === option.value;
                           return (
                             <CommandItem
-                              keywords={[group.group, option.label]}
                               key={option.value}
+                              keywords={[group.group, option.label]}
                               value={`${option.label}-${option.value}`}
                               onMouseDown={(event) => {
                                 event.preventDefault();

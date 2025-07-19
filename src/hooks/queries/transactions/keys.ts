@@ -7,4 +7,6 @@ export const transactionsKeys = {
     'transaction',
     { transactionId },
   ],
+  commandSearch: (search?: string) => ['transactions', 'command', search],
+  command: () => ['transactions', 'command'],
 };

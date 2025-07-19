@@ -66,6 +66,32 @@ export const useListTransactionsQuery = () => {
   return query;
 };
 
+export const useCommandTransactionsQuery = (search?: string) => {
+  const query = useQuery({
+    enabled: !!search,
+    queryKey: transactionsKeys.commandSearch(search),
+    queryFn: async () => {
+      const response = await transactions.$get({
+        query: { description: search },
+      });
+      if (!response.ok) {
+        const err = (await response.json()) as unknown as ErrorResponseAPI;
+        throw new Error(err.error.message);
+      }
+
+      const data = await response.json();
+      const parsedData = listTransactionsResponse.safeParse(data);
+      if (!parsedData.success) {
+        throw new Error('There is an error when parsing response data.');
+      }
+
+      return parsedData.data;
+    },
+  });
+
+  return query;
+};
+
 export const useGetTransactionQuery = (transactionId?: string) => {
   const query = useQuery({
     enabled: !!transactionId,
