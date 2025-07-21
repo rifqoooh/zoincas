@@ -33,6 +33,30 @@ export const ContentJSONRequired = <T extends ZodSchema>(
   };
 };
 
+export const ContentFormData = <T extends ZodSchema>(
+  schema: T,
+  description: string
+) => {
+  return {
+    content: {
+      'multipart/form-data': {
+        schema,
+      },
+    },
+    description,
+  };
+};
+
+export const ContentFormDataRequired = <T extends ZodSchema>(
+  schema: T,
+  description: string
+) => {
+  return {
+    ...ContentFormData(schema, description),
+    required: true,
+  };
+};
+
 interface createErrorSchemaProps<T extends ZodSchema> {
   schema: T;
   path: string;
