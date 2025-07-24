@@ -129,7 +129,7 @@ export function CommandMenu() {
           )}
           onClick={() => setOpen(true)}
         >
-          <span className="inline-flex">Search...</span>
+          <span className="inline-flex text-muted-foreground">Search...</span>
           <div className="absolute top-1.5 right-1.5 hidden gap-1 sm:flex">
             <CommandMenuKbd>{isMac ? '⌘' : 'Ctrl'}</CommandMenuKbd>
             <CommandMenuKbd className="aspect-square">K</CommandMenuKbd>
