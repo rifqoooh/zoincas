@@ -10,9 +10,10 @@ Analyze this receipt image (base64 encoded) and extract transaction details matc
 Rules:
 1. Output only valid JSON, no extra text
 2. Amount must be number, if uncertain about amount, set it to 0
-3. Datetime must follow ISO 8601 with UTC (Z) suffix
-4. If the receipt is not readable or not a receipt, return {}
-5. If description is empty, set it to "Untitled"
+3. If there is '+' or '-' symbol in front of amount, make it positive number or negative number respectively, otherwise always make it negative
+4. Datetime must follow ISO 8601 with UTC (Z) suffix
+5. If the receipt is not readable or not a receipt, return {}
+6. If description is empty, set it to "Untitled"
 
 Example valid response:
 {

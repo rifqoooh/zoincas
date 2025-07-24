@@ -16,7 +16,8 @@
     "shadcn": "bunx --bun shadcn@latest add"
   },
   "overrides": {
-    "react-is": "^19.0.0"
+    "react-is": "^19.0.0",
+    "react-remove-scroll": "^2.7.1"
   },
   "dependencies": {
     "@ai-sdk/google": "^1.2.22",

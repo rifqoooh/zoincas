@@ -48,6 +48,7 @@ function SheetOverlay({
 function SheetContent({
   className,
   children,
+  style,
   side = "right",
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
@@ -55,7 +56,7 @@ function SheetContent({
 }) {
   const padding = "0.5rem"
 
-  const style = React.useMemo<React.CSSProperties | undefined>(() => {
+  const innerStyle = React.useMemo<React.CSSProperties | undefined>(() => {
     if(side === "right") {
       return {
         top: padding,
@@ -106,7 +107,7 @@ function SheetContent({
             "data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom h-auto border rounded-xl",
           className,
         )}
-        style={style}
+        style={{...innerStyle, ...style}}
         {...props}
       >
         <div className="relative overflow-y-auto h-full p-6">

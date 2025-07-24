@@ -125,7 +125,7 @@ export function CommandMenu() {
         <Button
           variant="secondary"
           className={cn(
-            'relative h-8 w-full justify-start bg-surface pl-2.5 font-normal text-surface-foreground/60 shadow-none sm:pr-12 md:w-40 lg:w-56 xl:w-64 dark:bg-card'
+            'relative h-8 w-40 cursor-text justify-start bg-surface pl-2.5 font-normal text-surface-foreground/60 shadow-none sm:pr-12 lg:w-56 xl:w-64 dark:bg-card'
           )}
           onClick={() => setOpen(true)}
         >

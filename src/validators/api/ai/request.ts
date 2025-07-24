@@ -5,4 +5,4 @@ export const scanImageSchema = z.object({
   image: imageSchema,
 });
 
-export type ScanImageSchema = z.infer<typeof scanImageSchema>;
+export type ScanImageType = z.infer<typeof scanImageSchema>;

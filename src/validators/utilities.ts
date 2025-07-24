@@ -2,8 +2,8 @@ import { z } from 'zod';
 
 export const requiredString = z.string().trim().min(1, 'Required');
 
-const MB_BYTES = 1000000; // 10 MB
-const ACCEPTED_MIME_TYPES = [
+const MB_BYTES = 5 * 1024 * 1024; // 5 MB
+export const ACCEPTED_IMAGE_MIME_TYPES = [
   'image/jpeg',
   'image/jpg',
   'image/png',
@@ -11,22 +11,20 @@ const ACCEPTED_MIME_TYPES = [
 ];
 
 export const imageSchema = z.instanceof(File).superRefine((f, ctx) => {
-  if (!ACCEPTED_MIME_TYPES.includes(f.type)) {
+  if (!ACCEPTED_IMAGE_MIME_TYPES.includes(f.type)) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
-      message: `File must be one of [${ACCEPTED_MIME_TYPES.join(
+      message: `File must be one of [${ACCEPTED_IMAGE_MIME_TYPES.join(
         ', '
       )}] but was ${f.type}`,
     });
   }
-  if (f.size > 3 * MB_BYTES) {
+  if (f.size > MB_BYTES) {
     ctx.addIssue({
       code: z.ZodIssueCode.too_big,
       type: 'array',
-      message: `The file must not be larger than ${3 * MB_BYTES} bytes: ${
-        f.size
-      }`,
-      maximum: 3 * MB_BYTES,
+      message: `The file must not be larger than ${MB_BYTES} bytes: ${f.size}`,
+      maximum: MB_BYTES,
       inclusive: true,
     });
   }
