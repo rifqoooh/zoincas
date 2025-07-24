@@ -43,3 +43,40 @@ export const useGetSummariesQuery = () => {
 
   return query;
 };
+
+export const useGetSummariesCategoryQuery = () => {
+  const [search] = useQueryStates({
+    startDate: parseAsInteger,
+    endDate: parseAsInteger,
+    balance: parseAsString,
+  });
+
+  const parsedSearch = {
+    startDate: search.startDate ?? undefined,
+    endDate: search.endDate ?? undefined,
+    balance: search.balance ?? undefined,
+  };
+
+  const query = useQuery({
+    queryKey: summariesKeys.summariesCategory(parsedSearch),
+    queryFn: async () => {
+      const response = await summaries.category.$get({
+        query: parsedSearch,
+      });
+      if (!response.ok) {
+        const err = (await response.json()) as unknown as ErrorResponseAPI;
+        throw new Error(err.error.message);
+      }
+
+      const data = await response.json();
+      const parsedData = getSummariesResponse.safeParse(data);
+      if (!parsedData.success) {
+        throw new Error('There is an error when parsing response data.');
+      }
+
+      return parsedData.data;
+    },
+  });
+
+  return query;
+};

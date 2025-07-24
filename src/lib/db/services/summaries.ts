@@ -1,16 +1,16 @@
 import type { GetSummariesQuery } from '@/validators/api/summaries/request';
 
-import { and, eq, gte, lte, sql, sum } from 'drizzle-orm';
+import { and, desc, eq, gte, lt, lte, sql, sum } from 'drizzle-orm';
 
 import { db } from '@/lib/db';
-import { balances, transactions } from '@/lib/db/schema';
+import { balances, categories, transactions } from '@/lib/db/schema';
 
 export const getSummaries = async (
   userId: string,
   query: GetSummariesQuery
 ) => {
   const where = and(
-    query.balance ? eq(balances.id, query.balance) : undefined,
+    query.balance ? eq(transactions.balanceId, query.balance) : undefined,
     and(
       query.startDate
         ? gte(
@@ -55,6 +55,54 @@ export const getSummaries = async (
     .where(where)
     .groupBy(sql`date`)
     .orderBy(sql`date`);
+
+  return data;
+};
+
+export const getSummariesCategory = async (
+  userId: string,
+  query: GetSummariesQuery
+) => {
+  const where = and(
+    query.balance ? eq(transactions.balanceId, query.balance) : undefined,
+    and(
+      query.startDate
+        ? gte(
+            transactions.datetime,
+            (() => {
+              const date = new Date(query.startDate);
+              date.setHours(0, 0, 0, 0);
+              return date;
+            })()
+          )
+        : undefined,
+      query.endDate
+        ? lte(
+            transactions.datetime,
+            (() => {
+              const date = new Date(query.endDate);
+              date.setHours(23, 59, 59, 999);
+              return date;
+            })()
+          )
+        : undefined
+    ),
+    lt(transactions.amount, 0),
+    eq(categories.userId, userId)
+  );
+
+  const data = await db
+    .select({
+      name: categories.name,
+      amount: sum(sql`abs(${transactions.amount})`)
+        .mapWith(Number)
+        .as('amount'),
+    })
+    .from(transactions)
+    .innerJoin(categories, eq(transactions.categoryId, categories.id))
+    .where(where)
+    .groupBy(categories.name)
+    .orderBy(desc(sql`amount`));
 
   return data;
 };
