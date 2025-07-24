@@ -9,6 +9,7 @@ import budgetCategories from './_routes/budget-categories';
 import budgetPlans from './_routes/budget-plans';
 import categories from './_routes/categories';
 import sessions from './_routes/sessions';
+import summaries from './_routes/summaries';
 import transactions from './_routes/transactions';
 import users from './_routes/users';
 
@@ -24,6 +25,7 @@ const balancesRoutes = app.route('/', balances);
 const categoriesRoutes = app.route('/', categories);
 const budgetPlansRoutes = app.route('/', budgetPlans);
 const budgetCategoriesRoutes = app.route('/', budgetCategories);
+const summariesRoutes = app.route('/', summaries);
 const aiRoutes = app.route('/', ai);
 
 export const GET = handle(app);
@@ -37,4 +39,5 @@ export type BalancesType = typeof balancesRoutes;
 export type CategoriesType = typeof categoriesRoutes;
 export type BudgetPlansType = typeof budgetPlansRoutes;
 export type BudgetCategoriesType = typeof budgetCategoriesRoutes;
+export type SummariesType = typeof summariesRoutes;
 export type AIType = typeof aiRoutes;
