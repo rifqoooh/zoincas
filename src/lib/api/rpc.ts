@@ -1,4 +1,5 @@
 import type {
+  AIType,
   AuthType,
   BalancesType,
   BudgetCategoriesType,
@@ -20,3 +21,4 @@ export const categories = hc<CategoriesType>(url).api.categories;
 export const budgetPlans = hc<BudgetPlansType>(url).api['budget-plans'];
 export const budgetCategories =
   hc<BudgetCategoriesType>(url).api['budget-categories'];
+export const ai = hc<AIType>(url).api.ai;
