@@ -4,6 +4,8 @@ import * as React from 'react';
 
 import { Mesh, Program, Renderer, Triangle } from 'ogl';
 
+import { cn } from '@/lib/utilities';
+
 interface LiquidChromeProps extends React.HTMLAttributes<HTMLDivElement> {
   baseColor?: [number, number, number];
   speed?: number;
@@ -20,6 +22,7 @@ export function LiquidChrome({
   frequencyX = 3,
   frequencyY = 2,
   interactive = true,
+  className,
   ...props
 }: LiquidChromeProps) {
   const containerRef = React.useRef<HTMLDivElement | null>(null);
@@ -174,5 +177,7 @@ export function LiquidChrome({
     };
   }, [baseColor, speed, amplitude, frequencyX, frequencyY, interactive]);
 
-  return <div ref={containerRef} className="h-full w-full" {...props} />;
+  return (
+    <div {...props} ref={containerRef} className={cn('size-full', className)} />
+  );
 }

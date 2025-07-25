@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 
+import Link from 'next/link';
+
 import { SignInForm } from '@/components/forms/sign-in';
 import { createMetadata } from '@/lib/seo/metadata';
-import Link from 'next/link';
 
 export const metadata: Metadata = createMetadata({
   title: 'Sign in',
@@ -14,7 +15,7 @@ export default function SignInPage() {
     <div className="p-6 lg:p-8">
       <div className="mx-auto flex w-full flex-col justify-center gap-6 sm:w-[400px]">
         <div className="flex flex-col gap-2 text-center">
-          <h1 className="font-semibold text-xl tracking-tight">
+          <h1 className="text-xl uppercase tracking-tight">
             Welcome to Zoincas
           </h1>
           <p className="text-muted-foreground text-sm">
