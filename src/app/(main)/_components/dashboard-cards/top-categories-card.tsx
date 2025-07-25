@@ -49,7 +49,7 @@ export function TopCategoriesCard({
   return (
     <Card className={className} {...props}>
       <CardHeader>
-        <CardDescription>Top categories</CardDescription>
+        <CardDescription>Top expense categories</CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">
         <PieChart
