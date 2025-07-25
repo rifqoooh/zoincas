@@ -3,7 +3,8 @@ import type { Metadata } from 'next';
 import { Container } from '@/components/container';
 import { Separator } from '@/components/ui/separator';
 import { createMetadata } from '@/lib/seo/metadata';
-import { DashboardCards } from '../_components/dashboard-cards';
+import { NetWorthCard } from '../_components/dashboard-cards/net-worth-card';
+import { TopCategoriesCard } from '../_components/dashboard-cards/top-categories-card';
 import { Header } from '../_components/header';
 import { HeaderDescription } from '../_components/header/header-description';
 import { HeaderTitle } from '../_components/header/header-title';
@@ -28,8 +29,9 @@ export default function DashboardPage() {
 
       <Separator />
 
-      <div className="grid gap-4 py-6">
-        <DashboardCards />
+      <div className="grid gap-4 py-6 xl:grid-cols-6">
+        <NetWorthCard className="xl:col-span-4" />
+        <TopCategoriesCard className="xl:col-span-2" />
       </div>
     </Container>
   );

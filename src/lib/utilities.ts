@@ -30,13 +30,13 @@ export const mergeRefs = <T = any>(
   };
 };
 
-export function formatCurrency(
+export const formatCurrency = (
   value: number | string,
   options: {
     currency?: 'USD' | 'IDR';
     notation?: Intl.NumberFormatOptions['notation'];
   } = {}
-) {
+) => {
   const { currency = 'IDR', notation = 'standard' } = options;
 
   // convert to float if passed price is string
@@ -47,5 +47,14 @@ export function formatCurrency(
     currency,
     notation,
     maximumFractionDigits: 0,
+  }).format(number);
+}
+
+export const formatCompactNumber = (value: number | string) => {
+  // convert to float if passed price is string
+  const number = typeof value === 'string' ? parseFloat(value) : value;
+
+  return new Intl.NumberFormat('en', {
+    notation: 'compact',
   }).format(number);
 }

@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import type {
   ChartConfig,
   ChartTooltipContentProps,
@@ -20,31 +22,42 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/charts';
 import { formatCurrency } from '@/lib/utilities';
+import { format } from 'date-fns';
 
 interface BarChartProps {
   summaries: GetSummariesResponse;
 }
 
-const chartConfig = {
-  income: {
-    label: 'Income',
-  },
-  expense: {
-    label: 'Expense',
-  },
-} satisfies ChartConfig;
-
 export function BarChart({ summaries }: BarChartProps) {
+  const mappedData = React.useMemo(() => {
+    return summaries.map((summary) => ({
+      date: format(summary.date, 'dd MMM yyyy'),
+      income: summary.income,
+      expense: summary.expense,
+    }));
+  }, [summaries]);
+
+  const chartConfig = React.useMemo(() => {
+    return {
+      income: {
+        label: 'Income',
+      },
+      expense: {
+        label: 'Expense',
+      },
+    } satisfies ChartConfig;
+  }, []);
+
   return (
     <ChartContainer config={chartConfig}>
-      <RechartsBarChart data={summaries} stackOffset="sign" accessibilityLayer>
+      <RechartsBarChart data={mappedData} stackOffset="sign" accessibilityLayer>
         <CartesianGrid horizontal={false} vertical={false} />
         <XAxis
           dataKey="date"
           tickLine={false}
           axisLine={false}
           tickMargin={10}
-          ticks={[summaries.at(0)?.date ?? '', summaries.at(-1)?.date ?? '']}
+          ticks={[mappedData.at(0)?.date ?? '', mappedData.at(-1)?.date ?? '']}
           interval={'preserveStartEnd'}
         />
         <ChartTooltip
