@@ -3,6 +3,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { ThemeProviderProps } from 'next-themes';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { QueryProvider } from './query';
+import { TailwindIndicator } from './tailwind-indicator';
 import { ThemeProvider } from './theme';
 
 interface ProviderProps extends ThemeProviderProps {}
@@ -16,6 +17,7 @@ export function Provider({ children, ...props }: ProviderProps) {
           {children}
           <Toaster position="top-center" richColors />
         </NuqsAdapter>
+        <TailwindIndicator />
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryProvider>
     </ThemeProvider>
