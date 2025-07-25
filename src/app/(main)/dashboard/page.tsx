@@ -3,10 +3,10 @@ import type { Metadata } from 'next';
 import { Container } from '@/components/container';
 import { Separator } from '@/components/ui/separator';
 import { createMetadata } from '@/lib/seo/metadata';
-import { FilterButton } from '../_components/dashboard-cards/filter-button';
 import { InsightCard } from '../_components/dashboard-cards/insight-card';
 import { NetWorthCard } from '../_components/dashboard-cards/net-worth-card';
 import { TopCategoriesCard } from '../_components/dashboard-cards/top-categories-card';
+import { FacetedFilter } from '../_components/dashboard-faceted-filter';
 import { Header } from '../_components/header';
 import { HeaderDescription } from '../_components/header/header-description';
 import { HeaderTitle } from '../_components/header/header-title';
@@ -20,7 +20,7 @@ export const metadata: Metadata = createMetadata({
 export default function DashboardPage() {
   return (
     <Container>
-      <Header>
+      <Header className="sm:flex-col sm:items-start sm:justify-start lg:flex-row lg:items-center lg:justify-between">
         <div>
           <HeaderTitle>Dashboard</HeaderTitle>
           <HeaderDescription>
@@ -28,7 +28,7 @@ export default function DashboardPage() {
           </HeaderDescription>
         </div>
 
-        <FilterButton />
+        <FacetedFilter />
       </Header>
 
       <Separator />
