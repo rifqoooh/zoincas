@@ -48,8 +48,17 @@ export function BarChart({ summaries }: BarChartProps) {
     } satisfies ChartConfig;
   }, []);
 
+  const ticks = React.useMemo(() => {
+    const data = [mappedData.at(0)?.date ?? ''];
+    if (mappedData.length > 1) {
+      data.push(mappedData.at(-1)?.date ?? '');
+    }
+
+    return data;
+  }, [mappedData]);
+
   return (
-    <ChartContainer config={chartConfig} className="h-full w-full">
+    <ChartContainer config={chartConfig}>
       <RechartsBarChart data={mappedData} stackOffset="sign" accessibilityLayer>
         <CartesianGrid horizontal={false} vertical={false} />
         <XAxis
@@ -57,7 +66,7 @@ export function BarChart({ summaries }: BarChartProps) {
           tickLine={false}
           axisLine={false}
           tickMargin={10}
-          ticks={[mappedData.at(0)?.date ?? '', mappedData.at(-1)?.date ?? '']}
+          ticks={ticks}
           interval={'preserveStartEnd'}
         />
         <ChartTooltip
