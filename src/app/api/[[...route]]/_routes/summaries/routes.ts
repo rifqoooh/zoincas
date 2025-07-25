@@ -7,6 +7,7 @@ import { protectedMiddleware } from '@/middleware/api/protected-middleware';
 import { getSummariesQuery } from '@/validators/api/summaries/request';
 import {
   getSummariesCategoryResponse,
+  getSummariesIncomeExpenseResponse,
   getSummariesResponse,
 } from '@/validators/api/summaries/response';
 
@@ -31,6 +32,28 @@ export const getSummaries = createRoute({
   },
 });
 
+export const getSummariesIncomeExpense = createRoute({
+  method: 'get',
+  path: '/summaries/income-expense',
+  tags,
+  middleware: [protectedMiddleware()],
+  request: {
+    query: getSummariesQuery,
+  },
+  responses: {
+    [StatusCode.OK]: ContentJSON(
+      getSummariesIncomeExpenseResponse,
+      'The income and expense summaries.'
+    ),
+    [StatusCode.NOT_FOUND]: ContentJSON(
+      createNotFoundSchema({
+        path: '/summaries/income-expense',
+      }),
+      'The income and expense summaries does not exist in our resources.'
+    ),
+  },
+});
+
 export const getSummariesCategory = createRoute({
   method: 'get',
   path: '/summaries/category',
@@ -42,16 +65,17 @@ export const getSummariesCategory = createRoute({
   responses: {
     [StatusCode.OK]: ContentJSON(
       getSummariesCategoryResponse,
-      'The summaries category.'
+      'The category summaries.'
     ),
     [StatusCode.NOT_FOUND]: ContentJSON(
       createNotFoundSchema({
         path: '/summaries/category',
       }),
-      'The summaries category does not exist in our resources.'
+      'The category summaries does not exist in our resources.'
     ),
   },
 });
 
 export type GetSummaries = typeof getSummaries;
+export type GetSummariesIncomeExpense = typeof getSummariesIncomeExpense;
 export type GetSummariesCategory = typeof getSummariesCategory;
