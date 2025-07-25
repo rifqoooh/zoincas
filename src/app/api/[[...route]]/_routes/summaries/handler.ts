@@ -62,5 +62,19 @@ export const getSummariesCategory: AppRouteHandler<
     );
   }
 
-  return c.json(data, StatusCode.OK);
+  const topCategories = data.slice(0, 3);
+
+  const otherCategories = data.slice(3);
+  const otherCategoriesAmount = otherCategories.reduce((acc, category) => {
+    return acc + category.amount;
+  }, 0);
+
+  if (otherCategories.length > 0) {
+    topCategories.push({
+      name: 'Other',
+      amount: otherCategoriesAmount,
+    });
+  }
+
+  return c.json(topCategories, StatusCode.OK);
 };

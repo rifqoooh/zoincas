@@ -4,7 +4,10 @@ import { useQuery } from '@tanstack/react-query';
 import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs';
 
 import { summaries } from '@/lib/api/rpc';
-import { getSummariesResponse } from '@/validators/api/summaries/response';
+import {
+  getSummariesCategoryResponse,
+  getSummariesResponse,
+} from '@/validators/api/summaries/response';
 import { summariesKeys } from './keys';
 
 export const useGetSummariesQuery = () => {
@@ -69,7 +72,7 @@ export const useGetSummariesCategoryQuery = () => {
       }
 
       const data = await response.json();
-      const parsedData = getSummariesResponse.safeParse(data);
+      const parsedData = getSummariesCategoryResponse.safeParse(data);
       if (!parsedData.success) {
         throw new Error('There is an error when parsing response data.');
       }
