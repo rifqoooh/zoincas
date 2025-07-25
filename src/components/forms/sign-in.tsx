@@ -1,7 +1,8 @@
-"use client";
+'use client';
 
-import { PasswordInput } from "@/components/password-input";
-import { Button } from "@/components/ui/button";
+import { GoogleAuthButton } from '@/components/google-auth-button';
+import { PasswordInput } from '@/components/password-input';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -9,18 +10,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-// import { GoogleAuthButton } from '@/components/google-auth-button';
-// import { useGoogleOAuth } from '@/hooks/use-google-oauth';
-import { useSignIn } from "@/hooks/actions/use-sign-in";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
+import { useGoogleOAuth } from '@/hooks/actions/use-google-oauth';
+import { useSignIn } from '@/hooks/actions/use-sign-in';
 
 export function SignInForm() {
   const { form, onSubmit, isPending: isPendingForm } = useSignIn();
-  //   const { onSignInGoogle, isPending: isPendingOAuth } = useGoogleOAuth();
+  const { onSignInGoogle, isPending: isPendingOAuth } = useGoogleOAuth();
 
-  const isPending = isPendingForm; // || isPendingOAuth;
+  const isPending = isPendingForm || isPendingOAuth;
 
   return (
     <>
@@ -86,7 +86,7 @@ export function SignInForm() {
         <Separator orientation="horizontal" />
       </div>
 
-      {/* <GoogleAuthButton onClick={() => onSignInGoogle()} disabled={isPending} /> */}
+      <GoogleAuthButton onClick={onSignInGoogle} disabled={isPending} />
     </>
   );
 }

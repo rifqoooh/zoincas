@@ -2,11 +2,22 @@
 
 import type { SignInType } from '@/validators/actions/sign-in';
 
+import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
+
+import { env } from '@/env';
 import { auth } from '@/lib/auth/server';
 import { Routes } from '@/lib/safe-routes';
 import { signInSchema } from '@/validators/actions/sign-in';
-import { headers } from 'next/headers';
-import { redirect } from 'next/navigation';
+
+export const signInGoogleAction = async () => {
+  await auth.api.signInSocial({
+    body: {
+      provider: 'google',
+      callbackURL: env().NEXT_PUBLIC_APP_URL,
+    },
+  });
+};
 
 export const signInAction = async (
   values: SignInType,
