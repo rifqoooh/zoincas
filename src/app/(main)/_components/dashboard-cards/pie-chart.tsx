@@ -49,7 +49,7 @@ export function PieChart({ colors, fallbackColor, categories }: PieChartProps) {
   return (
     <ChartContainer
       config={chartConfig}
-      className="mx-auto aspect-square h-[300px]"
+      className="mx-auto h-[300px] w-[270px]"
     >
       <RechartsPieChart>
         <ChartTooltip
@@ -66,7 +66,7 @@ export function PieChart({ colors, fallbackColor, categories }: PieChartProps) {
           data={mappedData}
           nameKey="name"
           dataKey="amount"
-          innerRadius={105}
+          innerRadius={95}
           strokeWidth={5}
           startAngle={90}
           endAngle={-270}
@@ -75,7 +75,7 @@ export function PieChart({ colors, fallbackColor, categories }: PieChartProps) {
         >
           <Label
             position="center"
-            viewBox={{ cx: 150, cy: 145 }}
+            viewBox={{ cx: 135, cy: 145 }}
             content={({ viewBox }) => {
               if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
                 return (

@@ -49,7 +49,7 @@ export function BarChart({ summaries }: BarChartProps) {
   }, []);
 
   return (
-    <ChartContainer config={chartConfig}>
+    <ChartContainer config={chartConfig} className="h-full w-full">
       <RechartsBarChart data={mappedData} stackOffset="sign" accessibilityLayer>
         <CartesianGrid horizontal={false} vertical={false} />
         <XAxis

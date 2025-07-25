@@ -27,7 +27,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import {} from '@/components/ui/select';
 import { cn } from '@/lib/utilities';
 
 interface CalendarDatePickerProps
@@ -177,16 +176,16 @@ export const CalendarDatePicker = React.forwardRef<
           <PopoverContent className="w-auto" align="end" sideOffset={8}>
             <div className="flex">
               {numberOfMonths === 2 && (
-                <div className="hidden flex-col gap-1 border-foreground/10 pr-4 text-left md:flex">
+                <div className="hidden w-36 flex-col gap-1 border-foreground/10 pr-4 text-left md:flex">
                   {dateRanges.map(({ label, start, end }) => (
                     <Button
                       key={label}
                       variant="ghost"
                       size="sm"
                       className={cn(
-                        'justify-start hover:bg-primary/90',
+                        'justify-start',
                         selectedRange === label &&
-                          'bg-primary text-background hover:bg-red-500'
+                          'bg-primary text-primary-foreground'
                       )}
                       onClick={() => {
                         selectDateRange(start, end, label);
