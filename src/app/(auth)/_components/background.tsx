@@ -13,7 +13,7 @@ export function Background() {
         />
       </div>
 
-      <div className="relative">
+      <div className="relative mt-auto">
         <p className="font-medium text-lg">zoincas</p>
         <p className="text-sm">Rich mindset manage their money.</p>
       </div>

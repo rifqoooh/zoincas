@@ -14,10 +14,10 @@ import {
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { useGoogleOAuth } from '@/hooks/actions/use-google-oauth';
-import { useSignIn } from '@/hooks/actions/use-sign-in';
+import { useSignUp } from '@/hooks/actions/use-sign-up';
 
-export function SignInForm() {
-  const { form, onSubmit, isPending: isPendingForm } = useSignIn();
+export function SignUpForm() {
+  const { form, onSubmit, isPending: isPendingForm } = useSignUp();
   const { onSignInGoogle, isPending: isPendingOAuth } = useGoogleOAuth();
 
   const isPending = isPendingForm || isPendingOAuth;
@@ -28,6 +28,25 @@ export function SignInForm() {
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid gap-6">
             <div className="grid gap-2">
+              <FormField
+                name="name"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Full name</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="John Doe"
+                        className="h-9"
+                        disabled={isPending}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 name="email"
                 control={form.control}
@@ -73,7 +92,7 @@ export function SignInForm() {
               className="w-full"
               disabled={isPending}
             >
-              {isPending ? <p>Loading...</p> : <p>Sign in</p>}
+              {isPending ? <p>Loading...</p> : <p>Create account</p>}
             </Button>
           </div>
         </form>

@@ -1,6 +1,7 @@
 'use server';
 
 import type { SignInType } from '@/validators/actions/sign-in';
+import type { SignUpType } from '@/validators/actions/sign-up';
 
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -9,6 +10,21 @@ import { env } from '@/env';
 import { auth } from '@/lib/auth/server';
 import { Routes } from '@/lib/safe-routes';
 import { signInSchema } from '@/validators/actions/sign-in';
+import { signUpSchema } from '@/validators/actions/sign-up';
+
+export const signUpAction = async (values: SignUpType) => {
+  const { name, email, password } = signUpSchema.parse(values);
+
+  await auth.api.signUpEmail({
+    body: {
+      name,
+      email,
+      password,
+    },
+  });
+
+  redirect(Routes.root());
+};
 
 export const signInGoogleAction = async () => {
   await auth.api.signInSocial({
