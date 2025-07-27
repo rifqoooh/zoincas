@@ -43,3 +43,4 @@ next-env.d.ts
 # etc
 /csv
 /note.md
+/src/lib/db/seed/admin.ts
