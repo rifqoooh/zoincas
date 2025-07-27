@@ -1,9 +1,10 @@
 'use client';
 
-import { signOutAction } from '@/actions/auth';
-import { toast } from '@/lib/toast-redirect';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTransition } from 'react';
+
+import { signOutAction } from '@/actions/auth';
+import { toast } from '@/lib/toast-redirect';
 
 export const useSignOut = () => {
   const [isPending, startTransition] = useTransition();

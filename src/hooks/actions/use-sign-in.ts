@@ -4,6 +4,7 @@ import type { SignInType } from '@/validators/actions/sign-in';
 import type { SubmitHandler } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -21,6 +22,8 @@ export const useSignIn = () => {
 
   const [isPending, startTransition] = useTransition();
 
+  const queryClient = useQueryClient();
+
   const form = useForm<SignInType>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -36,6 +39,9 @@ export const useSignIn = () => {
       toast(signInAction(parsedData, callbackURL), {
         loading: 'Please wait, we are signing you in...',
         success: 'There you go!',
+        onSuccess: () => {
+          queryClient.clear();
+        },
       });
     });
   };
