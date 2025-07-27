@@ -4,17 +4,13 @@ import { redirect } from 'next/navigation';
 import { auth } from '@/lib/auth/server';
 import { Routes } from '@/lib/safe-routes';
 
-export const adminMiddleware = async () => {
+export const authMiddleware = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
-  if (!session) {
-    redirect(Routes.signIn());
-  }
-
-  if (session.user.role !== 'admin') {
-    redirect(Routes.root());
+  if (session) {
+    redirect(Routes.dashboard());
   }
 
   return;

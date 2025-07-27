@@ -12,4 +12,5 @@ export const SignInSearchParams = z.object({
 export const Routes = {
   root: createRoute(() => '/', z.object({}), RootSearchParams),
   signIn: createRoute(() => '/sign-in', z.object({}), SignInSearchParams),
+  dashboard: createRoute(() => '/dashboard'),
 };

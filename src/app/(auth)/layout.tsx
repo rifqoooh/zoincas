@@ -1,12 +1,15 @@
 import type * as React from 'react';
 
+import { authMiddleware } from '@/middleware/page/auth-middleware';
 import { Background } from './_components/background';
 
 interface AuthLayoutProps {
   readonly children: React.ReactNode;
 }
 
-export default function AuthLayout({ children }: AuthLayoutProps) {
+export default async function AuthLayout({ children }: AuthLayoutProps) {
+  await authMiddleware();
+
   return (
     <div className="relative grid h-svh flex-col items-center justify-center lg:max-w-none lg:grid-cols-2 lg:px-0 xl:grid-cols-[45%_55%]">
       <div>{children}</div>

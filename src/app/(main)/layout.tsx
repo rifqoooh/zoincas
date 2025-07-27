@@ -7,6 +7,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
+import { protectedMiddleware } from '@/middleware/page/protected-middleware';
 import { CommandMenu } from './_components/command-menu';
 import { MainProviders } from './_components/providers';
 
@@ -14,7 +15,9 @@ type MainLayoutProps = {
   readonly children: React.ReactNode;
 };
 
-export default function MainLayout({ children }: MainLayoutProps) {
+export default async function MainLayout({ children }: MainLayoutProps) {
+  await protectedMiddleware();
+
   return (
     <SidebarProvider>
       <MainSidebar />
