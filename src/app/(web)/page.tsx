@@ -1,11 +1,17 @@
 import { createMetadata } from '@/lib/seo/metadata';
 import type { Metadata } from 'next';
+import { Header } from './_components/header';
+import { Hero } from './_components/hero';
 
 export const metadata: Metadata = createMetadata({
-  title: 'Zoincas',
   description: 'Zoincas is a personal financial tracker app powered with AI.',
 });
 
 export default function RootPage() {
-  return <div>Landing Page</div>;
+  return (
+    <main>
+      <Header />
+      <Hero />
+    </main>
+  );
 }
