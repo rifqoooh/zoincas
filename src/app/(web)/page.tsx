@@ -1,5 +1,7 @@
-import { createMetadata } from '@/lib/seo/metadata';
 import type { Metadata } from 'next';
+
+import { createMetadata } from '@/lib/seo/metadata';
+import { Features } from './_components/features';
 import { Header } from './_components/header';
 import { Hero } from './_components/hero';
 
@@ -12,6 +14,7 @@ export default function RootPage() {
     <main>
       <Header />
       <Hero />
+      <Features />
     </main>
   );
 }
