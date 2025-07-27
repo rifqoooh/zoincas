@@ -2,7 +2,7 @@ import merge from 'lodash.merge';
 import type { Metadata } from 'next';
 
 interface MetadataGenerator extends Omit<Metadata, 'title' | 'description'> {
-  title: string;
+  title?: string;
   description: string;
   image?: string;
 }
@@ -21,7 +21,7 @@ export const createMetadata = ({
   image,
   ...properties
 }: MetadataGenerator): Metadata => {
-  const parsedTitle = `${title} | ${applicationName}`;
+  const parsedTitle = title ? `${title} | ${applicationName}` : applicationName;
   const defaultMetadata: Metadata = {
     title: parsedTitle,
     description,
