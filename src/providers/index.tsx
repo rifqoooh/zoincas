@@ -1,6 +1,7 @@
+import type { ThemeProviderProps } from 'next-themes';
+
 import { Toaster } from '@/components/ui/sonner';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import type { ThemeProviderProps } from 'next-themes';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { QueryProvider } from './query';
 import { TailwindIndicator } from './tailwind-indicator';
