@@ -9,6 +9,8 @@
     "start": "next start",
     "lint": "bunx --bun biome lint",
     "format": "bunx --bun biome format ./src",
+    "ultracite lint": "bun x ultracite lint",
+    "ultracite format": "bun x ultracite format ./src",
     "db:push": "bunx --bun drizzle-kit push",
     "db:pull": "bunx --bun drizzle-kit pull",
     "db:studio": "bunx --bun drizzle-kit studio",
