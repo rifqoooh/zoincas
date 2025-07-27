@@ -131,6 +131,7 @@ export const CreateEditTransactionForm = () => {
                         jsDate={field.value}
                         onJsDateChange={field.onChange}
                         isDisabled={isPending}
+                        hourCycle={12}
                       />
                     </FormControl>
                     <FormMessage />
