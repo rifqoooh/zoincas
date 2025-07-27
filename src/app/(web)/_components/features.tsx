@@ -75,9 +75,9 @@ function CardDecorator({ children }: { children: React.ReactNode }) {
       />
       <div
         aria-hidden
-        className="absolute inset-0 bg-radial from-transparent to-75% to-background"
+        className="absolute inset-0 bg-radial from-transparent to-75% to-card"
       />
-      <div className="absolute inset-0 m-auto flex size-12 items-center justify-center border-t border-l bg-background">
+      <div className="absolute inset-0 m-auto flex size-12 items-center justify-center border-t border-l bg-card">
         {children}
       </div>
     </div>
