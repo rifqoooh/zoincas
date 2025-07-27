@@ -80,7 +80,7 @@ export function Hero() {
 
                 <AnimatedGroup variants={transitionVariants}>
                   <h1 className="mt-8 text-balance text-5xl md:text-6xl xl:text-7xl">
-                    Your
+                    Modern
                     <Image
                       src="https://res.cloudinary.com/dq3ztcghr/image/upload/v1753508303/single-fake-gold-dollar-coin-crop_xuzcwx.webp"
                       alt="coin"
@@ -89,7 +89,7 @@ export function Hero() {
                       width="256"
                       height="256"
                     />
-                    Personal Financial Management
+                    Solution for Personal Financial Management
                   </h1>
                 </AnimatedGroup>
 
