@@ -1,21 +1,20 @@
 'use server';
 
 import converter from 'convert-csv-to-json';
-import { ilike } from 'drizzle-orm';
 
-import { db } from '../';
+import { db } from '@/lib/db';
 import {
   balances,
   budgetCategories,
   budgetPlans,
   categories,
   transactions,
-  users,
 } from '../schema';
 
 const getJSON = (filename: string) => {
   const json = converter
     .fieldDelimiter(',')
+    .supportQuotedField(true)
     .formatValueByType(true)
     .getJsonFromCsv(filename);
 
@@ -30,21 +29,11 @@ const seed = async () => {
     await db.delete(budgetPlans);
     await db.delete(budgetCategories);
 
-    const email = 'rifqoh@zoincas.com';
-    const [user] = await db
-      .select()
-      .from(users)
-      .where(ilike(users.email, email))
-      .limit(1);
-
-    const { id: userId } = user;
-
     // get balances data from csv
     const rawBalances = getJSON('csv/balances.csv');
 
     const mappedBalances = rawBalances.map(({ createdAt, ...balance }) => ({
       ...balance,
-      userId,
     }));
 
     // get categories data from csv
@@ -54,7 +43,6 @@ const seed = async () => {
       ({ createdAt, ...category }) => ({
         ...category,
         name: category.name || 'Untitled',
-        userId,
       })
     );
 
@@ -65,7 +53,6 @@ const seed = async () => {
       ({ createdAt, ...budgetPlan }) => ({
         ...budgetPlan,
         title: budgetPlan.title || 'Untitled',
-        userId,
       })
     );
 
