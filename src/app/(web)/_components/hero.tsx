@@ -180,18 +180,18 @@ export function Hero() {
                 />
                 <div className="relative inset-shadow-2xs mx-auto max-w-6xl overflow-hidden rounded-2xl border bg-background p-4 shadow-lg shadow-zinc-950/15 ring-1 ring-background dark:inset-shadow-white/20">
                   <Image
-                    className="relative hidden aspect-15/8 rounded-2xl bg-background dark:block"
-                    src="/mail2.png"
-                    alt="app screen"
-                    width="2700"
-                    height="1440"
+                    className="relative z-2 rounded-2xl border border-border/25 dark:hidden"
+                    src="https://res.cloudinary.com/dq3ztcghr/image/upload/v1753601980/light-zoincas-transactions_ackkv2.png"
+                    alt="app screen light theme"
+                    width="1366"
+                    height="679"
                   />
                   <Image
-                    className="relative z-2 aspect-15/8 rounded-2xl border border-border/25 dark:hidden"
-                    src="/mail2-light.png"
-                    alt="app screen"
-                    width="2700"
-                    height="1440"
+                    className="relative hidden rounded-2xl bg-background dark:block"
+                    src="https://res.cloudinary.com/dq3ztcghr/image/upload/v1753601963/dark-zoincas-transactions_jtiuud.png"
+                    alt="app screen dark theme"
+                    width="1366"
+                    height="679"
                   />
                 </div>
               </div>
