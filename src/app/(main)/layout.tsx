@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/sidebar';
 import { protectedMiddleware } from '@/middleware/page/protected-middleware';
 import { CommandMenu } from './_components/command-menu';
+import { Greeting } from './_components/greeting';
 import { MainProviders } from './_components/providers';
 
 type MainLayoutProps = {
@@ -30,7 +31,7 @@ export default async function MainLayout({ children }: MainLayoutProps) {
                 orientation="vertical"
                 className="mr-2 data-[orientation=vertical]:h-4"
               />
-              <div className="grow">Zoincas</div>
+              <Greeting className="grow" />
               <CommandMenu />
             </div>
           </header>
