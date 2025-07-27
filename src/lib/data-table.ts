@@ -3,11 +3,16 @@ import type * as React from 'react';
 import type {
   ExtendedColumnFilter,
   FilterOperator,
-  FilterVariant,
+  FilterVariant as FilterVariantPrimitive,
 } from '@/types/data-table';
 import type { Column } from '@tanstack/react-table';
 
 import { dataTableConfig } from '@/config/data-table';
+
+type FilterVariant = Exclude<
+  FilterVariantPrimitive,
+  'groupSelect' | 'groupMultiSelect'
+>;
 
 export function getCommonPinningStyles<TData>({
   column,
