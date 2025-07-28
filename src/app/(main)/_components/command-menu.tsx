@@ -64,7 +64,7 @@ export function CommandMenu() {
       transactionsData.map((transaction) => ({
         id: transaction.id,
         title: `${transaction.description} - ${format(transaction.datetime, 'dd MMM yyyy')}`,
-        url: `/transactions?description=${transaction.description}`,
+        url: `/transactions?description=${transaction.description.replace(/\s/g, '+')}`,
       })),
     [transactionsData]
   );
