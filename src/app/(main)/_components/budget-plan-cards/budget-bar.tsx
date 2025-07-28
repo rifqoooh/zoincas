@@ -29,7 +29,7 @@ export function BudgetBar({ id, category }: BudgetBarProps) {
     () =>
       category.amount === 0
         ? 0
-        : 100 - Math.max((remaining / category.amount) * 100, 0),
+        : Math.max((remaining / category.amount) * 100, 0),
     [category, remaining]
   );
 
@@ -48,12 +48,10 @@ export function BudgetBar({ id, category }: BudgetBarProps) {
         <div
           className={cn(
             'flex h-5 animate-shine items-center rounded-sm group-hover:bg-opacity-80',
-            'bg-gradient-to-r from-40% from-emerald-400 via-50% via-emerald-300 to-60% to-emerald-400 dark:from-emerald-500 dark:via-emerald-400 dark:to-emerald-500',
-            width >= 35 &&
-              'bg-gradient-to-r from-40% from-orange-400 via-50% via-orange-300 to-60% to-orange-400 dark:from-orange-500 dark:via-orange-400 dark:to-orange-500',
+            'bg-gradient-to-r from-40% from-orange-400 via-50% via-orange-300 to-60% to-orange-400 dark:from-orange-500 dark:via-orange-400 dark:to-orange-500',
             width >= 75 &&
-              'bg-gradient-to-r from-40% from-rose-400 via-50% via-rose-300 to-60% to-rose-400 dark:from-rose-500 dark:via-rose-400 dark:to-rose-500',
-            remaining < 0 &&
+              'bg-gradient-to-r from-40% from-emerald-400 via-50% via-emerald-300 to-60% to-emerald-400 dark:from-emerald-500 dark:via-emerald-400 dark:to-emerald-500',
+            width <= 25 &&
               'bg-gradient-to-r from-40% from-red-400 via-50% via-red-300 to-60% to-red-400 dark:from-red-500 dark:via-red-400 dark:to-red-500'
           )}
           style={{
@@ -64,10 +62,20 @@ export function BudgetBar({ id, category }: BudgetBarProps) {
       </div>
       <div className="flex w-full items-center justify-between">
         <div className="flex flex-col items-start">
-          <p className="hidden whitespace-nowrap text-muted-foreground/70 text-xs sm:block">
+          <p
+            className={cn(
+              'hidden whitespace-nowrap text-muted-foreground/70 text-xs sm:block',
+              remaining < 0 && 'text-red-500/70'
+            )}
+          >
             Usage
           </p>
-          <p className="hidden whitespace-nowrap text-muted-foreground text-sm sm:block">
+          <p
+            className={cn(
+              'hidden whitespace-nowrap text-muted-foreground text-sm sm:block',
+              remaining < 0 && 'text-red-500'
+            )}
+          >
             {formatCurrency(Math.abs(category.spend))}
           </p>
         </div>
