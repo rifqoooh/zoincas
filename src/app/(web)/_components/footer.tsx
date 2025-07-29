@@ -43,13 +43,13 @@ const links: FooterLink[] = [
 export function Footer() {
   return (
     <footer className="border-t py-12 ">
-      <Container className="pb-0">
-        <div className="flex flex-wrap justify-between gap-6">
-          <span className="order-last block text-center text-base text-muted-foreground md:order-first">
+      <Container className="px-6 pb-0">
+        <div className="flex flex-col justify-between gap-6 sm:flex-row">
+          <span className="block text-center text-base text-muted-foreground">
             &copy; {new Date().getFullYear()} Zoincas, All rights reserved
           </span>
 
-          <div className="order-first flex flex-wrap justify-center gap-6 md:order-last">
+          <div className="flex flex-wrap justify-center gap-6">
             {links.map((link, index) => (
               <a
                 key={index}
@@ -61,7 +61,10 @@ export function Footer() {
                 <link.icon className="size-6" />
               </a>
             ))}
-            <Separator orientation="vertical" />
+            <Separator
+              orientation="vertical"
+              className="data-[orientation=vertical]:h-auto"
+            />
             <ToggleTheme />
           </div>
         </div>
