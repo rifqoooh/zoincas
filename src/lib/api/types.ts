@@ -2,12 +2,18 @@ import type { SelectSessionsType } from '@/validators/db/sessions';
 import type { SelectUsersType } from '@/validators/db/users';
 import type { OpenAPIHono, RouteConfig, RouteHandler } from '@hono/zod-openapi';
 import type { z } from '@hono/zod-openapi';
-import type { Schema } from 'hono';
+import type { Context, Schema } from 'hono';
+import type { Promisify, RateLimitInfo } from 'hono-rate-limiter';
 
 export interface AppBindings {
   Variables: {
     user: SelectUsersType | null;
     session: SelectSessionsType | null;
+    rateLimit: RateLimitInfo;
+    rateLimitStore: {
+      get?: (key: string) => Promisify<RateLimitInfo | undefined>;
+      resetKey: (key: string) => Promisify<void>;
+    };
   };
 }
 
@@ -18,6 +24,8 @@ export type AppRouteHandler<R extends RouteConfig> = RouteHandler<
   R,
   AppBindings
 >;
+
+export type AppContext = Context<AppBindings>;
 
 export type ZodSchema =
   // @ts-expect-error

@@ -2,6 +2,7 @@ import { handle } from 'hono/vercel';
 
 import configureOpenAPI from '@/lib/api/configure-open-api';
 import { createApp } from '@/lib/api/create-app';
+import { rateLimiter } from '@/lib/api/rate-limiter';
 
 import ai from './_routes/ai';
 import balances from './_routes/balances';
@@ -16,6 +17,7 @@ import users from './_routes/users';
 const app = createApp().basePath('/api');
 
 configureOpenAPI(app);
+rateLimiter(app);
 
 // When making a lot of routes the Hono tend to errors excessively deep types,
 // so we need to split the routes into different variables
