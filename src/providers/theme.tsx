@@ -8,6 +8,7 @@ export function ThemeProvider({ children, ...properties }: ThemeProviderProps) {
       defaultTheme="system"
       enableSystem
       disableTransitionOnChange
+      enableColorScheme
       {...properties}
     >
       {children}

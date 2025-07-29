@@ -1,32 +1,46 @@
 'use client';
 
+import * as React from 'react';
+
 import { MoonIcon, SunIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
-import { Toggle } from '@/components/ui/toggle';
+import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useIsClient } from '@/hooks/use-is-client';
+import { useMetaColor } from '@/hooks/use-meta-theme-color';
 
 export function ToggleTheme() {
-  const { theme, setTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
+  const { setMetaColor, metaColor } = useMetaColor();
+
+  React.useEffect(() => {
+    setMetaColor(metaColor);
+  }, [metaColor, setMetaColor]);
+
+  const toggleTheme = React.useCallback(() => {
+    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
+  }, [resolvedTheme, setTheme]);
+
+  const isClient = useIsClient();
+  if (!isClient) {
+    return <Skeleton className="size-6" />;
+  }
 
   return (
-    <Toggle
-      className="group h-full min-w-0 rounded-none p-0 text-muted-foreground duration-150 hover:bg-transparent hover:text-primary data-[state=on]:bg-transparent data-[state=on]:hover:bg-muted dark:text-muted-foreground dark:hover:bg-transparent dark:hover:text-primary"
-      pressed={theme !== 'dark'}
-      onPressedChange={() =>
-        setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))
-      }
-      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+    <Button
+      variant="ghost"
+      size="icon"
+      className="extend-touch-target size-auto rounded-none p-0 text-muted-foreground hover:bg-opacity-0 dark:hover:bg-opacity-0"
+      onClick={toggleTheme}
+      title="Toggle theme"
       suppressHydrationWarning
     >
-      {/* Note: After dark mode implementation, rely on dark: prefix rather than group-data-[state=on]: */}
-      <MoonIcon
-        className="size-6 shrink-0 scale-0 opacity-0 transition-all group-data-[state=on]:scale-100 group-data-[state=on]:opacity-100"
-        aria-hidden="true"
-      />
-      <SunIcon
-        className="absolute size-6 shrink-0 scale-100 opacity-100 transition-all group-data-[state=on]:scale-0 group-data-[state=on]:opacity-0"
-        aria-hidden="true"
-      />
-    </Toggle>
+      {resolvedTheme === 'dark' ? (
+        <MoonIcon className="size-6 shrink-0 scale-100 transition-all" />
+      ) : (
+        <SunIcon className="size-6 shrink-0 scale-100 transition-all" />
+      )}
+    </Button>
   );
 }
