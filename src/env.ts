@@ -17,6 +17,7 @@ export const env = () =>
       GOOGLE_GENERATIVE_AI_API_KEY: z.string().min(1),
       UPSTASH_REDIS_REST_URL: z.url().min(1),
       UPSTASH_REDIS_REST_TOKEN: z.string().min(1),
+      SENTRY_AUTH_TOKEN: z.string().min(1),
     },
     client: {
       NEXT_PUBLIC_APP_URL: z.url().min(1),
@@ -30,6 +31,7 @@ export const env = () =>
       GOOGLE_GENERATIVE_AI_API_KEY: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
       UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
       UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
+      SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
       NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     },
     emptyStringAsUndefined: true,
