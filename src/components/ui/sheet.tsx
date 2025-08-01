@@ -61,6 +61,7 @@ function SheetContent({
       return {
         top: padding,
         right: padding,
+        width: `calc(100% - ${padding} * 2)`,
         height: `calc(100% - ${padding} * 2)`,
       }
     }
@@ -68,6 +69,7 @@ function SheetContent({
       return {
         top: padding,
         left: padding,
+        width: `calc(100% - ${padding} * 2)`,
         height: `calc(100% - ${padding} * 2)`,
       }
     }
@@ -98,9 +100,9 @@ function SheetContent({
         className={cn(
           "fixed z-50 flex flex-col gap-4 bg-background overflow-y-hidden shadow-lg transition ease-in-out data-[state=closed]:animate-out data-[state=open]:animate-in data-[state=closed]:duration-300 data-[state=open]:duration-500",
           side === "right" &&
-            "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right w-full border sm:max-w-md rounded-xl",
+            "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right border sm:max-w-md rounded-xl",
           side === "left" &&
-            "data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left w-full border sm:max-w-md rounded-xl",
+            "data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left border sm:max-w-md rounded-xl",
           side === "top" &&
             "data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top h-auto border rounded-xl",
           side === "bottom" &&

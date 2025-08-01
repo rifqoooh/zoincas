@@ -45,7 +45,7 @@ export function MainNavigation() {
   menus[indexCategories].items = categories;
 
   return (
-    <SidebarGroup>
+    <SidebarGroup className="p-0">
       <SidebarMenu>
         {menus.map((menu) => (
           <Collapsible key={menu.title} asChild>

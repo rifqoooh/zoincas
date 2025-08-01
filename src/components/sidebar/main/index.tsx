@@ -23,7 +23,7 @@ export function MainSidebar({
 }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar variant="inset" {...props}>
-      <SidebarHeader>
+      <SidebarHeader className="px-0">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
@@ -42,7 +42,7 @@ export function MainSidebar({
         <MainNavigation />
         <BalancesNavigation />
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="px-0">
         <UserNavigation />
       </SidebarFooter>
     </Sidebar>

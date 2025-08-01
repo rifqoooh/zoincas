@@ -37,7 +37,7 @@ export function BalancesNavigation() {
   const isPending = balancesQuery.isPending;
 
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+    <SidebarGroup className="p-0 group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Balances</SidebarGroupLabel>
       <SidebarMenu>
         {isPending ? (
