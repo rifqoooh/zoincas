@@ -2,7 +2,12 @@
 
 import * as React from 'react';
 
-import { ArrowLeftRightIcon, CreditCardIcon, Layers2Icon } from 'lucide-react';
+import {
+  ArrowLeftRightIcon,
+  CreditCardIcon,
+  Layers2Icon,
+  SearchIcon,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import { menus } from '@/components/sidebar/main/constants';
@@ -125,11 +130,14 @@ export function CommandMenu() {
         <Button
           variant="outline"
           className={cn(
-            'relative h-8 w-40 cursor-text justify-start bg-surface pl-2.5 font-normal text-surface-foreground/60 shadow-none sm:pr-12 lg:w-56 xl:w-64 dark:bg-card'
+            'relative h-8 w-auto cursor-text justify-start bg-surface font-normal text-surface-foreground/60 shadow-none has-[>svg]:px-2 sm:w-40 sm:px-4 sm:pr-12 sm:pl-2.5 lg:w-56 xl:w-64 dark:bg-card'
           )}
           onClick={() => setOpen(true)}
         >
-          <span className="inline-flex text-muted-foreground">Search...</span>
+          <SearchIcon className="block size-4 text-muted-foreground sm:hidden" />
+          <span className="hidden text-muted-foreground sm:inline-flex">
+            Search...
+          </span>
           <div className="absolute top-1.25 right-1.5 hidden gap-1 sm:flex">
             <CommandMenuKbd>{isMac ? '⌘' : 'Ctrl'}</CommandMenuKbd>
             <CommandMenuKbd className="aspect-square">K</CommandMenuKbd>
