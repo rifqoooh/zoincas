@@ -102,8 +102,10 @@ export function Header() {
                 </ul>
               </div>
               <div className="flex w-full flex-col space-y-3 lg:w-fit lg:flex-row lg:gap-3 lg:space-y-0">
-                {/* biome-ignore lint/nursery/noNestedTernary: <explanation> */}
-                {isPending ? null : user ? (
+                {isPending ? (
+                  <div className="invisible h-8" />
+                  // biome-ignore lint/nursery/noNestedTernary: <explanation>
+                ) : user ? (
                   <Button size="sm" asChild>
                     <Link href="/dashboard">
                       <span>Dashboard</span>
