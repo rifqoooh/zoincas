@@ -40,6 +40,7 @@ type SidebarContextProps = {
   setOpenMobile: (open: boolean) => void
   isMobile: boolean
   toggleSidebar: () => void
+  closeMobileSidebar: () => void
 }
 
 const SidebarContext = React.createContext<SidebarContextProps | null>(null)
@@ -93,6 +94,13 @@ function SidebarProvider({
     return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open)
   }, [isMobile, setOpen, setOpenMobile])
 
+  // Helper to close sidebar in mobile device (expected behaviour)
+  const closeMobileSidebar = React.useCallback(() => {
+    if(isMobile) {
+      return setOpenMobile(false)
+    }
+  }, [isMobile, setOpenMobile])
+
   // Adds a keyboard shortcut to toggle the sidebar.
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -122,8 +130,9 @@ function SidebarProvider({
       openMobile,
       setOpenMobile,
       toggleSidebar,
+      closeMobileSidebar,
     }),
-    [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar]
+    [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar, closeMobileSidebar]
   )
 
   return (
