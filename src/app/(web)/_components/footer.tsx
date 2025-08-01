@@ -20,7 +20,7 @@ interface FooterLink {
 const links: FooterLink[] = [
   {
     title: 'Github',
-    href: '#',
+    href: 'https://github.com/rifqoooh',
     icon: GithubIcon,
   },
   {
