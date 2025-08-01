@@ -31,17 +31,13 @@ export function DataTablePagination<TData>({
   return (
     <div
       className={cn(
-        'flex w-full flex-col-reverse items-center justify-between gap-4 overflow-auto p-1 sm:flex-row sm:gap-8',
+        'flex w-full flex-col-reverse justify-between gap-4 overflow-auto p-1 sm:flex-row sm:items-center sm:gap-8',
         className
       )}
       {...props}
     >
       <div className="flex-1 whitespace-nowrap text-muted-foreground text-sm">
-        {table.getFilteredSelectedRowModel().rows.length} of{' '}
-        {table.getFilteredRowModel().rows.length} row(s) selected.
-      </div>
-      <div className="flex flex-col-reverse items-center gap-4 sm:flex-row sm:gap-6 lg:gap-8">
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center gap-2">
           <p className="whitespace-nowrap font-medium text-sm">Rows per page</p>
           <Select
             value={`${table.getState().pagination.pageSize}`}
@@ -61,16 +57,21 @@ export function DataTablePagination<TData>({
             </SelectContent>
           </Select>
         </div>
-        <div className="flex items-center justify-center font-medium text-sm">
+      </div>
+      <div className="flex w-full flex-col-reverse items-center gap-4 sm:w-auto sm:flex-row sm:gap-6 lg:gap-8">
+        <div
+          key="table-page-info"
+          className="hidden items-center justify-center font-medium text-sm sm:flex"
+        >
           Page {table.getState().pagination.pageIndex + 1} of{' '}
           {table.getPageCount()}
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="flex w-full items-center gap-2 sm:w-auto">
           <Button
             aria-label="Go to first page"
             variant="outline"
             size="icon"
-            className="hidden size-8 lg:flex"
+            className="flex size-8 sm:hidden lg:flex"
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
           >
@@ -86,6 +87,13 @@ export function DataTablePagination<TData>({
           >
             <ChevronLeft />
           </Button>
+          <div
+            key="page-info"
+            className="mx-auto flex items-center justify-center font-medium text-sm sm:hidden"
+          >
+            Page {table.getState().pagination.pageIndex + 1} of{' '}
+            {table.getPageCount()}
+          </div>
           <Button
             aria-label="Go to next page"
             variant="outline"
@@ -100,7 +108,7 @@ export function DataTablePagination<TData>({
             aria-label="Go to last page"
             variant="outline"
             size="icon"
-            className="hidden size-8 lg:flex"
+            className="flex size-8 sm:hidden lg:flex"
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
           >
