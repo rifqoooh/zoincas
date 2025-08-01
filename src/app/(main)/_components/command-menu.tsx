@@ -123,14 +123,14 @@ export function CommandMenu() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          variant="secondary"
+          variant="outline"
           className={cn(
             'relative h-8 w-40 cursor-text justify-start bg-surface pl-2.5 font-normal text-surface-foreground/60 shadow-none sm:pr-12 lg:w-56 xl:w-64 dark:bg-card'
           )}
           onClick={() => setOpen(true)}
         >
           <span className="inline-flex text-muted-foreground">Search...</span>
-          <div className="absolute top-1.5 right-1.5 hidden gap-1 sm:flex">
+          <div className="absolute top-1.25 right-1.5 hidden gap-1 sm:flex">
             <CommandMenuKbd>{isMac ? '⌘' : 'Ctrl'}</CommandMenuKbd>
             <CommandMenuKbd className="aspect-square">K</CommandMenuKbd>
           </div>
