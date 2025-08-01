@@ -2,6 +2,7 @@ import { Check } from 'lucide-react';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
+import { Routes } from '@/lib/safe-routes';
 
 export function Pricing() {
   return (
@@ -26,7 +27,7 @@ export function Pricing() {
 
                 <div className="flex justify-center">
                   <Button size="lg" asChild>
-                    <Link href="/dashboard">Start free right now</Link>
+                    <Link href={Routes.dashboard()}>Start free right now</Link>
                   </Button>
                 </div>
               </div>

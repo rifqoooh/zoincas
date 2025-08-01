@@ -15,18 +15,20 @@ import {
 import { useCreateBudgetPlanMutation } from '@/hooks/queries/budget-plans';
 import { useCreateEditBudgetModal } from '@/hooks/store/create-edit-budget';
 import { useDeleteBudgetPlanModal } from '@/hooks/store/delete-budget-plan';
+import { Routes } from '@/lib/safe-routes';
 
 interface CardActionsProps {
   budget: BudgetPlansDataType;
 }
 
 export function CardActions({ budget }: CardActionsProps) {
-  const href = budget.categories.map((category) => category.id).join(',');
-
   const createEditBudgetStore = useCreateEditBudgetModal();
   const deleteBudgetStore = useDeleteBudgetPlanModal();
 
   const createMutation = useCreateBudgetPlanMutation();
+
+  const categories = budget.categories.map((category) => category.id);
+  const href = Routes.transactions({}, { search: { budget: categories } });
 
   const onEditBudget = () => {
     createEditBudgetStore.onOpen({ id: budget.id });
@@ -78,7 +80,7 @@ export function CardActions({ budget }: CardActionsProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem asChild>
-            <Link href={`/transactions?budget=${href}`}>View transactions</Link>
+            <Link href={href}>View transactions</Link>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={onEditBudget}>
             Edit budget

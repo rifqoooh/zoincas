@@ -23,14 +23,14 @@ export const signUpAction = async (values: SignUpType) => {
     },
   });
 
-  redirect(Routes.root());
+  redirect(Routes.dashboard());
 };
 
 export const signInGoogleAction = async () => {
   await auth.api.signInSocial({
     body: {
       provider: 'google',
-      callbackURL: env().NEXT_PUBLIC_APP_URL,
+      callbackURL: `${env().NEXT_PUBLIC_APP_URL}/dashboard`,
     },
   });
 };
@@ -52,7 +52,7 @@ export const signInAction = async (
     redirect(Routes.root({}, { search: { url: callbackURL } }));
   }
 
-  redirect(Routes.root());
+  redirect(Routes.dashboard());
 };
 
 export const signOutAction = async () => {

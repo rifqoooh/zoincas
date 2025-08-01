@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { SignUpForm } from '@/components/forms/sign-up';
+import { Routes } from '@/lib/safe-routes';
 import { createMetadata } from '@/lib/seo/metadata';
 
 export const metadata: Metadata = createMetadata({
@@ -26,7 +27,7 @@ export default function SignUpPage() {
         <SignUpForm />
 
         <Link
-          href="/sign-in"
+          href={Routes.signIn()}
           className="block text-center text-sm hover:underline"
         >
           Already have an account? Sign in

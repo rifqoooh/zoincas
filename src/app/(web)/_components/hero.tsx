@@ -11,6 +11,7 @@ import { AnimatedGroup } from '@/components/motion-primitives/animated-group';
 import { TextEffect } from '@/components/motion-primitives/text-effect';
 import { Button } from '@/components/ui/button';
 import { useGetSessionsQuery } from '@/hooks/queries/sessions';
+import { Routes } from '@/lib/safe-routes';
 import { Header } from './header';
 
 const transitionVariants = {
@@ -58,7 +59,7 @@ export function Hero() {
               <div className="text-center sm:mx-auto lg:mt-0 lg:mr-auto">
                 <AnimatedGroup variants={transitionVariants}>
                   <Link
-                    href="/transactions"
+                    href={Routes.transactions()}
                     className="group mx-auto flex w-fit items-center gap-4 rounded-full border bg-muted p-1 pl-4 shadow-md shadow-zinc-950/5 transition-colors duration-300 hover:bg-background dark:border-t-white/5 dark:shadow-zinc-950 dark:hover:border-t-border"
                   >
                     <span className="text-foreground text-sm">
@@ -131,7 +132,7 @@ export function Hero() {
                         className="rounded-xl px-5 text-base"
                         asChild
                       >
-                        <Link href="/dashboard">
+                        <Link href={Routes.dashboard()}>
                           <span className="text-nowrap">
                             Continue Manage Your Finances
                           </span>
@@ -148,7 +149,7 @@ export function Hero() {
                         className="rounded-xl px-5 text-base"
                         asChild
                       >
-                        <Link href="/sign-in">
+                        <Link href={Routes.signIn()}>
                           <span className="text-nowrap">
                             Simplify Your Finances Today
                           </span>

@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useCreateEditBalanceModal } from '@/hooks/store/create-edit-balance';
 import { useDeleteBalanceModal } from '@/hooks/store/delete-balance';
+import { Routes } from '@/lib/safe-routes';
 
 interface CardActionsProps {
   balance: BalancesDataType;
@@ -21,6 +22,8 @@ interface CardActionsProps {
 export function CardActions({ balance }: CardActionsProps) {
   const createEditBalanceStore = useCreateEditBalanceModal();
   const deleteBalanceStore = useDeleteBalanceModal();
+
+  const href = Routes.transactions({}, { search: { balance: [balance.id] } });
 
   const onEditBalance = () => {
     createEditBalanceStore.onOpen({ id: balance.id });
@@ -41,9 +44,7 @@ export function CardActions({ balance }: CardActionsProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem asChild>
-            <Link href={`/transactions?balance=${balance.id}`}>
-              View transactions
-            </Link>
+            <Link href={href}>View transactions</Link>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={onEditBalance}>
             Edit balances

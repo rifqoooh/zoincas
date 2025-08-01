@@ -28,6 +28,7 @@ import { useListCategoriesQuery } from '@/hooks/queries/categories';
 import { useCommandTransactionsQuery } from '@/hooks/queries/transactions';
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
 import { useIsMac } from '@/hooks/use-is-mac';
+import { Routes } from '@/lib/safe-routes';
 import { cn } from '@/lib/utilities';
 import { format } from 'date-fns';
 
@@ -64,7 +65,10 @@ export function CommandMenu() {
       transactionsData.map((transaction) => ({
         id: transaction.id,
         title: `${transaction.description} - ${format(transaction.datetime, 'dd MMM yyyy')}`,
-        url: `/transactions?description=${transaction.description.replace(/\s/g, '+')}`,
+        url: Routes.transactions(
+          {},
+          { search: { description: transaction.description } }
+        ),
       })),
     [transactionsData]
   );
@@ -74,7 +78,7 @@ export function CommandMenu() {
       balancesData.map((balance) => ({
         id: balance.id,
         title: balance.name,
-        url: `/transactions?balance=${balance.id}`,
+        url: Routes.transactions({}, { search: { balance: [balance.id] } }),
       })),
     [balancesData]
   );
@@ -84,7 +88,7 @@ export function CommandMenu() {
       categoriesData.map((category) => ({
         id: category.id,
         title: category.name,
-        url: `/transactions?category=${category.id}`,
+        url: Routes.transactions({}, { search: { category: [category.id] } }),
       })),
     [categoriesData]
   );

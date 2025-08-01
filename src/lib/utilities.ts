@@ -58,3 +58,7 @@ export const formatCompactNumber = (value: number | string) => {
     notation: 'compact',
   }).format(number);
 }
+
+export const replaceSpaceString = (value: string, replaceWith: string = '+') => {
+  return value.replace(/\s/g, replaceWith);
+}

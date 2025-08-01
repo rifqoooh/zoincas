@@ -21,6 +21,7 @@ import {
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
 import { useListCategoriesQuery } from '@/hooks/queries/categories';
+import { Routes } from '@/lib/safe-routes';
 import { menus } from './constants';
 
 export function MainNavigation() {
@@ -31,7 +32,7 @@ export function MainNavigation() {
     () =>
       data.map((category) => ({
         title: category.name,
-        url: `/transactions?category=${category.id}`,
+        url: Routes.transactions({}, { search: { category: [category.id] } }),
       })),
     [data]
   );
