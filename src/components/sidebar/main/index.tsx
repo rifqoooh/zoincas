@@ -17,6 +17,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { Routes } from '@/lib/safe-routes';
 
 export function MainSidebar({
   ...props
@@ -30,7 +31,7 @@ export function MainSidebar({
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <Link href="/dashboard">
+              <Link href={Routes.dashboard()}>
                 <CommandIcon className="!size-5" />
                 <span className="font-medium text-base">zoincas</span>
               </Link>

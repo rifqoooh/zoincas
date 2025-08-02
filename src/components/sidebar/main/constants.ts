@@ -8,6 +8,8 @@ import {
   PiggyBankIcon,
 } from 'lucide-react';
 
+import { Routes } from '@/lib/safe-routes';
+
 export interface Menu {
   title: string;
   url: string;
@@ -18,28 +20,28 @@ export interface Menu {
 export const menus: Menu[] = [
   {
     title: 'Dashboard',
-    url: '/dashboard',
+    url: Routes.dashboard(),
     icon: LayoutDashboardIcon,
   },
   {
     title: 'Balances',
-    url: '/balances',
+    url: Routes.balances(),
     icon: CreditCardIcon,
   },
   {
     title: 'Categories',
-    url: '/categories',
+    url: Routes.categories(),
     icon: Layers2Icon,
     items: [],
   },
   {
     title: 'Transactions',
-    url: '/transactions',
+    url: Routes.transactions(),
     icon: ArrowLeftRightIcon,
   },
   {
     title: 'Budget Plans',
-    url: '/budgets',
+    url: Routes.budgets(),
     icon: PiggyBankIcon,
   },
 ];

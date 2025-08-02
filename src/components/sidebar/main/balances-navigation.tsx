@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/sidebar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useListBalancesQuery } from '@/hooks/queries/balances';
+import { Routes } from '@/lib/safe-routes';
 import { formatCurrency } from '@/lib/utilities';
 
 export function BalancesNavigation() {
@@ -27,7 +28,7 @@ export function BalancesNavigation() {
       description: formatCurrency(
         balance.initialAmount + balance.transactions.sum
       ),
-      url: `/transactions?balance=${balance.id}`,
+      url: Routes.transactions({}, { search: { balance: [balance.id] } }),
     }));
   }, [data]);
 

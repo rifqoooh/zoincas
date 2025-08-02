@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useCreateEditCategoryModal } from '@/hooks/store/create-edit-category';
 import { useDeleteCategoryModal } from '@/hooks/store/delete-category';
+import { Routes } from '@/lib/safe-routes';
 
 interface CardActionsProps {
   category: CategoriesDataType;
@@ -21,6 +22,8 @@ interface CardActionsProps {
 export function CardActions({ category }: CardActionsProps) {
   const createEditCategoryStore = useCreateEditCategoryModal();
   const deleteCategoryStore = useDeleteCategoryModal();
+
+  const href = Routes.transactions({}, { search: { category: [category.id] } });
 
   const onEditCategory = () => {
     createEditCategoryStore.onOpen({ id: category.id });
@@ -40,9 +43,7 @@ export function CardActions({ category }: CardActionsProps) {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem asChild>
-          <Link href={`/transactions?category=${category.id}`}>
-            View transactions
-          </Link>
+          <Link href={href}>View transactions</Link>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={onEditCategory}>
           Edit category

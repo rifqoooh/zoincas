@@ -7,12 +7,13 @@ import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import { useGetSessionsQuery } from '@/hooks/queries/sessions';
+import { Routes } from '@/lib/safe-routes';
 import { cn } from '@/lib/utilities';
 
 const menuItems = [
   { name: 'Features', href: '#features' },
   { name: 'Pricing', href: '#pricing' },
-  { name: 'About', href: '#about' },
+  { name: 'About', href: '#footer' },
 ];
 
 export function Header() {
@@ -48,7 +49,7 @@ export function Header() {
           <div className="relative flex flex-wrap items-center justify-between gap-4 py-6 lg:gap-0 lg:py-4">
             <div className="flex w-full justify-between lg:w-auto">
               <Link
-                href="/"
+                href={Routes.dashboard()}
                 aria-label="home"
                 className="flex items-center space-x-2"
               >
@@ -105,7 +106,7 @@ export function Header() {
                 {/* biome-ignore lint/nursery/noNestedTernary: <explanation> */}
                 {isPending ? null : user ? (
                   <Button size="sm" asChild>
-                    <Link href="/dashboard">
+                    <Link href={Routes.dashboard()}>
                       <span>Dashboard</span>
                     </Link>
                   </Button>
@@ -117,7 +118,7 @@ export function Header() {
                       className={cn(isScrolled && 'lg:hidden')}
                       asChild
                     >
-                      <Link href="/sign-in">
+                      <Link href={Routes.signIn()}>
                         <span>Login</span>
                       </Link>
                     </Button>
@@ -126,7 +127,7 @@ export function Header() {
                       className={cn(isScrolled && 'lg:hidden')}
                       asChild
                     >
-                      <Link href="/sign-up">
+                      <Link href={Routes.signUp()}>
                         <span>Sign Up</span>
                       </Link>
                     </Button>
@@ -135,7 +136,7 @@ export function Header() {
                       className={cn('hidden', isScrolled && 'lg:inline-flex')}
                       asChild
                     >
-                      <Link href="/sign-up">
+                      <Link href={Routes.signUp()}>
                         <span>Start today</span>
                       </Link>
                     </Button>
