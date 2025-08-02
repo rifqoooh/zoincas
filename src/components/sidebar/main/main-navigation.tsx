@@ -19,12 +19,15 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import { useListCategoriesQuery } from '@/hooks/queries/categories';
 import { Routes } from '@/lib/safe-routes';
 import { menus } from './constants';
 
 export function MainNavigation() {
+  const { closeMobileSidebar } = useSidebar();
+
   const categoriesQuery = useListCategoriesQuery();
   const data = categoriesQuery.data || [];
 
@@ -43,13 +46,13 @@ export function MainNavigation() {
   menus[indexCategories].items = categories;
 
   return (
-    <SidebarGroup>
+    <SidebarGroup className="p-0">
       <SidebarMenu>
         {menus.map((menu) => (
           <Collapsible key={menu.title} asChild>
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip={menu.title}>
-                <Link href={menu.url}>
+                <Link href={menu.url} onNavigate={closeMobileSidebar}>
                   <menu.icon />
                   <span>{menu.title}</span>
                 </Link>
@@ -69,7 +72,10 @@ export function MainNavigation() {
                         (subItem: { title: string; url: string }) => (
                           <SidebarMenuSubItem key={subItem.title}>
                             <SidebarMenuSubButton asChild>
-                              <Link href={subItem.url}>
+                              <Link
+                                href={subItem.url}
+                                onNavigate={closeMobileSidebar}
+                              >
                                 <span>{subItem.title}</span>
                               </Link>
                             </SidebarMenuSubButton>

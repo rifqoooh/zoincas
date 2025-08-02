@@ -10,7 +10,7 @@ import {
   Bar,
   CartesianGrid,
   BarChart as RechartsBarChart,
-  ReferenceLine,
+  Rectangle,
   XAxis,
 } from 'recharts';
 
@@ -82,20 +82,30 @@ export function BarChart({ summaries }: BarChartProps) {
           verticalAlign="top"
           className="justify-end"
         />
-        <ReferenceLine y={0} stroke="var(--muted-foreground)" opacity={0.2} />
         <Bar
           dataKey="income"
           stackId="a"
           fill="#22c55e"
-          radius={[4, 4, 0, 0]}
+          radius={6}
+          shape={<BarGap />}
         />
         <Bar
           dataKey="expense"
           stackId="a"
           fill="#ef4444"
-          radius={[4, 4, 0, 0]}
+          radius={6}
+          shape={<BarGap />}
         />
       </RechartsBarChart>
     </ChartContainer>
   );
+}
+
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+function BarGap(props: any) {
+  const gap = 4;
+  const adjustedY =
+    props.dataKey === 'income' ? props.y - gap / 2 : props.y + gap / 2;
+
+  return <Rectangle {...props} y={adjustedY} />;
 }

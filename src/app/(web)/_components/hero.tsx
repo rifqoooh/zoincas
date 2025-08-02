@@ -120,7 +120,7 @@ export function Hero() {
                   className="mt-12 flex flex-col items-center justify-center gap-2 md:flex-row"
                 >
                   {isPending ? (
-                    <div className="invisible h-10 border p-0.5" />
+                    <div className="invisible h-[2.9rem]" />
                     // biome-ignore lint/nursery/noNestedTernary: <explanation>
                   ) : user ? (
                     <div

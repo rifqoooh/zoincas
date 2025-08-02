@@ -10,6 +10,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useListBalancesQuery } from '@/hooks/queries/balances';
@@ -17,6 +18,8 @@ import { Routes } from '@/lib/safe-routes';
 import { formatCurrency } from '@/lib/utilities';
 
 export function BalancesNavigation() {
+  const { closeMobileSidebar } = useSidebar();
+
   const balancesQuery = useListBalancesQuery();
   const data = balancesQuery.data || [];
 
@@ -35,7 +38,7 @@ export function BalancesNavigation() {
   const isPending = balancesQuery.isPending;
 
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+    <SidebarGroup className="p-0 group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Balances</SidebarGroupLabel>
       <SidebarMenu>
         {isPending ? (
@@ -48,7 +51,7 @@ export function BalancesNavigation() {
           balances.map((item) => (
             <SidebarMenuItem key={item.name}>
               <SidebarMenuButton className="h-auto px-4" asChild>
-                <Link href={item.url}>
+                <Link href={item.url} onNavigate={closeMobileSidebar}>
                   <div className="flex w-full flex-row items-center justify-between">
                     <div className="flex flex-col">
                       <span>{item.name}</span>
