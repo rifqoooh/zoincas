@@ -2,6 +2,8 @@ import type { NextConfig } from 'next';
 
 import { withSentryConfig } from '@sentry/nextjs';
 
+import { env } from '@/env';
+
 const coreConfig: NextConfig = {
   images: {
     remotePatterns: [
@@ -22,8 +24,8 @@ const config = withSentryConfig(coreConfig, {
   // For all available options, see:
   // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
-  org: 'arij-rifqoh',
-  project: 'zoincas',
+  org: env().SENTRY_ORG,
+  project: env().SENTRY_ORG,
 
   // Only print logs for uploading source maps in CI
   silent: !process.env.CI,
