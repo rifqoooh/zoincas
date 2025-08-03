@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 
 import { Container } from '@/components/container';
-import { CreateTransactionButton } from '@/components/modal/create-edit-transaction/button';
 import { TransactionsTable } from '@/components/tables/transactions';
 import { Separator } from '@/components/ui/separator';
 import { createMetadata } from '@/lib/seo/metadata';
+import { CreateTransactions } from '../_components/create-transactions';
 import { Header } from '../_components/header';
 import { HeaderDescription } from '../_components/header/header-description';
 import { HeaderTitle } from '../_components/header/header-title';
@@ -26,7 +26,7 @@ export default function TransactionsPage() {
           </HeaderDescription>
         </div>
 
-        <CreateTransactionButton />
+        <CreateTransactions />
       </Header>
 
       <Separator />
