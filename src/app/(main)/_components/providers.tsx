@@ -12,6 +12,7 @@ import { CreateEditBalanceModal } from '@/components/modal/create-edit-balance';
 import { CreateEditBudgetModal } from '@/components/modal/create-edit-budget-plan';
 import { CreateEditCategoryModal } from '@/components/modal/create-edit-category';
 import { CreateEditTransactionModal } from '@/components/modal/create-edit-transaction';
+import { ImportTransactionsCSVModal } from '@/components/modal/import-transactions-csv';
 
 export function MainProviders({ children }: { children: React.ReactNode }) {
   return (
@@ -19,6 +20,7 @@ export function MainProviders({ children }: { children: React.ReactNode }) {
       <CreateEditBalanceModal />
       <CreateEditCategoryModal />
       <CreateEditTransactionModal />
+      <ImportTransactionsCSVModal />
       <CreateEditBudgetModal />
 
       {/* alert modal providers */}
