@@ -2,8 +2,13 @@
 
 import { Button } from '@/components/ui/button';
 import { useCreateEditTransactionModal } from '@/hooks/store/create-edit-transaction';
+import { cn } from '@/lib/utilities';
 
-export function CreateTransactionButton() {
+export function CreateTransactionButton({
+  className,
+}: {
+  className?: string;
+}) {
   const store = useCreateEditTransactionModal();
 
   const onClick = () => {
@@ -11,7 +16,7 @@ export function CreateTransactionButton() {
   };
 
   return (
-    <Button className="gap-2" size="sm" onClick={onClick}>
+    <Button className={cn('gap-2', className)} size="sm" onClick={onClick}>
       <span>Create transaction</span>
     </Button>
   );

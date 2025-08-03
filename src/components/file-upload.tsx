@@ -155,6 +155,7 @@ function createStore(
           files.set(action.file, {
             ...fileState,
             error: action.error,
+            progress: 100,
             status: 'error',
           });
         }
@@ -1057,18 +1058,18 @@ function getFileIcon(file: File) {
   const extension = file.name.split('.').pop()?.toLowerCase() ?? '';
 
   if (type.startsWith('video/')) {
-    return <FileVideoIcon />;
+    return <FileVideoIcon className="size-5" />;
   }
 
   if (type.startsWith('audio/')) {
-    return <FileAudioIcon />;
+    return <FileAudioIcon className="size-5" />;
   }
 
   if (
     type.startsWith('text/') ||
     ['txt', 'md', 'rtf', 'pdf'].includes(extension)
   ) {
-    return <FileTextIcon />;
+    return <FileTextIcon className="size-5" />;
   }
 
   if (
@@ -1090,21 +1091,21 @@ function getFileIcon(file: File) {
       'cs',
     ].includes(extension)
   ) {
-    return <FileCodeIcon />;
+    return <FileCodeIcon className="size-5" />;
   }
 
   if (['zip', 'rar', '7z', 'tar', 'gz', 'bz2'].includes(extension)) {
-    return <FileArchiveIcon />;
+    return <FileArchiveIcon className="size-5" />;
   }
 
   if (
     ['exe', 'msi', 'app', 'apk', 'deb', 'rpm'].includes(extension) ||
     type.startsWith('application/')
   ) {
-    return <FileCogIcon />;
+    return <FileCogIcon className="size-5" />;
   }
 
-  return <FileIcon />;
+  return <FileIcon className="size-5" />;
 }
 
 interface FileUploadItemPreviewProps
@@ -1138,7 +1139,7 @@ function FileUploadItemPreview(props: FileUploadItemPreviewProps) {
         );
       }
 
-      return getFileIcon(file);
+      return <div>{getFileIcon(file)}</div>;
     },
     [render, itemContext.fileState?.file.type, context.urlCache]
   );
@@ -1169,6 +1170,7 @@ interface FileUploadItemMetadataProps
   extends React.ComponentPropsWithoutRef<'div'> {
   asChild?: boolean;
   size?: 'default' | 'sm';
+  hasFileProgress?: boolean;
 }
 
 function FileUploadItemMetadata(props: FileUploadItemMetadataProps) {
@@ -1177,6 +1179,7 @@ function FileUploadItemMetadata(props: FileUploadItemMetadataProps) {
     size = 'default',
     children,
     className,
+    hasFileProgress = false,
     ...metadataProps
   } = props;
 
@@ -1207,21 +1210,26 @@ function FileUploadItemMetadata(props: FileUploadItemMetadataProps) {
           >
             {itemContext.fileState.file.name}
           </span>
-          <span
-            id={itemContext.sizeId}
-            className={cn(
-              'truncate text-muted-foreground text-xs',
-              size === 'sm' && 'text-[11px] leading-snug'
-            )}
-          >
-            {formatBytes(itemContext.fileState.file.size)}
-          </span>
-          {itemContext.fileState.error && (
+
+          {itemContext.fileState.error ? (
             <span
               id={itemContext.messageId}
-              className="text-destructive text-xs"
+              className={cn(
+                'truncate text-destructive text-xs',
+                size === 'sm' && 'text-[11px] leading-snug'
+              )}
             >
               {itemContext.fileState.error}
+            </span>
+          ) : (
+            <span
+              id={itemContext.sizeId}
+              className={cn(
+                'truncate text-muted-foreground text-xs',
+                size === 'sm' && 'text-[11px] leading-snug'
+              )}
+            >
+              {formatBytes(itemContext.fileState.file.size)}
             </span>
           )}
         </>
@@ -1262,6 +1270,10 @@ function FileUploadItemProgress(props: FileUploadItemProgressProps) {
   }
 
   const ItemProgressPrimitive = asChild ? Slot : 'div';
+
+  if (itemContext.fileState.error) {
+    return null;
+  }
 
   switch (variant) {
     case 'circular': {

@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 
+import type { FileUploadProps } from '@/components/file-upload';
 import type { InsertTransactionsType } from '@/validators/db/transactions';
 import type { SubmitHandler } from 'react-hook-form';
 
@@ -9,7 +10,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-import type { FileUploadProps } from '@/components/file-upload';
 import { useScanImageMutation } from '@/hooks/queries/ai';
 import { useListBalancesQuery } from '@/hooks/queries/balances';
 import { useListBudgetPlansQuery } from '@/hooks/queries/budget-plans';

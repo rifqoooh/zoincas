@@ -34,31 +34,29 @@ export function CardActions({ balance }: CardActionsProps) {
   };
 
   return (
-    <>
-      <DropdownMenu modal={false}>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon">
-            <MoreHorizontalIcon className="size-4" />
-            <span className="sr-only">Open menu</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem asChild>
-            <Link href={href}>View transactions</Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={onEditBalance}>
-            Edit balances
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            variant="destructive"
-            className="dark:text-red-500 dark:focus:text-red-500"
-            onClick={onDeleteBalance}
-          >
-            Delete balance
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </>
+    <DropdownMenu modal={false}>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon">
+          <MoreHorizontalIcon className="size-4" />
+          <span className="sr-only">Open menu</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem asChild>
+          <Link href={href}>View transactions</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={onEditBalance}>
+          Edit balances
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          variant="destructive"
+          className="dark:text-red-500 dark:focus:text-red-500"
+          onClick={onDeleteBalance}
+        >
+          Delete balance
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

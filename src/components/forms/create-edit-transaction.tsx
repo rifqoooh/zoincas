@@ -1,3 +1,5 @@
+import { CloudUploadIcon, XIcon } from 'lucide-react';
+
 import { AutoComplete } from '@/components/auto-complete';
 import { AutoCompleteGroup } from '@/components/auto-complete-group';
 import { CurrencyInput } from '@/components/currency-input';
@@ -25,8 +27,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useCreateEditTransaction } from '@/hooks/actions/use-create-edit-transaction';
 import { formatCurrency } from '@/lib/utilities';
+
 import { ACCEPTED_IMAGE_MIME_TYPES } from '@/validators/utilities';
-import { CloudUploadIcon, XIcon } from 'lucide-react';
 
 export const CreateEditTransactionForm = () => {
   const {
