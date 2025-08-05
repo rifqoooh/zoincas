@@ -12,7 +12,7 @@ export function Greeting({ className, ...props }: React.ComponentProps<'div'>) {
   const isPending = sessionsQuery.isPending;
 
   if (isPending) {
-    return <div />;
+    return <div className="grow" />;
   }
 
   return (
