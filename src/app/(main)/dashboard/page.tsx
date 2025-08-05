@@ -33,7 +33,7 @@ export default function DashboardPage() {
 
       <Separator />
 
-      <div className="grid gap-4 py-6 lg:grid-cols-6">
+      <div className="grid grid-cols-1 gap-4 py-6 lg:grid-cols-6">
         <InsightCard type="income" className="lg:col-span-2" />
         <InsightCard type="expense" className="lg:col-span-2" />
         <InsightCard type="remaining" className="lg:col-span-2" />

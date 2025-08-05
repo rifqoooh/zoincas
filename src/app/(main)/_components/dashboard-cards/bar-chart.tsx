@@ -58,7 +58,7 @@ export function BarChart({ summaries }: BarChartProps) {
   }, [mappedData]);
 
   return (
-    <ChartContainer config={chartConfig}>
+    <ChartContainer config={chartConfig} className="size-full">
       <RechartsBarChart data={mappedData} stackOffset="sign" accessibilityLayer>
         <CartesianGrid horizontal={false} vertical={false} />
         <XAxis

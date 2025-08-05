@@ -57,7 +57,7 @@ export function NetWorthCard({
         <CardDescription>Net worth</CardDescription>
         <CardTitle>{formatCurrency(totalAmount)}</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="h-full min-h-80">
         <BarChart summaries={summariesData} />
       </CardContent>
     </Card>
