@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { CalendarDate } from '@internationalized/date';
+import type { CalendarDate } from '@internationalized/date';
 import type { DateSegment as IDateSegment } from '@react-stately/datepicker';
 import type {
   AriaDatePickerProps,
@@ -25,13 +25,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { cn } from '@/lib/utilities';
 import {
   isToday as _isToday,
@@ -43,7 +36,7 @@ import {
   toCalendarDate,
   toCalendarDateTime,
 } from '@internationalized/date';
-import { format, setMonth } from 'date-fns';
+import {} from 'date-fns';
 import {
   CalendarIcon,
   ChevronLeftIcon,
@@ -68,140 +61,19 @@ import {
   useTimeFieldState,
 } from 'react-stately';
 
-interface SelectMonthProps {
-  focusedDate: CalendarDate;
-  onChangeMonth: (month: number) => void;
-  className?: string;
-}
-
-function SelectMonth({
-  focusedDate,
-  onChangeMonth,
-  className,
-}: SelectMonthProps) {
-  const months = React.useMemo(
-    () => [
-      { value: 1, label: 'January' },
-      { value: 2, label: 'February' },
-      { value: 3, label: 'March' },
-      { value: 4, label: 'April' },
-      { value: 5, label: 'May' },
-      { value: 6, label: 'June' },
-      { value: 7, label: 'July' },
-      { value: 8, label: 'August' },
-      { value: 9, label: 'September' },
-      { value: 10, label: 'October' },
-      { value: 11, label: 'November' },
-      { value: 12, label: 'December' },
-    ],
-    []
-  );
-
-  const [month, setMonth] = React.useState(focusedDate.month);
-
-  const onSelect = (month: number) => {
-    setMonth(month);
-    onChangeMonth(month);
-  };
-
-  return (
-    <>
-      <Select
-        value={month.toString()}
-        onValueChange={(value) => onSelect(Number(value))}
-      >
-        <SelectTrigger className={cn('data-[size=default]:h-7', className)}>
-          <SelectValue aria-label={months[month - 1].label}>
-            <p className="text-xs">{months[month - 1].label}</p>
-          </SelectValue>
-        </SelectTrigger>
-        <SelectContent>
-          {months.map((month) => (
-            <SelectItem
-              key={month.value}
-              value={month.value.toString()}
-              className="text-xs"
-            >
-              {month.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </>
-  );
-}
-
-interface SelectYearProps {
-  focusedDate: CalendarDate;
-  onChangeYear: (year: number) => void;
-  className?: string;
-}
-
-function SelectYear({ focusedDate, onChangeYear, className }: SelectYearProps) {
-  const years = React.useMemo(
-    () => Array.from({ length: 10 }, (_, i) => i + focusedDate.year - 5),
-    [focusedDate.year]
-  );
-
-  const [year, setYear] = React.useState(focusedDate.year);
-
-  const onSelect = (year: number) => {
-    setYear(year);
-    onChangeYear(year);
-  };
-
-  return (
-    <>
-      <Select
-        value={year.toString()}
-        onValueChange={(value) => onSelect(Number(value))}
-      >
-        <SelectTrigger className={cn('data-[size=default]:h-7', className)}>
-          <SelectValue aria-label={year.toString()}>
-            <p className="text-xs">{year}</p>
-          </SelectValue>
-        </SelectTrigger>
-        <SelectContent>
-          {years.map((year) => (
-            <SelectItem key={year} value={year.toString()} className="text-xs">
-              {year}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </>
-  );
-}
-
 function Calendar(props: CalendarProps<DateValue>) {
   const prevButtonRef = React.useRef<HTMLButtonElement | null>(null);
   const nextButtonRef = React.useRef<HTMLButtonElement | null>(null);
 
-  const { year, month } = React.useMemo(() => {
-    const date = new Date();
-    return { year: date.getFullYear(), month: date.getMonth() + 1 };
-  }, []);
-  const calendarDate = new CalendarDate(year, month, 1);
-  const [focusedDate, setFocusedDate] = React.useState(calendarDate);
-
-  const onChangeMonth = (month: number) => {
-    setFocusedDate(focusedDate.set({ month }));
-  };
-
-  const onChangeYear = (year: number) => {
-    setFocusedDate(focusedDate.set({ year }));
-  };
-
   const { locale } = useLocale();
   const state = useCalendarState({
     ...props,
-    focusedValue: focusedDate,
-    onFocusChange: setFocusedDate,
     locale,
     createCalendar,
   });
   const {
     calendarProps,
+    title,
     prevButtonProps: _prevButtonProps,
     nextButtonProps: _nextButtonProps,
   } = useCalendar(props, state);
@@ -216,33 +88,24 @@ function Calendar(props: CalendarProps<DateValue>) {
 
   return (
     <div {...calendarProps} className="space-y-4">
-      <div className="flex items-center justify-between gap-2 pt-1">
+      <div className="relative flex items-center justify-center pt-1">
         <Button
           {...prevButtonProps}
           ref={prevButtonRef}
           variant="outline"
           className={cn(
-            'size-7 bg-transparent p-0 opacity-50 hover:opacity-100'
+            'absolute left-1 size-7 bg-transparent p-0 opacity-50 hover:opacity-100'
           )}
         >
           <ChevronLeftIcon className="size-4" />
         </Button>
-        <SelectMonth
-          focusedDate={focusedDate}
-          onChangeMonth={onChangeMonth}
-          className="grow ps-2.5 pe-1.5"
-        />
-        <SelectYear
-          focusedDate={focusedDate}
-          onChangeYear={onChangeYear}
-          className="w-20 ps-2.5 pe-1.5"
-        />
+        <div className="font-medium text-sm">{title}</div>
         <Button
           {...nextButtonProps}
           ref={nextButtonRef}
           variant="outline"
           className={cn(
-            'size-7 bg-transparent p-0 opacity-50 hover:opacity-100'
+            'absolute right-1 size-7 bg-transparent p-0 opacity-50 hover:opacity-100'
           )}
         >
           <ChevronRightIcon className="size-4" />
@@ -390,7 +253,11 @@ function formatDateSegments(segments: IDateSegment[]): IDateSegment[] {
   };
   const formattedMonthSegment = {
     ...monthSegment,
-    text: format(setMonth(new Date(), Number(monthSegment.text) - 1), 'MMM'),
+    text: monthSegment.text.padStart(2, '0'),
+  };
+  const formattedYearSegment = {
+    ...yearSegment,
+    text: yearSegment.text.padStart(4, '0'),
   };
   const formattedHourSegment = {
     ...hourSegment,
@@ -399,10 +266,10 @@ function formatDateSegments(segments: IDateSegment[]): IDateSegment[] {
 
   return [
     formattedDaySegment,
-    changeSeparatorSegment(separatorSegment, ' '),
+    changeSeparatorSegment(separatorSegment, '-'),
     formattedMonthSegment,
-    changeSeparatorSegment(separatorSegment, ','),
-    yearSegment,
+    changeSeparatorSegment(separatorSegment, '-'),
+    formattedYearSegment,
     formattedHourSegment,
     changeSeparatorSegment(separatorSegment, ':'),
     minuteSegment,
@@ -428,7 +295,7 @@ function DateSegment({ segment, state }: DateSegmentProps) {
       {...segmentProps}
       ref={ref}
       className={cn(
-        'focus:rounded-[2px] focus:bg-accent focus:text-accent-foreground focus:outline-none',
+        'focus:rounded-[2px] focus:bg-primary focus:text-primary-foreground focus:outline-none',
         segment.type !== 'literal' && 'px-0.5',
         segment.type === 'hour' && 'ml-1',
         segment.isPlaceholder && 'text-muted-foreground'
