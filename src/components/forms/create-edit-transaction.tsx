@@ -61,7 +61,7 @@ export const CreateEditTransactionForm = () => {
     const categories = plan.categories.map((category) => ({
       label: category.name,
       value: category.id,
-      description: formatCurrency(category.amount - category.spend),
+      description: formatCurrency(category.amount + category.spend),
     }));
     return {
       group: plan.title,
