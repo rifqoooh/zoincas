@@ -58,7 +58,9 @@ export function VerifyConfirmationDialog({
 
   const onSubmit = (data: VerifyDeleteType) => {
     if (data.verification === verification) {
-      return onConfirm();
+      onConfirm();
+      form.reset();
+      return;
     }
 
     return toast.error('Verification failed. Please check your typing.');
