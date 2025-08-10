@@ -6,6 +6,7 @@ import * as routes from './routes';
 const router = createRouter()
   .openapi(routes.listTransactions, handlers.listTransactions)
   .openapi(routes.createTransaction, handlers.createTransaction)
+  .openapi(routes.createManyTransactions, handlers.createManyTransactions)
   .openapi(routes.deleteManyTransactions, handlers.deleteManyTransactions)
   .openapi(
     routes.assignManyCategoryTransactions,

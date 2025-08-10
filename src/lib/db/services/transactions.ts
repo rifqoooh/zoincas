@@ -161,9 +161,11 @@ export const listTransactions = async (
 // TODO:
 export const createTransaction = async (input: InsertTransactionsType) => {
   const data = await db.transaction(async (tx) => {
+    const category = input.categoryId;
+
     // If input category id is not empty string and not UUID we know it is a new category to create
-    const parsedCategoryId = z.string().uuid().safeParse(input.categoryId);
-    if (!parsedCategoryId.success && input.categoryId) {
+    const isUUID = z.string().uuid().safeParse(input.categoryId).success;
+    if (!isUUID && category) {
       // Get user id from input balance id
       const [{ userId }] = await tx
         .select({
@@ -174,10 +176,10 @@ export const createTransaction = async (input: InsertTransactionsType) => {
         .limit(1);
 
       // Create a new category
-      const [{ id }] = await tx
+      const [created] = await tx
         .insert(categories)
         .values({
-          name: parsedCategoryId.data,
+          name: category,
           userId,
         })
         .returning({
@@ -185,10 +187,81 @@ export const createTransaction = async (input: InsertTransactionsType) => {
         });
 
       // Assign new category id to input
-      input.categoryId = id;
+      input.categoryId = created.id;
     }
 
     const [data] = await tx.insert(transactions).values(input).returning();
+
+    return data;
+  });
+
+  return data;
+};
+
+export const createManyTransactions = async (
+  userId: string,
+  input: InsertTransactionsType[]
+) => {
+  const categoriesCache = new Map<string, string>();
+
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <explanation>
+  const data = await db.transaction(async (tx) => {
+    for (const transaction of input) {
+      const category = transaction.categoryId;
+
+      // Guard clause of empty category id
+      if (!category) {
+        continue;
+      }
+
+      // Check if category id is already cached
+      if (categoriesCache.has(category)) {
+        // Assign new category id to input
+        transaction.categoryId = categoriesCache.get(category);
+        continue;
+      }
+
+      // If input category id is not empty string and not UUID we know it is a new category to create
+      const isUUID = z.string().uuid().safeParse(category).success;
+      if (!isUUID && category) {
+        // Check if category already exists for the user (avoid duplicate)
+        const [existing] = await tx
+          .select({ id: categories.id })
+          .from(categories)
+          .where(
+            and(eq(categories.name, category), eq(categories.userId, userId))
+          )
+          .limit(1);
+
+        if (existing.id) {
+          // Assign existing category id to input
+          transaction.categoryId = existing.id;
+
+          // Set category id in cache
+          categoriesCache.set(category, existing.id);
+
+          continue;
+        }
+
+        const [created] = await tx
+          .insert(categories)
+          .values({
+            name: category,
+            userId,
+          })
+          .returning({
+            id: categories.id,
+          });
+
+        // Assign new category id to input
+        transaction.categoryId = created.id;
+
+        // Set category id in cache
+        categoriesCache.set(category, created.id);
+      }
+    }
+
+    const data = await tx.insert(transactions).values(input).returning();
 
     return data;
   });

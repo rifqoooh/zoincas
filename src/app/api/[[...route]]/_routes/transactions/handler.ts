@@ -6,6 +6,7 @@ import type { SelectUsersType as User } from '@/validators/db/users';
 import type {
   AssignManyBudgetTransactions,
   AssignManyCategoryTransactions,
+  CreateManyTransactions,
   CreateTransaction,
   DeleteManyTransactions,
   DeleteTransaction,
@@ -45,6 +46,18 @@ export const createTransaction: AppRouteHandler<CreateTransaction> = async (
   const input = c.req.valid('json');
 
   const data = await transactions.createTransaction(input);
+
+  return c.json(data, StatusCode.CREATED);
+};
+
+export const createManyTransactions: AppRouteHandler<
+  CreateManyTransactions
+> = async (c) => {
+  const input = c.req.valid('json');
+
+  const user = c.get('user') as User;
+
+  const data = await transactions.createManyTransactions(user.id, input);
 
   return c.json(data, StatusCode.CREATED);
 };

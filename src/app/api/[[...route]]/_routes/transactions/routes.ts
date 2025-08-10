@@ -100,6 +100,34 @@ export const createTransaction = createRoute({
   },
 });
 
+export const createManyTransactions = createRoute({
+  method: 'post',
+  path: '/transactions/create-many',
+  tags,
+  middleware: [protectedMiddleware()],
+  request: {
+    body: ContentJSONRequired(
+      insertTransactionsSchema.array(),
+      'The transactions to create.'
+    ),
+  },
+  responses: {
+    [StatusCode.CREATED]: ContentJSON(
+      selectTransactionsSchema.array(),
+      'The created transactions.'
+    ),
+    [StatusCode.UNPROCESSABLE_ENTITY]: ContentJSON(
+      createErrorSchema({
+        schema: insertTransactionsSchema,
+        message: 'The transaction creation request input is invalid.',
+        path: '/transactions',
+        potentialInput: createTransactionInputErrors,
+      }),
+      'The validation transaction creation request error(s).'
+    ),
+  },
+});
+
 export const deleteManyTransactions = createRoute({
   method: 'post',
   path: '/transactions/delete-many',
@@ -252,6 +280,7 @@ export const deleteTransaction = createRoute({
 
 export type ListTransactions = typeof listTransactions;
 export type CreateTransaction = typeof createTransaction;
+export type CreateManyTransactions = typeof createManyTransactions;
 export type DeleteManyTransactions = typeof deleteManyTransactions;
 export type AssignManyCategoryTransactions =
   typeof assignManyCategoryTransactions;
