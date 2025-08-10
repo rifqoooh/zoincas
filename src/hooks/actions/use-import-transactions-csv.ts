@@ -233,7 +233,6 @@ export const useImportTransactionsCSV = () => {
 
     if (errors.message) {
       toast.error(errors.message);
-      console.log('errors', errors);
       return;
     }
 
