@@ -211,6 +211,7 @@ export const createManyTransactions = async (
 
       // Guard clause of empty category id
       if (!category) {
+        transaction.categoryId = null;
         continue;
       }
 
@@ -233,7 +234,7 @@ export const createManyTransactions = async (
           )
           .limit(1);
 
-        if (existing.id) {
+        if (existing) {
           // Assign existing category id to input
           transaction.categoryId = existing.id;
 

@@ -18,6 +18,7 @@ export const insertTransactionsSchema = createInsertSchema(transactions)
   .extend({
     amount: z.coerce.number(),
     balanceId: z.string().uuid({ message: 'Balance is required' }),
+    categoryId: z.string().nullable().optional(),
   })
   .omit({
     id: true,
