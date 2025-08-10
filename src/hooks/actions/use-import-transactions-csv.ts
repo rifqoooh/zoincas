@@ -85,7 +85,6 @@ export const useImportTransactionsCSV = () => {
             readString<CSVRow>(fileText, {
               header: true,
               skipEmptyLines: true,
-              fastMode: true,
 
               complete: (results) => {
                 if (results.data.length > 200) {
@@ -234,6 +233,7 @@ export const useImportTransactionsCSV = () => {
 
     if (errors) {
       toast.error(errors.message);
+      console.log(errors);
       return;
     }
 

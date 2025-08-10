@@ -95,14 +95,8 @@ export const ImportTransactionsCSVForm = () => {
                 <FormItem>
                   <FormLabel>Upload CSV file</FormLabel>
                   <FormDescription>
-                    Upload a CSV file. The first row should be the headers of
-                    the table, and your headers should not include any special
-                    characters other than hyphens{' '}
-                    <kbd className="text-code">-</kbd> or underscores{' '}
-                    <kbd className="text-code">_</kbd>
-                  </FormDescription>
-                  <FormDescription>
-                    Uploaded CSV file is only up to 5MB and max 200 rows
+                    The first row should be the headers of the table, and
+                    uploaded CSV file is only up to 5MB and max 200 rows
                   </FormDescription>
                   <FormControl>
                     <FileUpload
@@ -258,8 +252,8 @@ function MappingField({
               >
                 CSV columns
               </Label>
-              <div className="flex h-9 items-center rounded-md border border-input bg-transparent px-3 text-base shadow-xs md:text-sm dark:bg-input/30">
-                <p className="text-base md:text-sm">{column.name}</p>
+              <div className="flex h-9 items-center truncate rounded-md border border-input bg-transparent px-3 text-base shadow-xs md:text-sm dark:bg-input/30">
+                <p className="truncate text-base md:text-sm">{column.name}</p>
               </div>
             </div>
           </div>
