@@ -95,8 +95,13 @@ export const ImportTransactionsCSVForm = () => {
                 <FormItem>
                   <FormLabel>Upload CSV file</FormLabel>
                   <FormDescription>
-                    The first row should be the headers of the table, and
-                    uploaded CSV file is only up to 5MB and max 200 rows
+                    The first row should be the headers of the table, and your
+                    headers should not include any special characters other than
+                    hyphens <kbd className="text-code">-</kbd> or underscores{' '}
+                    <kbd className="text-code">_</kbd>
+                  </FormDescription>
+                  <FormDescription>
+                    Uploaded CSV file is only up to 5MB and max 200 rows
                   </FormDescription>
                   <FormControl>
                     <FileUpload

@@ -231,9 +231,9 @@ export const useImportTransactionsCSV = () => {
 
     const { input, errors } = getFinalInput(finalMapping, values.balanceId);
 
-    if (errors) {
+    if (errors.message) {
       toast.error(errors.message);
-      console.log(errors);
+      console.log('errors', errors);
       return;
     }
 
@@ -246,8 +246,8 @@ export const useImportTransactionsCSV = () => {
         },
       }),
       {
-        loading: 'Creating user...',
-        success: 'User created successfully',
+        loading: 'Creating transactions...',
+        success: 'Transactions created successfully',
         error: (error: unknown) => {
           if (error instanceof Error) {
             return error.message;
