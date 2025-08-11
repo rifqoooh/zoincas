@@ -51,6 +51,7 @@ interface UseDataTableProps<TData>
       | 'manualSorting'
     >,
     Required<Pick<TableOptions<TData>, 'pageCount'>> {
+  searchField?: string;
   initialState?: Omit<Partial<TableState>, 'sorting'> & {
     sorting?: ExtendedColumnSort<TData>[];
   };
@@ -68,6 +69,7 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
   const {
     columns,
     pageCount = -1,
+    searchField,
     initialState,
     history = 'replace',
     debounceMs = DEBOUNCE_MS,
@@ -216,18 +218,23 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
     }
 
     return Object.entries(filterValues).reduce<ColumnFiltersState>(
+      // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <explanation>
       (filters, [key, value]) => {
         if (value !== null) {
-          const processedValue = Array.isArray(value)
-            ? value
-            : // biome-ignore lint/performance/useTopLevelRegex: <explanation>
-              // biome-ignore lint/nursery/noNestedTernary: <explanation>
-              typeof value === 'string' && /[^a-zA-Z0-9-]/.test(value)
+          const processedValue =
+            searchField === key
               ? value
-                  // biome-ignore lint/performance/useTopLevelRegex: <explanation>
-                  .split(/[^a-zA-Z0-9-]+/)
-                  .filter(Boolean)
-              : [value];
+              : // biome-ignore lint/nursery/noNestedTernary: <explanation>
+                Array.isArray(value)
+                ? value
+                : // biome-ignore lint/performance/useTopLevelRegex: <explanation>
+                  // biome-ignore lint/nursery/noNestedTernary: <explanation>
+                  typeof value === 'string' && /[^a-zA-Z0-9-+]/.test(value)
+                  ? value
+                      // biome-ignore lint/performance/useTopLevelRegex: <explanation>
+                      .split(/[^a-zA-Z0-9-+]+/)
+                      .filter(Boolean)
+                  : [value];
 
           filters.push({
             id: key,
@@ -238,7 +245,7 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
       },
       []
     );
-  }, [filterValues, enableAdvancedFilter]);
+  }, [searchField, filterValues, enableAdvancedFilter]);
 
   const [columnFilters, setColumnFilters] =
     React.useState<ColumnFiltersState>(initialColumnFilters);

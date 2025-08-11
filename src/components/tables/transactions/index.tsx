@@ -78,6 +78,7 @@ export function TransactionsTable() {
     data: transactions,
     columns,
     pageCount: pagination.pageCount,
+    searchField: 'description',
     initialState: {
       columnVisibility: { category: false },
       sorting: [{ id: 'datetime', desc: true }],
