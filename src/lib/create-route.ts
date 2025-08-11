@@ -24,7 +24,7 @@ export function createRoute<
   const routeBuilder: RouteBuilder<Params, Search> = (params, options) => {
     const baseUrl = fn(params);
     const searchString =
-      options?.search && qs.stringify(options.search, { allowDots: true });
+      options?.search && qs.stringify(options.search, { arrayFormat: 'comma' });
     return [baseUrl, searchString ? `?${searchString}` : ''].join('');
   };
 
