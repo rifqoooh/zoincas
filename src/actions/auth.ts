@@ -49,7 +49,7 @@ export const signInAction = async (
   });
 
   if (callbackURL) {
-    redirect(Routes.root({}, { search: { url: callbackURL } }));
+    redirect(Routes.root());
   }
 
   redirect(Routes.dashboard());

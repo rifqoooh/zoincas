@@ -60,8 +60,8 @@ export const transactionsSearchParams = z.object({
 });
 
 export const Routes = {
-  root: createRoute(() => '/', z.object({}), rootSearchParams),
-  signIn: createRoute(() => '/sign-in', z.object({}), signInSearchParams),
+  root: createRoute(() => '/'),
+  signIn: createRoute(() => '/sign-in'),
   signUp: createRoute(() => '/sign-up'),
   dashboard: createRoute(
     () => '/dashboard',

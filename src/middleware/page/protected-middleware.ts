@@ -10,7 +10,7 @@ export const protectedMiddleware = async () => {
   });
 
   if (!session) {
-    redirect(Routes.signIn({}, { search: { callbackURL: 'dashboard' } }));
+    redirect(Routes.signIn());
   }
 
   return;
