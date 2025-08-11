@@ -3,7 +3,12 @@
 import * as React from 'react';
 
 import { Command as CommandPrimitive, defaultFilter } from 'cmdk';
-import { CheckIcon, ChevronDownIcon, PlusCircleIcon } from 'lucide-react';
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  PlusCircleIcon,
+  XCircleIcon,
+} from 'lucide-react';
 
 import {
   CommandEmpty,
@@ -131,6 +136,13 @@ export function AutoComplete({
     setInputValue('');
   }, []);
 
+  const onRemoveOption = React.useCallback(() => {
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    setSelected(undefined as any as Option);
+    setInputValue('');
+    onChange(undefined);
+  }, [onChange]);
+
   const onSelectOption = React.useCallback(
     (option: Option) => {
       setSelected(() => option);
@@ -162,7 +174,7 @@ export function AutoComplete({
 
   return (
     <CommandPrimitive onKeyDown={onKeyDown}>
-      <div className="group rounded-md border border-input px-1 py-2 text-sm ring-offset-background transition-[color,box-shadow] focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 dark:bg-input/30">
+      <div className="group rounded-md border border-input px-3 py-2 text-sm ring-offset-background transition-[color,box-shadow] focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 dark:bg-input/30">
         <div className="flex items-center gap-1">
           <CommandPrimitive.Input
             ref={mergeRefs([inputRef, ref])}
@@ -172,9 +184,16 @@ export function AutoComplete({
             onFocus={onFocus}
             placeholder={placeholder}
             disabled={isDisabled || isLoading}
-            className="ml-2 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+            className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
           />
-          <ChevronDownIcon className="size-4 text-muted-foreground" />
+          {selected ? (
+            <XCircleIcon
+              className="size-4 text-muted-foreground"
+              onClick={onRemoveOption}
+            />
+          ) : (
+            <ChevronDownIcon className="size-4 text-muted-foreground" />
+          )}
         </div>
       </div>
       <div className="relative z-50">
