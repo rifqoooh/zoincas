@@ -21,6 +21,9 @@ import {
   transactionsDataSchema,
 } from '@/validators/api/transactions/response';
 import { selectTransactionsSchema } from '@/validators/db/transactions';
+import { balancesKeys } from '../balances/keys';
+import { budgetPlansKeys } from '../budget-plans/keys';
+import { categoriesKeys } from '../categories/keys';
 import { transactionsKeys } from './keys';
 
 export const useListTransactionsQuery = () => {
@@ -148,6 +151,12 @@ export const useCreateTransactionMutation = () => {
       queryClient.invalidateQueries({
         queryKey: transactionsKeys.all(),
       });
+      queryClient.invalidateQueries({
+        queryKey: balancesKeys.all(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: categoriesKeys.all(),
+      });
     },
   });
 
@@ -179,6 +188,12 @@ export const useCreateManyTransactionMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: transactionsKeys.all(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: balancesKeys.all(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: categoriesKeys.all(),
       });
     },
   });
@@ -217,6 +232,18 @@ export const useUpdateTransactionMutation = (transactionId?: string) => {
       queryClient.invalidateQueries({
         queryKey: transactionsKeys.all(),
       });
+      queryClient.removeQueries({
+        queryKey: transactionsKeys.transaction({ transactionId }),
+      });
+      queryClient.invalidateQueries({
+        queryKey: balancesKeys.all(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: categoriesKeys.all(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: budgetPlansKeys.all(),
+      });
     },
   });
 
@@ -253,6 +280,12 @@ export const useDeleteTransactionMutation = (transactionId?: string) => {
       queryClient.invalidateQueries({
         queryKey: transactionsKeys.all(),
       });
+      queryClient.invalidateQueries({
+        queryKey: balancesKeys.all(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: categoriesKeys.all(),
+      });
     },
   });
 
@@ -288,6 +321,12 @@ export const useDeleteManyTransactionMutation = (transactionIds?: string[]) => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: transactionsKeys.all(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: balancesKeys.all(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: categoriesKeys.all(),
       });
     },
   });
@@ -327,6 +366,9 @@ export const useAssignManyCategoryTransactionMutation = (
       queryClient.invalidateQueries({
         queryKey: transactionsKeys.all(),
       });
+      queryClient.invalidateQueries({
+        queryKey: categoriesKeys.all(),
+      });
     },
   });
 
@@ -364,6 +406,9 @@ export const useAssignManyBudgetTransactionMutation = (
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: transactionsKeys.all(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: budgetPlansKeys.all(),
       });
     },
   });

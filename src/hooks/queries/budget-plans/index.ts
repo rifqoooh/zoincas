@@ -11,6 +11,7 @@ import {
 } from '@/validators/api/budget-plans/response';
 import { selectBudgetPlansSchema } from '@/validators/db/budget-plans';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { transactionsKeys } from '../transactions/keys';
 import { budgetPlansKeys } from './keys';
 
 export const useListBudgetPlansQuery = () => {
@@ -164,6 +165,9 @@ export const useDeleteBudgetPlanMutation = (budgetPlanId?: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: budgetPlansKeys.all(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: transactionsKeys.all(),
       });
     },
   });

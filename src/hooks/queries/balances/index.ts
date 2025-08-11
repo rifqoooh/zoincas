@@ -11,6 +11,7 @@ import {
 } from '@/validators/api/balances/response';
 import { selectBalancesSchema } from '@/validators/db/balances';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { transactionsKeys } from '../transactions/keys';
 import { balancesKeys } from './keys';
 
 export const useListBalancesQuery = () => {
@@ -164,6 +165,9 @@ export const useDeleteBalanceMutation = (balanceId?: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: balancesKeys.all(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: transactionsKeys.all(),
       });
     },
   });

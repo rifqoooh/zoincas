@@ -11,6 +11,7 @@ import {
 } from '@/validators/api/categories/response';
 import { selectCategoriesSchema } from '@/validators/db/categories';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { transactionsKeys } from '../transactions/keys';
 import { categoriesKeys } from './keys';
 
 export const useListCategoriesQuery = () => {
@@ -164,6 +165,9 @@ export const useDeleteCategoryMutation = (categoryId?: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: categoriesKeys.all(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: transactionsKeys.all(),
       });
     },
   });

@@ -68,15 +68,15 @@ export function BudgetBar({ id, category }: BudgetBarProps) {
               remaining < 0 && 'text-red-500/70'
             )}
           >
-            Usage
+            {remaining >= 0 ? 'Remaining' : 'Over budget'}
           </p>
           <p
             className={cn(
-              'hidden whitespace-nowrap text-muted-foreground text-sm sm:block',
+              'whitespace-nowrap text-muted-foreground text-sm',
               remaining < 0 && 'text-red-500'
             )}
           >
-            {formatCurrency(Math.abs(category.spend))}
+            {formatCurrency(remaining)}
           </p>
         </div>
 
@@ -87,15 +87,15 @@ export function BudgetBar({ id, category }: BudgetBarProps) {
               remaining < 0 && 'text-red-500/70'
             )}
           >
-            {remaining >= 0 ? 'Remaining' : 'Over budget'}
+            Usage
           </p>
           <p
             className={cn(
-              'whitespace-nowrap text-muted-foreground text-sm',
+              'hidden whitespace-nowrap text-muted-foreground text-sm sm:block',
               remaining < 0 && 'text-red-500'
             )}
           >
-            {formatCurrency(remaining)}
+            {formatCurrency(Math.abs(category.spend))}
           </p>
         </div>
       </div>
