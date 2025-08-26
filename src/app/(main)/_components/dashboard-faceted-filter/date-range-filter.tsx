@@ -2,10 +2,10 @@
 
 import * as React from 'react';
 
-import { parseAsIsoDate, useQueryStates } from 'nuqs';
+import { parseAsString, useQueryStates } from 'nuqs';
 
 import { CalendarDatePicker } from '@/components/calendar-date-picker';
-import { subDays } from 'date-fns';
+import { format, subDays } from 'date-fns';
 
 export function DateRangeFilter() {
   const defaultDate = React.useMemo(() => {
@@ -14,8 +14,8 @@ export function DateRangeFilter() {
   }, []);
 
   const [search, setSearch] = useQueryStates({
-    start: parseAsIsoDate.withDefault(defaultDate.from),
-    end: parseAsIsoDate.withDefault(defaultDate.to),
+    start: parseAsString.withDefault(format(defaultDate.from, 'yyyy-MM-dd')),
+    end: parseAsString.withDefault(format(defaultDate.to, 'yyyy-MM-dd')),
   });
 
   const [selectedDateRange, setSelectedDateRange] = React.useState({
@@ -27,8 +27,8 @@ export function DateRangeFilter() {
     (range: { from: Date; to: Date }) => {
       setSelectedDateRange(range);
       setSearch({
-        start: range.from,
-        end: range.to,
+        start: format(range.from, 'yyyy-MM-dd'),
+        end: format(range.to, 'yyyy-MM-dd'),
       });
     },
     [setSearch]

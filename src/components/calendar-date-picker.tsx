@@ -7,17 +7,16 @@ import type { VariantProps } from 'class-variance-authority';
 import type { DateRange } from 'react-day-picker';
 
 import {
-  endOfDay,
   endOfMonth,
   endOfWeek,
   endOfYear,
-  startOfDay,
+  format,
   startOfMonth,
   startOfWeek,
   startOfYear,
   subDays,
 } from 'date-fns';
-import { formatInTimeZone, toDate } from 'date-fns-tz';
+import { toDate } from 'date-fns-tz';
 import { ChevronDownIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -61,34 +60,26 @@ export const CalendarDatePicker = React.forwardRef<
     const [selectedRange, setSelectedRange] = React.useState<string | null>(
       numberOfMonths === 2 ? 'This Year' : 'Today'
     );
-    const [monthFrom, setMonthFrom] = React.useState<Date | undefined>(
-      date?.from
-    );
-
-    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
     const selectDateRange = (from: Date, to: Date, range: string) => {
-      const startDate = startOfDay(toDate(from, { timeZone }));
-      const endDate =
-        numberOfMonths === 2 ? endOfDay(toDate(to, { timeZone })) : startDate;
+      const startDate = toDate(from);
+      const endDate = numberOfMonths === 2 ? toDate(to) : startDate;
       onDateSelect({ from: startDate, to: endDate });
       setSelectedRange(range);
-      setMonthFrom(from);
     };
 
-    const handleDateSelect = (range: DateRange | undefined) => {
+    const onSelect = (range: DateRange | undefined) => {
       if (range) {
-        let from = startOfDay(toDate(range.from as Date, { timeZone }));
-        let to = range.to ? endOfDay(toDate(range.to, { timeZone })) : from;
+        let from = toDate(range.from as Date);
+        let to = range.to ? toDate(range.to) : from;
         if (numberOfMonths === 1) {
           if (range.from !== date.from) {
             to = from;
           } else {
-            from = startOfDay(toDate(range.to as Date, { timeZone }));
+            from = toDate(range.to as Date);
           }
         }
         onDateSelect({ from, to });
-        setMonthFrom(from);
       }
       setSelectedRange(null);
     };
@@ -127,9 +118,6 @@ export const CalendarDatePicker = React.forwardRef<
       },
     ];
 
-    const formatWithTz = (date: Date, fmt: string) =>
-      formatInTimeZone(date, timeZone, fmt);
-
     return (
       <>
         <Popover modal={false}>
@@ -147,23 +135,18 @@ export const CalendarDatePicker = React.forwardRef<
                 {date?.from ? (
                   date.to ? (
                     <>
-                      <span>{formatWithTz(date.from, 'dd')}</span>{' '}
-                      <span>{formatWithTz(date.from, 'MMM')}</span>{' '}
-                      <span>{formatWithTz(date.from, 'yyyy')}</span>
-                      {numberOfMonths === 2 && (
-                        <>
-                          {' - '}
-                          <span>{formatWithTz(date.to, 'dd')}</span>{' '}
-                          <span>{formatWithTz(date.to, 'MMM')}</span>{' '}
-                          <span>{formatWithTz(date.to, 'yyyy')}</span>
-                        </>
-                      )}
+                      <span>{format(date.from, 'dd MMM yyyy')}</span>{' '}
+                      {numberOfMonths === 2 &&
+                        date.from.toDateString() !== date.to.toDateString() && (
+                          <>
+                            {' - '}
+                            <span>{format(date.to, 'dd MMM yyyy')}</span>
+                          </>
+                        )}
                     </>
                   ) : (
                     <>
-                      <span>{formatWithTz(date.from, 'dd')}</span>{' '}
-                      <span>{formatWithTz(date.from, 'MMM')}</span>{' '}
-                      <span>{formatWithTz(date.from, 'yyyy')}</span>
+                      <span>{format(date.from, 'dd MMM yyyy')}</span>
                     </>
                   )
                 ) : (
@@ -189,7 +172,6 @@ export const CalendarDatePicker = React.forwardRef<
                       )}
                       onClick={() => {
                         selectDateRange(start, end, label);
-                        setMonthFrom(start);
                       }}
                     >
                       {label}
@@ -200,11 +182,9 @@ export const CalendarDatePicker = React.forwardRef<
               <div className="flex flex-col">
                 <Calendar
                   mode="range"
-                  defaultMonth={monthFrom}
-                  month={monthFrom}
-                  onMonthChange={setMonthFrom}
+                  defaultMonth={date?.from}
                   selected={date}
-                  onSelect={handleDateSelect}
+                  onSelect={onSelect}
                   numberOfMonths={numberOfMonths}
                 />
               </div>
