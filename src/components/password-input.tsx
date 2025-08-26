@@ -15,7 +15,6 @@ export function PasswordInput({
     <div className="relative">
       <Input
         type={isVisible ? 'text' : 'password'}
-        autoComplete="new-password"
         className={cn('pe-10', className)}
         {...props}
       />
@@ -28,9 +27,9 @@ export function PasswordInput({
         onClick={() => setIsVisible(!isVisible)}
       >
         {isVisible ? (
-          <EyeOffIcon className="size-4" />
-        ) : (
           <EyeIcon className="size-4" />
+        ) : (
+          <EyeOffIcon className="size-4" />
         )}
       </button>
     </div>

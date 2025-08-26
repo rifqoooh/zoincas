@@ -38,6 +38,7 @@ export function SignInForm() {
                       <Input
                         {...field}
                         placeholder="example@email.com"
+                        autoComplete="username"
                         className="h-9"
                         disabled={isPending}
                       />
@@ -57,6 +58,7 @@ export function SignInForm() {
                       <PasswordInput
                         {...field}
                         placeholder="Type strong password"
+                        autoComplete="current-password"
                         className="h-9"
                         disabled={isPending}
                       />
