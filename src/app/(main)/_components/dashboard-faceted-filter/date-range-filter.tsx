@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { parseAsInteger, useQueryStates } from 'nuqs';
+import { parseAsIsoDate, useQueryStates } from 'nuqs';
 
 import { CalendarDatePicker } from '@/components/calendar-date-picker';
 import { subDays } from 'date-fns';
@@ -14,21 +14,21 @@ export function DateRangeFilter() {
   }, []);
 
   const [search, setSearch] = useQueryStates({
-    startDate: parseAsInteger.withDefault(defaultDate.from.getTime()),
-    endDate: parseAsInteger.withDefault(defaultDate.to.getTime()),
+    start: parseAsIsoDate.withDefault(defaultDate.from),
+    end: parseAsIsoDate.withDefault(defaultDate.to),
   });
 
   const [selectedDateRange, setSelectedDateRange] = React.useState({
-    from: new Date(search.startDate),
-    to: new Date(search.endDate),
+    from: new Date(search.start),
+    to: new Date(search.end),
   });
 
   const onDateSelect = React.useCallback(
     (range: { from: Date; to: Date }) => {
       setSelectedDateRange(range);
       setSearch({
-        startDate: range.from.getTime(),
-        endDate: range.to.getTime(),
+        start: range.from,
+        end: range.to,
       });
     },
     [setSearch]

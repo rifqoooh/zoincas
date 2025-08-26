@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 export const getSummariesQuery = z.object({
-  startDate: z.coerce.number().optional(), // date timestamp
-  endDate: z.coerce.number().optional(), // date timestamp
+  startDate: z.coerce.date().optional(),
+  endDate: z.coerce.date().optional(),
   balance: z.string().optional(),
 });
 

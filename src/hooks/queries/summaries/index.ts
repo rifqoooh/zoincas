@@ -1,7 +1,7 @@
 import type { ErrorResponseAPI } from '@/lib/api/types';
 
 import { useQuery } from '@tanstack/react-query';
-import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs';
+import { parseAsIsoDate, parseAsString, useQueryStates } from 'nuqs';
 
 import { summaries } from '@/lib/api/rpc';
 import {
@@ -13,14 +13,14 @@ import { summariesKeys } from './keys';
 
 export const useGetSummariesQuery = () => {
   const [search] = useQueryStates({
-    startDate: parseAsInteger,
-    endDate: parseAsInteger,
+    start: parseAsIsoDate,
+    end: parseAsIsoDate,
     balance: parseAsString,
   });
 
   const parsedSearch = {
-    startDate: search.startDate ?? undefined,
-    endDate: search.endDate ?? undefined,
+    startDate: search.start ?? undefined,
+    endDate: search.end ?? undefined,
     balance: search.balance ?? undefined,
   };
 
@@ -50,14 +50,14 @@ export const useGetSummariesQuery = () => {
 
 export const useGetSummariesIncomeExpenseQuery = () => {
   const [search] = useQueryStates({
-    startDate: parseAsInteger,
-    endDate: parseAsInteger,
+    start: parseAsIsoDate,
+    end: parseAsIsoDate,
     balance: parseAsString,
   });
 
   const parsedSearch = {
-    startDate: search.startDate ?? undefined,
-    endDate: search.endDate ?? undefined,
+    startDate: search.start ?? undefined,
+    endDate: search.end ?? undefined,
     balance: search.balance ?? undefined,
   };
 
@@ -87,14 +87,14 @@ export const useGetSummariesIncomeExpenseQuery = () => {
 
 export const useGetSummariesCategoryQuery = () => {
   const [search] = useQueryStates({
-    startDate: parseAsInteger,
-    endDate: parseAsInteger,
+    start: parseAsIsoDate,
+    end: parseAsIsoDate,
     balance: parseAsString,
   });
 
   const parsedSearch = {
-    startDate: search.startDate ?? undefined,
-    endDate: search.endDate ?? undefined,
+    startDate: search.start ?? undefined,
+    endDate: search.end ?? undefined,
     balance: search.balance ?? undefined,
   };
 
