@@ -196,7 +196,7 @@ export const transactionsColumns = ({
       },
       meta: {
         label: 'Balance',
-        variant: 'select',
+        variant: 'multiSelect',
         options: balanceOptions,
         icon: CreditCardIcon,
       },
@@ -255,7 +255,7 @@ export const transactionsColumns = ({
       },
       meta: {
         label: 'Category',
-        variant: 'select',
+        variant: 'multiSelect',
         options: categoryOptions,
         icon: Layers2Icon,
       },
