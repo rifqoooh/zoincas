@@ -15,6 +15,7 @@ export function PasswordInput({
     <div className="relative">
       <Input
         type={isVisible ? 'text' : 'password'}
+        autoComplete="new-password"
         className={cn('pe-10', className)}
         {...props}
       />
