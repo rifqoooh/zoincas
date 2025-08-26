@@ -4,10 +4,10 @@
 
 import * as Sentry from '@sentry/nextjs';
 
-import { env } from '@/env';
-
 Sentry.init({
-  dsn: env().NEXT_PUBLIC_SENTRY_DSN,
+  enabled: process.env.NODE_ENV === 'production',
+
+  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
 
   // Add optional integrations for additional features
   integrations: [Sentry.replayIntegration()],
