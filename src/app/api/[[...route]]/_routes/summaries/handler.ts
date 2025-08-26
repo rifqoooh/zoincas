@@ -22,11 +22,11 @@ export const getSummaries: AppRouteHandler<GetSummaries> = async (c) => {
   const defaultStartDate = subDays(defaultEndDate, 30);
 
   if (!query.startDate) {
-    query.startDate = defaultStartDate.getTime();
+    query.startDate = defaultStartDate;
   }
 
   if (!query.endDate) {
-    query.endDate = defaultEndDate.getTime();
+    query.endDate = defaultEndDate;
   }
 
   const data = await summaries.getSummaries(user.id, query);
@@ -51,11 +51,11 @@ export const getSummariesIncomeExpense: AppRouteHandler<
   const defaultStartDate = subDays(defaultEndDate, 30);
 
   if (!query.startDate) {
-    query.startDate = defaultStartDate.getTime();
+    query.startDate = defaultStartDate;
   }
 
   if (!query.endDate) {
-    query.endDate = defaultEndDate.getTime();
+    query.endDate = defaultEndDate;
   }
 
   const data = await summaries.getSummariesIncomeExpense(user.id, query);
@@ -80,11 +80,11 @@ export const getSummariesCategory: AppRouteHandler<
   const defaultStartDate = subDays(defaultEndDate, 30);
 
   if (!query.startDate) {
-    query.startDate = defaultStartDate.getTime();
+    query.startDate = defaultStartDate;
   }
 
   if (!query.endDate) {
-    query.endDate = defaultEndDate.getTime();
+    query.endDate = defaultEndDate;
   }
 
   const data = await summaries.getSummariesCategory(user.id, query);
