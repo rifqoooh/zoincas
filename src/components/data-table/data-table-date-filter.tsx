@@ -12,7 +12,8 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { formatDate } from '@/lib/format';
 import type { Column } from '@tanstack/react-table';
-import { CalendarIcon, XCircle } from 'lucide-react';
+import { format } from 'date-fns';
+import { CalendarIcon, XCircleIcon } from 'lucide-react';
 import type { DateRange } from 'react-day-picker';
 
 type DateSelection = Date[] | DateRange;
@@ -21,13 +22,12 @@ function getIsDateRange(value: DateSelection): value is DateRange {
   return value && typeof value === 'object' && !Array.isArray(value);
 }
 
-function parseAsDate(timestamp: number | string | undefined): Date | undefined {
-  if (!timestamp) {
+function parseAsDate(value: string | undefined): Date | undefined {
+  if (!value) {
     return undefined;
   }
-  const numericTimestamp =
-    typeof timestamp === 'string' ? Number(timestamp) : timestamp;
-  const date = new Date(numericTimestamp);
+
+  const date = new Date(value);
   return Number.isNaN(date.getTime()) ? undefined : date;
 }
 
@@ -36,16 +36,17 @@ function parseColumnFilterValue(value: unknown) {
     return [];
   }
 
+  // if value is an array that means it's multiple date range
   if (Array.isArray(value)) {
     return value.map((item) => {
-      if (typeof item === 'number' || typeof item === 'string') {
+      if (typeof item === 'string') {
         return item;
       }
       return undefined;
     });
   }
 
-  if (typeof value === 'string' || typeof value === 'number') {
+  if (typeof value === 'string') {
     return [value];
   }
 
@@ -71,31 +72,33 @@ export function DataTableDateFilter<TData>({
     }
 
     if (multiple) {
-      const timestamps = parseColumnFilterValue(columnFilterValue);
+      const dates = parseColumnFilterValue(columnFilterValue);
       return {
-        from: parseAsDate(timestamps[0]),
-        to: parseAsDate(timestamps[1]),
+        from: parseAsDate(dates[0]),
+        to: parseAsDate(dates[1]),
       };
     }
 
-    const timestamps = parseColumnFilterValue(columnFilterValue);
-    const date = parseAsDate(timestamps[0]);
+    const dates = parseColumnFilterValue(columnFilterValue);
+    const date = parseAsDate(dates[0]);
+
     return date ? [date] : [];
   }, [columnFilterValue, multiple]);
 
   const onSelect = React.useCallback(
+    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <explanation>
     (date: Date | DateRange | undefined) => {
       if (!date) {
         column.setFilterValue(undefined);
         return;
       }
 
-      if (multiple && !('getTime' in date)) {
-        const from = date.from?.getTime();
-        const to = date.to?.getTime();
+      if (multiple && 'from' in date && 'to' in date) {
+        const from = date.from ? format(date.from, 'yyyy-MM-dd') : undefined;
+        const to = date.to ? format(date.to, 'yyyy-MM-dd') : undefined;
         column.setFilterValue(from || to ? [from, to] : undefined);
-      } else if (!multiple && 'getTime' in date) {
-        column.setFilterValue(date.getTime());
+      } else if (!multiple && date instanceof Date) {
+        column.setFilterValue(date);
       }
     },
     [column, multiple]
@@ -116,9 +119,11 @@ export function DataTableDateFilter<TData>({
       }
       return selectedDates.from || selectedDates.to;
     }
+
     if (!Array.isArray(selectedDates)) {
       return false;
     }
+
     return selectedDates.length > 0;
   }, [multiple, selectedDates]);
 
@@ -127,6 +132,9 @@ export function DataTableDateFilter<TData>({
       return '';
     }
     if (range.from && range.to) {
+      if (range.from.toDateString() === range.to.toDateString()) {
+        return formatDate(range.from);
+      }
       return `${formatDate(range.from)} - ${formatDate(range.to)}`;
     }
     return formatDate(range.from ?? range.to);
@@ -197,7 +205,7 @@ export function DataTableDateFilter<TData>({
               onClick={onReset}
               className="rounded-sm opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
             >
-              <XCircle />
+              <XCircleIcon />
             </div>
           ) : (
             <CalendarIcon />
@@ -208,7 +216,6 @@ export function DataTableDateFilter<TData>({
       <PopoverContent className="w-auto p-0" align="start">
         {multiple ? (
           <Calendar
-            initialFocus
             mode="range"
             selected={
               getIsDateRange(selectedDates)
@@ -216,15 +223,16 @@ export function DataTableDateFilter<TData>({
                 : { from: undefined, to: undefined }
             }
             onSelect={onSelect}
+            autoFocus
           />
         ) : (
           <Calendar
-            initialFocus
             mode="single"
             selected={
               getIsDateRange(selectedDates) ? undefined : selectedDates[0]
             }
             onSelect={onSelect}
+            autoFocus
           />
         )}
       </PopoverContent>

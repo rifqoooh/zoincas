@@ -14,7 +14,7 @@ const sortSchema = z
 const balanceSchema = z.string().array().default([]);
 const categorySchema = z.string().array().default([]);
 const budgetSchema = z.string().array().default([]);
-const datetimeSchema = z.coerce.number().array().max(2).default([]);
+const datetimeSchema = z.coerce.date().array().max(2).default([]);
 
 export const listTransactionsQuery = z.object({
   page: z.coerce.number().int().positive().default(1),
