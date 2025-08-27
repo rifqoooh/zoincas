@@ -80,13 +80,13 @@ export function Hero() {
                 </AnimatedGroup>
 
                 <AnimatedGroup variants={transitionVariants}>
-                  <h1 className="mt-8 text-balance text-5xl uppercase md:text-6xl xl:text-7xl">
+                  <h1 className="mt-8 text-balance text-5xl uppercase leading-tight md:text-6xl xl:text-7xl">
                     AI
                     <Image
                       src="https://res.cloudinary.com/dq3ztcghr/image/upload/v1753508303/single-fake-gold-dollar-coin-crop_xuzcwx.webp"
                       alt="coin"
                       draggable={false}
-                      className="mx-4 mb-4 inline-block h-12 w-12 md:h-16 md:w-16"
+                      className="mx-4 mb-2 inline-block h-12 w-12 md:mb-4 md:h-16 md:w-16"
                       width="256"
                       height="256"
                     />
