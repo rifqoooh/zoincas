@@ -21,7 +21,8 @@ export function CreateTransactionsMenu() {
   };
 
   const onScanFile = () => {
-    scanFileStore.onOpen();
+    return;
+    // scanFileStore.onOpen();
   };
 
   return (
