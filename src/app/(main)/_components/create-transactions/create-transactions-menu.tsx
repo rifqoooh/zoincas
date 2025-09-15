@@ -10,12 +10,18 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useImportTransactionsCSVModal } from '@/hooks/store/import-transactions-csv';
+import { useScanFileModal } from '@/hooks/store/scan-file';
 
 export function CreateTransactionsMenu() {
   const importTransactionsCSVStore = useImportTransactionsCSVModal();
+  const scanFileStore = useScanFileModal();
 
   const onImportFromCSV = () => {
     importTransactionsCSVStore.onOpen();
+  };
+
+  const onScanFile = () => {
+    scanFileStore.onOpen();
   };
 
   return (
@@ -30,6 +36,7 @@ export function CreateTransactionsMenu() {
         <DropdownMenuItem onClick={onImportFromCSV}>
           Import from CSV
         </DropdownMenuItem>
+        <DropdownMenuItem onClick={onScanFile}>Scan file</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

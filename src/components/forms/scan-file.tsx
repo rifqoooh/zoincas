@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import type { Field } from '@/hooks/actions/types';
 
-import { ACCEPTED_CSV_MIME_TYPES } from '@/validators/utilities';
+import { ACCEPTED_FILE_MIME_TYPES } from '@/validators/utilities';
 
 import { CloudUploadIcon, XIcon } from 'lucide-react';
 
@@ -43,11 +43,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useImportTransactionsCSV } from '@/hooks/actions/use-import-transactions-csv';
+import { useScanFile } from '@/hooks/actions/use-scan-file';
 import { robotoMono } from '@/lib/fonts';
 import { cn } from '@/lib/utilities';
 
-export function ImportTransactionsCSVForm() {
+export function ScanFileForm() {
   const {
     isFilesError,
     mapping,
@@ -58,7 +58,7 @@ export function ImportTransactionsCSVForm() {
     form,
     onSubmit,
     balancesQuery,
-  } = useImportTransactionsCSV();
+  } = useScanFile();
 
   const balancesData = balancesQuery.data || [];
   const balancesOptions = balancesData.map((balance) => ({
@@ -93,23 +93,14 @@ export function ImportTransactionsCSVForm() {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Upload CSV file</FormLabel>
-                  <FormDescription>
-                    The first row should be the headers of the table, and your
-                    headers should not include any special characters other than
-                    hyphens <kbd className="text-code">-</kbd> or underscores{' '}
-                    <kbd className="text-code">_</kbd>
-                  </FormDescription>
-                  <FormDescription>
-                    Uploaded CSV file is only up to 5MB and max 200 rows
-                  </FormDescription>
+                  <FormLabel>Scan file to transaction</FormLabel>
                   <FormControl>
                     <FileUpload
                       {...field}
                       onValueChange={field.onChange}
-                      accept={ACCEPTED_CSV_MIME_TYPES.join(',')}
+                      accept={ACCEPTED_FILE_MIME_TYPES.join(',')}
                       maxFiles={1}
-                      maxSize={5 * 1024 * 1024}
+                      maxSize={10 * 1024 * 1024}
                       onUpload={onFileUpload}
                       onFileReject={onFileReject}
                     >
@@ -129,7 +120,10 @@ export function ImportTransactionsCSVForm() {
                                 className="h-11"
                                 hasFileProgress={true}
                               />
-                              <FileUploadItemProgress />
+                              <FileUploadItemProgress
+                                variant="text"
+                                text="Scanning..."
+                              />
                               <FileUploadItemDelete asChild>
                                 <Button
                                   variant="ghost"
@@ -138,7 +132,7 @@ export function ImportTransactionsCSVForm() {
                                 >
                                   <XIcon />
                                   <span className="sr-only">
-                                    Delete uploaded csv
+                                    Delete uploaded file
                                   </span>
                                 </Button>
                               </FileUploadItemDelete>
@@ -148,7 +142,9 @@ export function ImportTransactionsCSVForm() {
                       )}
                     </FileUpload>
                   </FormControl>
-                  <FormMessage />
+                  <FormDescription className="mb-8">
+                    Uploaded image or PDF file is only up to 10MB
+                  </FormDescription>
                 </FormItem>
               )}
             />

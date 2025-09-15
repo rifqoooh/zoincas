@@ -12,24 +12,25 @@ import { usePapaParse } from 'react-papaparse';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
+import { useScanFileMutation } from '@/hooks/queries/ai';
 import { useListBalancesQuery } from '@/hooks/queries/balances';
 import { useCreateManyTransactionMutation } from '@/hooks/queries/transactions';
-import { useImportTransactionsCSVModal } from '@/hooks/store/import-transactions-csv';
 import { insertTransactionsSchema } from '@/validators/db/transactions';
-import { csvSchema } from '@/validators/utilities';
+import { fileSchema } from '@/validators/utilities';
+import { useScanFileModal } from '../store/scan-file';
 
 const importTransactionsSchema = z
   .object({
-    files: csvSchema
+    files: fileSchema
       .array()
-      .min(1, 'CSV file is required')
+      .min(1, 'File is required')
       .max(1, 'Only one file is allowed'),
   })
   .merge(insertTransactionsSchema.pick({ balanceId: true }));
 
 type ImportTransactionsType = z.infer<typeof importTransactionsSchema>;
 
-export const useImportTransactionsCSV = () => {
+export const useScanFile = () => {
   const [isFilesError, setIsFilesError] = React.useState(false);
   const [mapping, setMapping] = React.useState<Record<string, Field>>({});
   const [resultCSV, setResultCSV] = React.useState<CSVResult>({
@@ -38,9 +39,10 @@ export const useImportTransactionsCSV = () => {
     data: [],
   });
 
-  const store = useImportTransactionsCSVModal();
+  const store = useScanFileModal();
 
-  const mutation = useCreateManyTransactionMutation();
+  const scanFileMutation = useScanFileMutation();
+  const createMutation = useCreateManyTransactionMutation();
 
   const balancesQuery = useListBalancesQuery();
 
@@ -55,58 +57,65 @@ export const useImportTransactionsCSV = () => {
     React.useCallback(
       async (files, { onProgress, onSuccess, onError }) => {
         for (const file of files) {
-          onProgress(file, 90);
-
           try {
-            const fileText = await file.text();
+            onProgress(file, 50);
 
-            readString<CSVRow>(fileText, {
-              header: true,
-              skipEmptyLines: true,
+            await scanFileMutation.mutateAsync(
+              { file },
+              {
+                onSuccess: async (response) => {
+                  const fileText = response.csv;
 
-              complete: (results) => {
-                if (results.data.length > 200) {
-                  return setTimeout(() => {
-                    setIsFilesError(true);
-                    onError(
-                      file,
-                      new Error(
-                        `Only accept up to 200 rows of transactions, but received ${results.data.length}`
-                      )
-                    );
-                  }, 100);
-                }
+                  readString<CSVRow>(fileText, {
+                    header: true,
+                    skipEmptyLines: true,
 
-                const columns: CSVColumn[] =
-                  results.meta.fields?.map((name) => ({
-                    id: name,
-                    name,
-                    sample: results.data[0]?.[name] || '',
-                  })) || [];
+                    complete: (results) => {
+                      if (results.data.length > 200) {
+                        return setTimeout(() => {
+                          setIsFilesError(true);
+                          onError(
+                            file,
+                            new Error(
+                              `Only accept up to 200 rows of transactions, but received ${results.data.length}`
+                            )
+                          );
+                        }, 100);
+                      }
 
-                const preview = results.data.slice(0, 20);
+                      const columns: CSVColumn[] =
+                        results.meta.fields?.map((name) => ({
+                          id: name,
+                          name,
+                          sample: results.data[0]?.[name] || '',
+                        })) || [];
 
-                setTimeout(() => {
-                  onSuccess(file);
-                  setIsFilesError(false);
-                  setResultCSV({ columns, preview, data: results.data });
-                  setMapping({});
-                }, 500);
-              },
+                      const preview = results.data.slice(0, 20);
 
-              error: (error) => {
-                toast.error('Failed to parse CSV');
-                const err =
-                  error instanceof Error
-                    ? error
-                    : new Error('Failed to parse CSV');
+                      setTimeout(() => {
+                        onSuccess(file);
+                        setIsFilesError(false);
+                        setResultCSV({ columns, preview, data: results.data });
+                        setMapping({});
+                      }, 500);
+                    },
 
-                setTimeout(() => {
-                  setIsFilesError(true);
-                  onError(file, err);
-                }, 100);
-              },
-            });
+                    error: (error) => {
+                      toast.error('Failed to parse CSV');
+                      const err =
+                        error instanceof Error
+                          ? error
+                          : new Error('Failed to parse CSV');
+
+                      setTimeout(() => {
+                        setIsFilesError(true);
+                        onError(file, err);
+                      }, 100);
+                    },
+                  });
+                },
+              }
+            );
           } catch (error) {
             toast.error('Upload failed, please try again');
             const err =
@@ -119,7 +128,7 @@ export const useImportTransactionsCSV = () => {
           }
         }
       },
-      [readString]
+      [scanFileMutation, readString]
     );
 
   const getFinalMapping = () => {
@@ -217,7 +226,7 @@ export const useImportTransactionsCSV = () => {
     const parsedData = insertTransactionsSchema.array().parse(input);
 
     toast.promise(
-      mutation.mutateAsync(parsedData, {
+      createMutation.mutateAsync(parsedData, {
         onSuccess: () => {
           store.onClose();
         },
