@@ -3,6 +3,7 @@ import { z } from 'zod';
 export const requiredString = z.string().trim().min(1, 'Required');
 
 const MB_BYTES = 5 * 1024 * 1024; // 5 MB
+const FILE_MB_BYTES = 10 * 1024 * 1024; // 10 MB
 
 export const ACCEPTED_IMAGE_MIME_TYPES = [
   'image/jpeg',
@@ -48,6 +49,33 @@ export const csvSchema = z.instanceof(File).superRefine((f, ctx) => {
       type: 'array',
       message: `The file must not be larger than ${MB_BYTES} bytes: ${f.size}`,
       maximum: MB_BYTES,
+      inclusive: true,
+    });
+  }
+});
+
+export const ACCEPTED_PDF_MIME_TYPES = ['application/pdf'];
+
+export const ACCEPTED_FILE_MIME_TYPES = [
+  ...ACCEPTED_IMAGE_MIME_TYPES,
+  ...ACCEPTED_PDF_MIME_TYPES,
+];
+
+export const fileSchema = z.instanceof(File).superRefine((f, ctx) => {
+  if (!ACCEPTED_FILE_MIME_TYPES.includes(f.type)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: `File must be one of [${ACCEPTED_FILE_MIME_TYPES.join(
+        ', '
+      )}] but was ${f.type}`,
+    });
+  }
+  if (f.size > FILE_MB_BYTES) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.too_big,
+      type: 'array',
+      message: `The file must not be larger than ${FILE_MB_BYTES} bytes: ${f.size}`,
+      maximum: FILE_MB_BYTES,
       inclusive: true,
     });
   }

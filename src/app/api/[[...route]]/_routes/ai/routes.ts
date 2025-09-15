@@ -1,13 +1,14 @@
 import * as StatusCode from '@/lib/api/http-status-code';
 
 import { createRoute } from '@hono/zod-openapi';
+import { z } from '@hono/zod-openapi';
 
 import {
   ContentFormDataRequired,
   ContentJSON,
 } from '@/lib/api/openapi-utilities';
 import { protectedMiddleware } from '@/middleware/api/protected-middleware';
-import { scanImageSchema } from '@/validators/api/ai/request';
+import { scanFileSchema, scanImageSchema } from '@/validators/api/ai/request';
 import { selectTransactionsSchema } from '@/validators/db/transactions';
 
 const tags = ['AI'];
@@ -27,9 +28,28 @@ export const scanImage = createRoute({
         amount: true,
         description: true,
       }),
-      'The created transaction.'
+      'The scanned transaction.'
+    ),
+  },
+});
+
+export const scanFile = createRoute({
+  method: 'post',
+  path: '/ai/scan-file',
+  tags,
+  middleware: [protectedMiddleware()],
+  request: {
+    body: ContentFormDataRequired(scanFileSchema, 'The file to scan.'),
+  },
+  responses: {
+    [StatusCode.CREATED]: ContentJSON(
+      z.object({
+        csv: z.string(),
+      }),
+      'The scanned transaction.'
     ),
   },
 });
 
 export type ScanImage = typeof scanImage;
+export type ScanFile = typeof scanFile;
