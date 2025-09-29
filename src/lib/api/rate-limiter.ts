@@ -17,9 +17,9 @@ export const rateLimiter = (app: AppOpenAPI) => {
       limit: 100, // Limit each IP to 100 requests per `window` (here, per 1 minutes).
       standardHeaders: 'draft-6', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
       keyGenerator: (c: AppContext) => {
-        const user = c.get('user') as User;
+        const user = c.get('user') as User | null;
         return (
-          user.id ??
+          user?.id ??
           c.req.header('x-forwarded-for') ??
           c.req.header('cf-connecting-ip') ??
           ''
