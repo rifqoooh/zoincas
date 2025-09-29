@@ -27,12 +27,19 @@ export const signUpAction = async (values: SignUpType) => {
 };
 
 export const signInGoogleAction = async () => {
-  await auth.api.signInSocial({
+  const response = await auth.api.signInSocial({
     body: {
       provider: 'google',
       callbackURL: `${env().NEXT_PUBLIC_APP_URL}/dashboard`,
     },
   });
+
+  // The response contains the redirect URL from Google
+  if (response?.url) {
+    redirect(response.url);
+  }
+
+  throw new Error('Failed to get Google OAuth URL');
 };
 
 export const signInAction = async (

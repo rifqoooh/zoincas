@@ -3,6 +3,7 @@ import { handle } from 'hono/vercel';
 import configureOpenAPI from '@/lib/api/configure-open-api';
 import { createApp } from '@/lib/api/create-app';
 import { rateLimiter } from '@/lib/api/rate-limiter';
+import { auth } from '@/lib/auth/server';
 
 import ai from './_routes/ai';
 import balances from './_routes/balances';
@@ -18,6 +19,10 @@ const app = createApp().basePath('/api');
 
 configureOpenAPI(app);
 rateLimiter(app);
+
+app.all('/auth/**', async (c) => {
+  return await auth.handler(c.req.raw);
+});
 
 // When making a lot of routes the Hono tend to errors excessively deep types,
 // so we need to split the routes into different variables

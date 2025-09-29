@@ -73,9 +73,5 @@ export function createApp() {
     );
   });
 
-  app.on(['GET', 'POST'], '/auth/*', async (c) => {
-    return await auth.handler(c.req.raw);
-  });
-
   return app;
 }
