@@ -105,7 +105,7 @@ export function ImportTransactionsCSVForm() {
                   </FormDescription>
                   <FormControl>
                     <FileUpload
-                      {...field}
+                      value={field.value}
                       onValueChange={field.onChange}
                       accept={ACCEPTED_CSV_MIME_TYPES.join(',')}
                       maxFiles={1}

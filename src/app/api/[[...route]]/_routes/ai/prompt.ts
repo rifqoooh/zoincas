@@ -31,10 +31,11 @@ Return CSV format text
 Rules:
 1. Output only valid CSV, no extra text
 2. CSV must have header
-3. If there is '+' or '-' symbol in front of amount, make it positive number or negative number respectively, otherwise always make it negative
-4. Datetime must follow ISO 8601 with UTC (Z) suffix
-5. If the receipt is not readable or not a receipt, return empty CSV
-6. If description is empty, set it to "Untitled"
+3. The amount number must be integer, not floating number. If found floating number, round to nearest number
+4. If there is '+' or '-' symbol in front of amount, make it positive number or negative number respectively, otherwise always make it negative
+5. Datetime must follow ISO 8601 with UTC (Z) suffix
+6. If the receipt is not readable or not a receipt, return empty CSV
+7. If description is empty, set it to "Untitled"
 
 Example valid response:
 datetime,amount,description
