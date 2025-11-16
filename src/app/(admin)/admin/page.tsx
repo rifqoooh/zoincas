@@ -8,7 +8,7 @@ import { AdminProviders } from '../_components/providers';
 export default function AdminPage() {
   return (
     <AdminProviders>
-      <header className="sticky inset-0 z-10 border-b">
+      <header className="sticky inset-0 z-10 border-b bg-background">
         <Container className="px-4 py-6">
           <div className="flex items-center gap-4">
             <p className="font-medium text-lg">Auth Admin</p>
