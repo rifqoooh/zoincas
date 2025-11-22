@@ -14,7 +14,7 @@ import { useScanFileModal } from '@/hooks/store/scan-file';
 
 export function CreateTransactionsMenu() {
   const importTransactionsCSVStore = useImportTransactionsCSVModal();
-  const scanFileStore = useScanFileModal();
+  const _scanFileStore = useScanFileModal();
 
   const onImportFromCSV = () => {
     importTransactionsCSVStore.onOpen();

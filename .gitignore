@@ -40,10 +40,12 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# etc
-/csv
-/note.md
-/src/lib/db/seed/admin.ts
-
 # Sentry Config File
 .env.sentry-build-plugin
+
+# etc
+/csv
+/src/lib/db/seed/admin.ts
+note.md
+debug.ts
+.enhancement

@@ -13,7 +13,7 @@
     "ultracite format": "bun x ultracite format ./src",
     "db:push": "bunx --bun drizzle-kit push",
     "db:pull": "bunx --bun drizzle-kit pull",
-    "db:studio": "bunx --bun drizzle-kit studio",
+    "db:studio": "bun drizzle-kit studio",
     "db:seed": "bun src/lib/db/seed/seed.ts",
     "shadcn": "bunx --bun shadcn@latest add"
   },
