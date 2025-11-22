@@ -89,6 +89,7 @@ export function Hero() {
                       className="mx-4 mb-2 inline-block h-12 w-12 md:mb-4 md:h-16 md:w-16"
                       width="256"
                       height="256"
+                      aria-hidden="true"
                     />
                     Solution for Personal Financial Management
                   </h1>
