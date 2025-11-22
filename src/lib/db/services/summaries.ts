@@ -150,20 +150,23 @@ export const getSummariesCategory = async (
         : undefined
     ),
     lt(transactions.amount, 0),
-    eq(categories.userId, userId)
+    eq(balances.userId, userId)
   );
 
   const data = await db
     .select({
-      name: categories.name,
+      name: coalesce(categories.name, 'Uncategorized')
+        .mapWith(String)
+        .as('name'),
       amount: sum(sql`abs(${transactions.amount})`)
         .mapWith(Number)
         .as('amount'),
     })
     .from(transactions)
-    .innerJoin(categories, eq(transactions.categoryId, categories.id))
+    .innerJoin(balances, eq(transactions.balanceId, balances.id))
+    .leftJoin(categories, eq(transactions.categoryId, categories.id))
     .where(where)
-    .groupBy(categories.name)
+    .groupBy(coalesce(categories.name, 'Uncategorized'))
     .orderBy(desc(sql`amount`));
 
   return data;

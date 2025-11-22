@@ -12,10 +12,14 @@ export const timestamps = {
 };
 
 export const coalesce = <T>(
-  value: SQL.Aliased<T> | SQL<T>,
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  value: SQL.Aliased<T> | SQL<T> | AnyColumn,
+  // biome-ignore lint/suspicious/noExplicitAny: <>
   defaultValue: any
 ) => {
+  if (typeof defaultValue === 'string') {
+    return sql<T>`coalesce(${value}, '${sql.raw(defaultValue)}')`;
+  }
+
   return sql<T>`coalesce(${value}, ${defaultValue})`;
 };
 
